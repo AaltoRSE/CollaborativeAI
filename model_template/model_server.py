@@ -27,6 +27,7 @@ class ModelServicer(model_pb2_grpc.ModelServicer):
         self.result_queue = queue.Queue()
         self.ai_model = ai_model
         self.testing = testing
+        self.called = 0
         if testing:
             self.discard_queue = queue.Queue()
 
@@ -115,7 +116,9 @@ class ModelServicer(model_pb2_grpc.ModelServicer):
     def registerModel(self, request, context):
         logger.info("Registering model")
         logger.info(request)
-        # get the value of the response by calling the desired function :
+        if self.called > 0:
+            context.set_code(grpc.StatusCode.OUT_OF_RANGE)
+        self.called += 1
         return self.ai_model.get_model_definition()
 
 
