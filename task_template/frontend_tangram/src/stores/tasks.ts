@@ -1,25 +1,18 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import type { Task, TaskInteraction, TaskSubmission } from './types'
+import type { Task, TaskInteraction, SubmissionData, DisplayMessage } from './types'
 
 const taskField = 'CollaborativeAI:Task'
 const interactionField = 'CollaborativeAI:Interaction'
-
+import { tangram_task } from '@/tasks/currentTask'
 export const useTaskStore = defineStore({
   id: 'tasks',
   state: () => ({
-    task: {
-      id: 'tangram',
-      title: 'Tangram design Task',
-      needsText: false,
-      description: `The objective of this task is to use a tangram game to collaboratively fullfil a task together with an AI. 
-                    The player and the AI take turns in placing (or moving) pieces of a tangram game. 
-                    Please define what task you and the AI will be working on.`
-    } as Task,
+    task: tangram_task as Task,
     currentInteraction: (sessionStorage.getItem(interactionField)
       ? JSON.parse(sessionStorage.getItem(interactionField) as string)
       : {}) as TaskInteraction, // Maybe we can define this type later, but it is likely to be quite specific per task...
-    lastInteraction: {} as any
+    lastInteraction: {} as SubmissionData
   }),
   actions: {
     /**
@@ -31,10 +24,9 @@ export const useTaskStore = defineStore({
       this.currentInteraction = {
         task: this.task,
         objective: '',
-        interactionData: {},
+        interactionData: {} as SubmissionData,
         isLoading: false,
-        history: [],
-        submissionHistory: []
+        history: []
       }
       this.storeInteraction()
     },
@@ -59,20 +51,23 @@ export const useTaskStore = defineStore({
      * The data submitted is task specific and
      * @param data
      */
-    submitUserInput(data: TaskSubmission) {
+    submitUserInput(data: SubmissionData) {
       this.currentInteraction.isLoading = true
       console.log('Pushing to history')
       console.log(data)
-      data.displayData.handled = true
-      this.currentInteraction.history.push(data.displayData)
-      this.currentInteraction.submissionHistory.push(data.submission)
+      this.currentInteraction.history.push({
+        text: data.text,
+        image: this.task.useInputImageInChat ? data.image : '',
+        role: 'user',
+        error: ''
+      })
       this.storeInteraction()
 
       axios
         .post(`/api/v1/task/process`, {
-          text: data.submission.data.message,
-          inputData: data.submission.data.tangramData,
-          image: data.submission.data.image,
+          text: data.text,
+          inputData: data.data,
+          image: data.image,
           objective: this.currentInteraction.objective
         })
         .then((response) => {
@@ -80,17 +75,27 @@ export const useTaskStore = defineStore({
           console.log(response)
           const responseData = response.data
           const submissiondata = { tangram: responseData.text }
-          const AISubmission = {
-            role: 'AI',
+          this.lastInteraction = {
+            text: responseData.text,
+            image: responseData.image,
             data: submissiondata
-          }
-          this.currentInteraction.submissionHistory.push(AISubmission)
-          this.lastInteraction = AISubmission
+          } as SubmissionData
+          this.currentInteraction.history.push({
+            text: responseData.text,
+            image: this.task.useAIImageInChat ? responseData.image : '',
+            role: 'AI',
+            error: ''
+          })
           sessionStorage.setItem(interactionField, JSON.stringify(this.currentInteraction))
           this.currentInteraction.isLoading = false
         })
         .catch((error) => {
-          this.lastInteraction = { role: 'AI', data: 'AI submission errored' }
+          this.currentInteraction.history.push({
+            role: 'AI',
+            image: '',
+            text: 'AI submission errored',
+            error: error
+          })
           this.currentInteraction.isLoading = false
         })
     },
@@ -106,13 +111,13 @@ export const useTaskStore = defineStore({
           this.currentInteraction = {} as TaskInteraction
           sessionStorage.removeItem(taskField)
           sessionStorage.removeItem(interactionField)
-          this.lastInteraction = {}
+          this.lastInteraction = {} as SubmissionData
         })
         .catch(() => {
           this.currentInteraction = {} as TaskInteraction
           sessionStorage.removeItem(taskField)
           sessionStorage.removeItem(interactionField)
-          this.lastInteraction = {}
+          this.lastInteraction = {} as SubmissionData
         })
     }
   }

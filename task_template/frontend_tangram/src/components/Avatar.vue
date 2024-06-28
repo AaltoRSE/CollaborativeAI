@@ -41,13 +41,13 @@ export default {
 }
 
 .avatar {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 }
 
 .avatarcontainer {
-  min-width: 80px;
+  min-width: 50px;
   padding: 10px;
 }
 </style>

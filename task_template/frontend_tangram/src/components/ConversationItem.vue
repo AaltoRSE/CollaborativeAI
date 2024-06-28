@@ -1,9 +1,12 @@
 <template>
-  <div class="flex w-full pt-2 pb-2 pr-2 align-items-center" v-if="message.role === 'user'">
-    <Avatar :isGPT="false" :ID="userName"></Avatar>
-    <div class="flex textcontainer align-items-start input">      
-      <img v-if="message.containsImage" class="mr-4" width="1000" :src="message.imageURL" />
-      {{ currentContent }}      
+  <div
+    class="flex w-full pt-2 pb-2 pr-2 align-items-center justify-content-end"
+    v-if="message.role === 'user'"
+  >
+    <!--<Avatar :isGPT="false" :ID="userName"></Avatar>-->
+    <div class="flex border-round-xl p-3 surface-100 align-items-start input w-6">
+      <img v-if="message.image" class="mr-4" width="000" :src="message.image" />
+      {{ currentContent }}
     </div>
   </div>
   <div
@@ -16,22 +19,17 @@
       <div class="flex textcontainer align-items-center">
         <div class="flex flex-column w-full align-items-start">
           <div class="flex w-full flex-column">
-            <div class="flex w-full justify-content-end align-items-start">              
-              <img class="mr-4" v-if="message.containsImage" width="1000" :src="message.imageURL" />              
+            <div class="flex w-full justify-content-end align-items-start">
+              <img class="mr-4" v-if="message.image" width="1000" :src="message.image" />
               <span>
                 {{ currentContent }}
               </span>
-            
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
-  <span class="flex flex-column overflow-x-hidden" v-if="isLoading">
-    <LoadingDots />
-  </span>
 </template>
 
 <script lang="ts">
@@ -72,7 +70,7 @@ export default {
   computed: {
     currentContent() {
       // either the amount up to this point OR the full Content
-      return this.message.message
+      return this.message.text
     }
   },
   methods: {},
@@ -99,53 +97,5 @@ export default {
   border-color: var(--aalto-color);
   background-color: var(--aalto-color);
   color: black;
-}
-
-.avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-
-.avatarcontainer {
-  min-width: 80px;
-  padding: 10px;
-}
-.textcontainer {
-  width: calc(100% - 100px);
-}
-
-.messagecontent {
-  margin: 4px;
-}
-
-p {
-  align-items: left;
-}
-
-pre {
-  background-color: black;
-}
-
-code {
-  background-color: black;
-  color: white;
-  background: black;
-}
-.gptmessage {
-  background-color: #eeeeee;
-}
-.input {
-  margin-top: 16px;
-  margin-bottom: 16px;
-  white-space: pre-line;
-}
-.reactionButton {
-  max-width: 1.5rem;
-  max-height: 1.5rem;
-}
-.copyButtons {
-  right: 0px;
-  top: 0px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="grid w-full">    
+  <div class="grid w-full">
     <div class="col-11">
       <div class="flex flex-column p-input-icon-right w-full flex-grow-1">
         <div class="flex flex-row w-full mb-2">
