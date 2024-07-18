@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import type { SubmissionObject, Task, TaskInteraction, TaskSubmission } from './types'
+// import type { SubmissionObject, Task, TaskInteraction, TaskSubmission } from './types'
 
 const taskField = 'CollaborativeAI:Task'
 const interactionField = 'CollaborativeAI:Interaction'

@@ -4,7 +4,7 @@ const DialogueItem = ({ message }) => {
     <>
       <div className={`dialogue-message ${messageClass}`}>
         {message.text}
-        <button type="submit" className="dialogue-button"> Edit </button>
+        {/* <button type="submit" className="dialogue-button"> Edit </button> */}
       </div>
     </>
   );

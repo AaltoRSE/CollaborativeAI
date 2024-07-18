@@ -1,13 +1,15 @@
 import { useState } from "react";
+import taskService from '../services/task'
 
 const colors = ["#b71c1c", "#f44336", "#ff9800", "#ffeb3b", "#009688", "#81c784", "#4caf50"];
 
 const FeedbackForm = ({ }) => {
   const [ratingSubmitted, setRatingSubmitted] = useState(false);
 
-  const handleRatingSubmitted = () => {
+  const handleRatingSubmitted = (rating) => {
     //Add finish call here
     setRatingSubmitted(true);
+    taskService.finishTask(rating)
   }
 
   return (
@@ -22,7 +24,7 @@ const FeedbackForm = ({ }) => {
             style={{
               "background-color": colors[rating]
             }}
-            onClick={handleRatingSubmitted}
+            onClick={() => handleRatingSubmitted(rating+1)}
           >
             {rating + 1}
           </div>

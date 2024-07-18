@@ -16,7 +16,7 @@ const Footer = () => {
       <div className="terms-section">
         <h2>Terms of Service</h2>
         <br></br>
-        <p>Read our <a href="/terms">Terms of Service</a></p>
+        <p>Read our <a href="/#">Terms of Service</a></p>
       </div>
       <div className="logo-section">
         <img src="./image1.png" alt="Project Logo" />
