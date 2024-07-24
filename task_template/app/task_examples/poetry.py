@@ -25,17 +25,15 @@ class Poetry(Task):
             The details of the poem are as follows : {objective}
             Each of you should generate one line in each step.
             You will get a message from the user in the form:
-            [POEM_LINE] : the user poem line
-            [COMMENT_LINE] : the user comment on the poem up till now
-            The comment line can be empty
-            Your answer should take the comment line and the poem line into consideration and consist and consist of the next line in the poem you want to create.
-            Your anser should only be the poem line you created. Do not include the text '[POEM_LINE]' or '[COMMENT_LINE]' into your answer.
+            COMMENT [POEM_LINE] COMMENT: POEM_LINE is the new poem line provided by the user and it is 
+            wrapped inside square brackets while the rest (both COMMENT) are comments made by the user.
+            Your answer should take the comment and the poem line into consideration and consist of the 
+            next line in the poem you want to create.
+            Your answer must follow this form: [YOUR_POEM_LINE] [YOUR_COMMENT]
+            YOUR_POEM_LINE is the poem line you created, wrapped inside square brackets while YOUR_COMMENT
+            is your answer or opinion about the content of COMMENT that the user provided.
             Your answer should not repeat what the user give, or what you have generated before.
             """
-        # system_prompt = f"""You are working together with a user to solve a math problem. 
-        #     The details of the problem are as follows : {}.
-        #     First you ask, the user what the poem's theme is by asking "What is the theme of your poem?.
-        #     """
         return system_prompt
 
     def process_model_answer(self, answer: ModelResponse) -> TaskDataResponse:

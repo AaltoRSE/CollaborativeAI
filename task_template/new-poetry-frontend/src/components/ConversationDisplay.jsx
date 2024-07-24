@@ -1,42 +1,59 @@
 import { useState, useEffect } from 'react';
 import ConversationItem from "./ConversationItem";
 import taskService from '../services/task'
+import { lengthLimit } from '../../config';
 
 const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
-  const [newLine, setNewLine] = useState("");
-  const [newComment, setNewComment] = useState("");
+  const [newMessage, setNewMessage] = useState("");
   const [isFinishClicked, setIsFinishClicked] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [theme, setTheme] = useState("");
   const [isLengthReached, setIsLengthReached] = useState(false);
 
-  //Check if the length of the poem has reached 9 lines yet
+  //Check if the length of the text has reached the line limit yet
   useEffect(() => {
-    setIsLengthReached(messages.length === 9) //It can be different number depends on what we want to achieve here
+    setIsLengthReached(messages.length === lengthLimit)
+    console.log(messages)
   }, [messages])
 
   const handleSubmit = (event) => {
-    const newMessageObject = {
-      inputData: { commentData: newComment},
-      text: newLine,
-      ojective: theme
-    }
     event.preventDefault();
-    if (newLine.trim() || newComment.trim()) {
-      addMessage({ sender: "user", text: newLine, comment: newComment});
+
+    let newLine = ""
+    const poemLine = newMessage.match(/\[(.*?)\]/);
+    if (newMessage.trim() && poemLine) {
+      newLine = poemLine[1];
+      addMessage({ sender: "user", text: newLine, comment: newMessage, type: "dialogue"});
       taskService
-        .submitUserInput(newMessageObject)
+        .submitUserInput({inputData: { commentData: newMessage}, text: newLine, ojective: theme})
         .then((returnedResponse) => {
           addMessage({ 
             sender: "ai",
-            text: returnedResponse.text
+            text: returnedResponse.text,
+            type: "dialogue"
           })
         })
         .catch((error) => {
           console.log(error)
         });
-      setNewLine("");
-      setNewComment("");
+      setNewMessage("");
+    } else if (!poemLine) {
+      addMessage({ sender: "user", text: "", comment: newMessage, type: "conversation"});
+      taskService
+        .submitUserInput({inputData: { commentData: newMessage}, text: "", ojective: theme})
+        .then((returnedResponse) => {
+          addMessage({ 
+            sender: "ai",
+            text: returnedResponse.text,
+            type: "conversation"
+          })
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+      setNewMessage("");
+    } else {
+      console.log("Error")
     }
   };
 
@@ -60,7 +77,8 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
       .then((returnedResponse) => {
         addMessage({ 
           sender: "ai",
-          text: returnedResponse.text
+          text: returnedResponse.text,
+          type: "dialogue"
         })
       })
       .catch((error) => {
@@ -114,21 +132,21 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
         <div className="form-wrapper">
           <form onSubmit={handleSubmit}>
             <div className="input-form">
-              <input 
+              {/* <input 
                 type="text" 
                 value={newComment}
                 disabled={isLengthReached}
                 className={isLengthReached ? "disabled" : ""}
                 onChange={(e) => setNewComment(e.target.value)} 
                 placeholder="Send a message to the AI" 
-              />
+              /> */}
               <input 
                 type="text" 
-                value={newLine} 
+                value={newMessage} 
                 disabled={isLengthReached}
                 className={isLengthReached ? "disabled" : ""}
-                onChange={(e) => setNewLine(e.target.value)} 
-                placeholder="Add a line to the poem" 
+                onChange={(e) => setNewMessage(e.target.value)} 
+                placeholder="Send a message to the AI" 
               />
             </div>
           </form>

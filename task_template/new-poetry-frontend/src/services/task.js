@@ -1,10 +1,8 @@
 import axios from 'axios'
-// import type { SubmissionObject, Task, TaskInteraction, TaskSubmission } from './types'
 
 const baseUrl = "/api/v1/task"
 
 const submitUserInput = (newUserMessage) => {
-  console.log(`new message submitted: ${JSON.stringify(newUserMessage)}`)
   const request = axios.post(`${baseUrl}/process`, newUserMessage)
   return request.then(response => response.data)
 }
