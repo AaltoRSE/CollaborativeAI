@@ -1,5 +1,4 @@
 import logging
-import tasks.tangram_models as tangram_models
 from typing import Any, List
 import json
 from tasks.task_interface import Task
@@ -22,7 +21,6 @@ class Poetry(Task):
         in the history of the session (based on the session_id cookie)
         """
 
-        #First you ask, the user what the poem's theme is by asking "What is the theme of your poem?"
         system_prompt = f"""You are working together with a user to iteratively create a poem. 
             The details of the poem are as follows : {objective}
             Each of you should generate one line in each step.
@@ -35,7 +33,8 @@ class Poetry(Task):
             Your answer should not repeat what the user give, or what you have generated before.
             """
         # system_prompt = f"""You are working together with a user to solve a math problem. 
-        #     The details of the problem are as follows : {objective}
+        #     The details of the problem are as follows : {}.
+        #     First you ask, the user what the poem's theme is by asking "What is the theme of your poem?.
         #     """
         return system_prompt
 
@@ -48,6 +47,7 @@ class Poetry(Task):
         process pieces' data and plug them into the prompt
         """
         # This could include an image, but for this task, we currently don't supply one
+        logger.info(request)
         return TaskRequest(
             text=f"[POEM_LINE] : {request.text} \n[COMMENT_LINE] : {request.inputData['commentData']}",
             system=self.get_system_prompt(request.objective),

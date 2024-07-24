@@ -14,7 +14,7 @@ const ConversationalItem = ({ message }) => {
         ) : (
           <>
             <div className={`avatar ${avatarClass}`}> {avatarText} </div>
-            {message.text}
+            <b>New line: </b> {message.text}
           </>
         )}
       </div>

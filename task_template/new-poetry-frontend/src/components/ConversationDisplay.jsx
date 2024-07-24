@@ -7,8 +7,8 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
   const [newComment, setNewComment] = useState("");
   const [isFinishClicked, setIsFinishClicked] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [theme, setTheme] = useState("")
-  const [isLengthReached, setIsLengthReached] = useState(false)
+  const [theme, setTheme] = useState("");
+  const [isLengthReached, setIsLengthReached] = useState(false);
 
   //Check if the length of the poem has reached 9 lines yet
   useEffect(() => {
@@ -22,8 +22,8 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
       ojective: theme
     }
     event.preventDefault();
-    if (newLine.trim()) {
-      addMessage({ sender: "user", text: newLine });
+    if (newLine.trim() || newComment.trim()) {
+      addMessage({ sender: "user", text: newLine, comment: newComment});
       taskService
         .submitUserInput(newMessageObject)
         .then((returnedResponse) => {
@@ -42,13 +42,12 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
 
   const handleThemeChange = (event) => setTheme(event.target.value)
 
-  const chooseTheme = () => {
+  const chooseTheme = (event) => {
     if (!theme.trim()) {
       alert('Please enter a theme');
       return;
     }
-    
-    console.log('Theme set:', theme);
+    event.preventDefault();
     setIsDisabled(true);
     
     //Generate the first AI poem line after setting the theme
@@ -79,24 +78,25 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
       <h2>Discussion with AI</h2>
       <div className="chat-space">
         <div className="theme-input">
-          <input 
-                type="text" 
+          <form onSubmit={chooseTheme}>
+            <input 
+                  type="text" 
+                  disabled={isDisabled}
+                  placeholder="Set a theme for the poem"
+                  value={theme}
+                  className={isDisabled ? "disabled" : ""}
+                  onChange={handleThemeChange}
+            />
+            <button 
+                type="button"
                 disabled={isDisabled}
-                placeholder="Set a theme for the poem"
-                value={theme}
                 className={isDisabled ? "disabled" : ""}
-                onChange={handleThemeChange}
-          />
-          <button 
-              type="button"
-              onClick={chooseTheme} 
-              disabled={isDisabled}
-              className={isDisabled ? "disabled" : ""}
-              style={{
-                "background-color": "#4caf50"
-              }}>
-              Submit 
-          </button>
+                style={{
+                  "background-color": "#4caf50"
+                }}>
+                Submit 
+            </button>
+          </form>
         </div>
         <div className="messages">
           {messages.map((msg, index) => (
@@ -112,7 +112,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
         </span>
         }
         <div className="form-wrapper">
-          <form onClick={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div className="input-form">
               <input 
                 type="text" 
