@@ -8,6 +8,11 @@
   cursor: not-allowed;
 }
 
+textarea {
+  width: 630px;
+  height: 100px;
+}
+
 body {
   font-family: "Inter", sans-serif;
 }
@@ -99,17 +104,18 @@ a:active {
   height: 50vh;
   margin: 5px;
   border-radius: 20px;
+  text-align: justify;
 }
 
-.dialogue {
+.dialogue-poem {
   text-align: center;
-  display: flex;
-  flex-direction: column;
-}
-
-.dialogue-message {
   padding: 10px;
   margin: 5px 0;
+  border-radius: 10px;
+}
+
+.dialogue-paragraph {
+  display: inline;
   border-radius: 10px;
 }
 
@@ -188,16 +194,11 @@ a:active {
 
 .form-wrapper {
   display: flex;
-  flex-direction: rows;
+  align-items: flex-start;
 }
 
-.input-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-form input {
-  width: 614px;
+.input-form textarea {
+  flex-grow: 1;
   margin: 5px;
 }
 
@@ -205,6 +206,7 @@ a:active {
   display: flex;
   flex-direction: row;
   margin: 5px;
+  height: 100px;
 }
 
 .button-group button {

@@ -8,17 +8,6 @@ const submitUserInput = (newUserMessage) => {
 }
 
 const finishTask = (rating) => {
-  // const ratingjson = { metrics: { rating: rating } }
-  // const request = 
-  //   axios
-  //     .post(`${baseUrl}/finish`, ratingjson)
-  //     .then((response) => {
-  //       console.log(`Rating ${rating} submitted`)
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //     })
-  // return request.then(response => response.data)
   console.log(`finish ${rating}`)
 }
 

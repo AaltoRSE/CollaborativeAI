@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ConversationItem from "./ConversationItem";
 import taskService from '../services/task'
-import { lengthLimit } from '../../config';
+import { lengthLimit } from '../utils/config';
 
 const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
   const [newMessage, setNewMessage] = useState("");
@@ -13,12 +13,10 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
   //Check if the length of the text has reached the line limit yet
   useEffect(() => {
     setIsLengthReached(messages.length === lengthLimit)
-    console.log(messages)
   }, [messages])
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     let newLine = ""
     const poemLine = newMessage.match(/\[(.*?)\]/);
     if (newMessage.trim() && poemLine) {
@@ -27,11 +25,19 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
       taskService
         .submitUserInput({inputData: { commentData: newMessage}, text: newLine, ojective: theme})
         .then((returnedResponse) => {
-          addMessage({ 
-            sender: "ai",
-            text: returnedResponse.text,
-            type: "dialogue"
-          })
+          if (returnedResponse.text.match(/\[(.*?)\]/)) {
+            addMessage({ 
+              sender: "ai",
+              text: returnedResponse.text,
+              type: "dialogue"
+            })
+          } else {
+            addMessage({ 
+              sender: "ai",
+              text: returnedResponse.text,
+              type: "conversation"
+            })
+          }
         })
         .catch((error) => {
           console.log(error)
@@ -110,7 +116,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
                 disabled={isDisabled}
                 className={isDisabled ? "disabled" : ""}
                 style={{
-                  "background-color": "#4caf50"
+                  backgroundColor: "#4caf50"
                 }}>
                 Submit 
             </button>
@@ -132,17 +138,8 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
         <div className="form-wrapper">
           <form onSubmit={handleSubmit}>
             <div className="input-form">
-              {/* <input 
-                type="text" 
-                value={newComment}
-                disabled={isLengthReached}
-                className={isLengthReached ? "disabled" : ""}
-                onChange={(e) => setNewComment(e.target.value)} 
-                placeholder="Send a message to the AI" 
-              /> */}
-              <input 
-                type="text" 
-                value={newMessage} 
+              <textarea 
+                value={newMessage}
                 disabled={isLengthReached}
                 className={isLengthReached ? "disabled" : ""}
                 onChange={(e) => setNewMessage(e.target.value)} 
@@ -153,7 +150,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
           <div className="button-group">
               <button type="submit" 
                 style={{
-                  "background-color": "#4caf50"
+                  backgroundColor: "#4caf50"
                 }}
                 disabled={isLengthReached}
                 className={isLengthReached ? "disabled" : ""}
@@ -162,7 +159,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
               </button>
               <button type="submit" className="finish-button" 
                 style={{
-                  "background-color": isFinishClicked ? "#f44336" : "#6eb4ff",
+                  backgroundColor: isFinishClicked ? "#f44336" : "#6eb4ff",
                   "cursor": isFinishClicked ? "not-allowed" : "pointer"
                 }}
                 onClick={toggleFinishButton}> 
