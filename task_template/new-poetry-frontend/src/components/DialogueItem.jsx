@@ -1,4 +1,4 @@
-const DialogueItem = ({ message }) => {
+const DialogueItem = ({ message, style }) => {
   const messageClass = message.sender === "user" ? "user-dialogue" : "ai-dialogue";
 
   let newLine = ""
@@ -11,8 +11,8 @@ const DialogueItem = ({ message }) => {
 
   return (
     <>
-      <div className={`dialogue-message ${messageClass}`}>
-        {newLine}
+      <div className={`${style} ${messageClass}`}>
+        {newLine} <br />
         {/* <button type="submit" className="dialogue-button"> Edit </button> */}
       </div>
     </>
