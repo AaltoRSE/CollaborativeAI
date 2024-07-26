@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ConversationDisplay from "./components/ConversationDisplay";
 import Dialogue from "./components/Dialogue";
 import TaskDescription from "./components/TaskDescription";
@@ -16,6 +16,10 @@ const App = () => {
   // ]);
   const [messages, setMessages] = useState([]);
 
+  useEffect(() => {
+    console.log(messages)
+  }, [messages])
+
   const [isFinished, setIsFinished] = useState(false);
 
   const addMessage = (message) => {
@@ -31,7 +35,7 @@ const App = () => {
       <Header />
       <TaskDescription />
       <div className="main-interaction">
-        <Dialogue messages={messages} />
+        <Dialogue messages={messages} setMessages={setMessages} />
         <ConversationDisplay toggleFinish={toggleFinish} messages={messages} addMessage={addMessage} />
       </div>
       {isFinished ? <FeedbackForm /> : <div className="feedback-placeholder"> </div>}
