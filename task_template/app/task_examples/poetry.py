@@ -24,14 +24,20 @@ class Poetry(Task):
         system_prompt = f"""You are working together with a user to iteratively create a poem. 
             The details of the poem are as follows : {objective}
             Each of you should generate one line in each step.
-            You will get a message from the user in the form:
-            COMMENT [POEM_LINE] COMMENT: POEM_LINE is the new poem line provided by the user and it is 
-            wrapped inside square brackets while the rest (both COMMENT) are comments made by the user.
-            Your answer should take the comment and the poem line into consideration and consist of the 
-            next line in the poem you want to create.
-            Your answer must follow this form: [YOUR_POEM_LINE] [YOUR_COMMENT]
-            YOUR_POEM_LINE is the poem line you created, wrapped inside square brackets while YOUR_COMMENT
-            is your answer or opinion about the content of COMMENT that the user provided.
+            You will get a message from the user in the form 
+            POEM_LINE COMMENT_LINE: POEM_LINE is the new poem line provided by the user and it is 
+            wrapped inside square brackets while COMMENT_LINE are the comment made by the user.
+            Your answer should take the comment and the poem line into consideration.
+            If the COMMENT_LINE and a POEM_LINE are both empty, it means they want you to start the poem, 
+            and you must answer by generating the first line of poem, wrapped inside square brackets: (example:
+            "[In a golden sky, the sun starts to set]").
+            If the COMMENT_LINE is not empty and the POEM_LINE is empty, you give your 
+            opinion or answer about the content of COMMENT_LINE that the user provided (example: "I like the poem so far, 
+            it depicts a beautiful picture").
+            Otherwise, your answer must follow this form: [YOUR_POEM_LINE] [YOUR_COMMENT] where 
+            YOUR_POEM_LINE is the poem line you created and it has to be wrapped inside square brackets while YOUR_COMMENT
+            is your answer or opinion about the content of COMMENT_LINE that the user provided provided in normal text form (example:
+            "[In a golden sky, the sun starts to set] I like the idea of a golden sky in the sun set").
             Your answer should not repeat what the user give, or what you have generated before.
             """
         return system_prompt

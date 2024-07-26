@@ -8,7 +8,7 @@ const ConversationalItem = ({ message }) => {
       <div className={`message ${messageClass}`}>
         {message.sender === "user" ? (
           <>
-            {message.comment}
+            {message.text} <br /> {message.comment}
             <div className={`avatar ${avatarClass}`}> {avatarText} </div>
           </>
         ) : (

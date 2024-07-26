@@ -4,7 +4,9 @@ import taskService from '../services/task'
 import { lengthLimit } from '../utils/config';
 
 const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
-  const [newMessage, setNewMessage] = useState("");
+  // const [newMessage, setNewMessage] = useState("");
+  const [newLine, setNewLine] = useState("");
+  const [newComment, setNewComment] = useState("");
   const [isFinishClicked, setIsFinishClicked] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [theme, setTheme] = useState("");
@@ -12,18 +14,16 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
 
   //Check if the length of the text has reached the line limit yet
   useEffect(() => {
-    setIsLengthReached(messages.length === lengthLimit)
+    setIsLengthReached(messages.filter(message => message.type === "dialogue").length === lengthLimit)
   }, [messages])
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
-    let newLine = ""
-    const poemLine = newMessage.match(/\[(.*?)\]/);
-    if (newMessage.trim() && poemLine) {
-      newLine = poemLine[1];
-      addMessage({ sender: "user", text: newLine, comment: newMessage, type: "dialogue"});
+
+    if (newLine.trim()) {
+      addMessage({ sender: "user", text: newLine, comment: newComment, type: "dialogue"});
       taskService
-        .submitUserInput({inputData: { commentData: newMessage}, text: newLine, ojective: theme})
+        .submitUserInput({inputData: { commentData: newComment}, text: newLine, ojective: theme})
         .then((returnedResponse) => {
           if (returnedResponse.text.match(/\[(.*?)\]/)) {
             addMessage({ 
@@ -42,11 +42,12 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
         .catch((error) => {
           console.log(error)
         });
-      setNewMessage("");
-    } else if (!poemLine) {
-      addMessage({ sender: "user", text: "", comment: newMessage, type: "conversation"});
+      setNewLine("");
+      setNewComment("");
+    } else if (newComment.trim()) {
+      addMessage({ sender: "user", text: "", comment: newComment, type: "conversation"});
       taskService
-        .submitUserInput({inputData: { commentData: newMessage}, text: "", ojective: theme})
+        .submitUserInput({inputData: { commentData: newComment}, text: "", ojective: theme})
         .then((returnedResponse) => {
           addMessage({ 
             sender: "ai",
@@ -57,9 +58,10 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
         .catch((error) => {
           console.log(error)
         });
-      setNewMessage("");
+        setNewLine("");
+        setNewComment("");
     } else {
-      console.log("Error")
+      console.log("No data is being sent to the model");
     }
   };
 
@@ -73,7 +75,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
     event.preventDefault();
     setIsDisabled(true);
     
-    //Generate the first AI poem line after setting the theme
+    //Generate the first AI poem line after setting the theme, it works based on how the prompt is set up
     taskService
       .submitUserInput({
         inputData: { commentData: ""},
@@ -101,8 +103,8 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
     <div className="chat-space-wrapper">
       <h2>Discussion with AI</h2>
       <div className="chat-space">
-        <div className="theme-input">
-          <form onSubmit={chooseTheme}>
+        <div>
+          <form onSubmit={chooseTheme} className="theme-input">
             <input 
                   type="text" 
                   disabled={isDisabled}
@@ -115,6 +117,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
                 type="button"
                 disabled={isDisabled}
                 className={isDisabled ? "disabled" : ""}
+                onClick={chooseTheme}
                 style={{
                   backgroundColor: "#4caf50"
                 }}>
@@ -137,12 +140,19 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
         }
         <div className="form-wrapper">
           <form onSubmit={handleSubmit}>
-            <div className="input-form">
+            <div className="input-form">  
               <textarea 
-                value={newMessage}
+                value={newLine}
                 disabled={isLengthReached}
                 className={isLengthReached ? "disabled" : ""}
-                onChange={(e) => setNewMessage(e.target.value)} 
+                onChange={(e) => setNewLine(e.target.value)}
+                placeholder="Add a line to the poem" 
+              />
+              <textarea 
+                value={newComment}
+                disabled={isLengthReached}
+                className={isLengthReached ? "disabled" : ""}
+                onChange={(e) => setNewComment(e.target.value)} 
                 placeholder="Send a message to the AI" 
               />
             </div>

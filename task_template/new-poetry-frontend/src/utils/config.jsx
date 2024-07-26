@@ -5,4 +5,4 @@ export const lengthLimit = 9;
 export const editButtonSwitch = true;
 
 //switch for choosing the type of the generated dialogue ("poem" or "paragraph")
-export const dialogueType = "paragraph"
+export const dialogueType = "poem"
