@@ -65,11 +65,9 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
     }
   };
 
-  const handleThemeChange = (event) => setTheme(event.target.value)
-
   const chooseTheme = (event) => {
     if (!theme.trim()) {
-      alert('Please enter a theme');
+      alert("Please enter a theme");
       return;
     }
     event.preventDefault();
@@ -126,9 +124,12 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
           </form>
         </div>
         <div className="messages">
-          {messages.map((msg, index) => (
-            <ConversationItem key={index} message={msg} /> 
-          ))}
+          {messages
+            .filter(msg => msg.comment !== "")
+            .map((msg, index) => (
+              <ConversationItem key={index} message={msg} /> 
+            ))
+          }
         </div>
         {isLengthReached && 
         <span 
