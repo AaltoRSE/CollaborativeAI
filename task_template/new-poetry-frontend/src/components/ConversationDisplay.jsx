@@ -38,7 +38,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
               type: "conversation"
             })
           }
-        })
+        })  
         .catch((error) => {
           console.log(error)
         });
@@ -111,7 +111,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
                   placeholder="Set a theme for the poem"
                   value={theme}
                   className={isDisabled ? "disabled" : ""}
-                  onChange={handleThemeChange}
+                  onChange={(event) => setTheme(event.target.value)}
             />
             <button 
                 type="button"
@@ -145,14 +145,14 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
                 value={newLine}
                 disabled={isLengthReached}
                 className={isLengthReached ? "disabled" : ""}
-                onChange={(e) => setNewLine(e.target.value)}
+                onChange={(event) => setNewLine(event.target.value)}
                 placeholder="Add a line to the poem" 
               />
               <textarea 
                 value={newComment}
                 disabled={isLengthReached}
                 className={isLengthReached ? "disabled" : ""}
-                onChange={(e) => setNewComment(e.target.value)} 
+                onChange={(event) => setNewComment(event.target.value)} 
                 placeholder="Send a message to the AI" 
               />
             </div>
