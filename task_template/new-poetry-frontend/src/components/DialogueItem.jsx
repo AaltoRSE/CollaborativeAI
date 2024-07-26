@@ -27,12 +27,12 @@ const DialogueItem = ({ idx, message, handleEditMessage, style }) => {
   return (
     <>
       {isEditing ? (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="edit-form">
           <textarea
             value={editedMessage}
             onChange={(event) => setEditedMessage(event.target.value)}
           />
-          <button type="submit">Save</button>
+          <button type="submit" disabled={!editedMessage.trim()}> Save </button>
         </form>
       ) : (
         <div className={`${style} ${messageClass}`} onClick={handleEditClick}>{newLine} <br/> </div>

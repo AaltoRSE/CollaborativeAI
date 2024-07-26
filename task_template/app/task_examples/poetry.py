@@ -39,7 +39,7 @@ class Poetry(Task):
             "[In a golden sky, the sun starts to set] I like the idea of a golden sky in the sun set"). You should say your
             feeling about the poem line the user gave and give recommendation about it if needed.
             You are curious, and always ready and eager to ask the user question if needed.
-            Your answer must not repeat what the user has already given, or what you have generated before.
+            Your poem line must not repeat what the user has already given, or what you have generated before.
             """
         return system_prompt
 

@@ -10,7 +10,11 @@ const Dialogue = ({ messages, setMessages }) => {
   }
 
   const handleEditMessage = (index, newMessage) => {
-    setMessages(messages.map((message, idx) => idx !== index ? message : { ...message, text: newMessage }))
+    if (!newMessage.trim()) {
+      alert("Please save a non empty dialogue");
+    } else {
+      setMessages(messages.map((message, idx) => idx !== index ? message : { ...message, text: newMessage }))
+    }
   };
 
   return (

@@ -135,6 +135,23 @@ a:active {
   background-color: #ffe0b2;
 }
 
+.edit-form {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.edit-form textarea {
+  width: 760px;
+  margin-right: 5px;
+  height: 70px;
+}
+
+.edit-form button {
+  color: #225424;
+  background-color: #93df95;
+  border-radius: 5px;
+}
+
 .chat-space {
   background-color: #fff;
   display: flex;
