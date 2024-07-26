@@ -8,7 +8,7 @@ const DialogueItem = ({ message, style }) => {
   } else {
     newLine = message.text
   }
-
+  // The <br /> here is to basically get a line break between the user and AI dialogue. Can add more or just remove it based on your task 
   return (
     <>
       <div className={`${style} ${messageClass}`}>
