@@ -21,16 +21,18 @@ const Dialogue = ({ messages, setMessages }) => {
     <div className="dialogue-wrapper">
       <h2>Your joint poem</h2>
       <div className="dialogue">
-        {messages.map((msg, index) => (
-          msg.type=="dialogue" && 
-          <DialogueItem 
-            key={index}
-            idx={index}
-            message={msg} 
-            handleEditMessage={handleEditMessage} 
-            style={style}
-          />
-        ))}
+        {messages
+          .map((msg, idx) => ({ ...msg, originalIndex: idx })) // Preserve original index
+          .filter(msg => msg.text !== "" && msg.text !== null)
+          .map((msg) => (
+            <DialogueItem
+              key={msg.originalIndex} // Use original index as key if needed
+              idx={msg.originalIndex} // Pass original index as `idx`
+              message={msg}
+              handleEditMessage={handleEditMessage}
+              style={style}
+            />
+          ))}
       </div>
     </div>
   );

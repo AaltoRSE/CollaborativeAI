@@ -16,13 +16,13 @@ const DialogueItem = ({ idx, message, handleEditMessage, style }) => {
     setIsEditing(!isEditing);
   };
 
-  let newLine = ""
+  /*let newLine = ""
   const poemLine = message.text.match(/\[(.*?)\]/);
   if (poemLine) {
     newLine = poemLine[1];
   } else {
     newLine = message.text
-  }
+  }*/
 
   return (
     <>
@@ -35,7 +35,7 @@ const DialogueItem = ({ idx, message, handleEditMessage, style }) => {
           <button type="submit" disabled={!editedMessage.trim()}> Save </button>
         </form>
       ) : (
-        <div className={`${style} ${messageClass}`} onClick={handleEditClick}>{newLine} <br/> </div>
+        <div className={`${style} ${messageClass}`} onClick={handleEditClick}>{message.text} <br/> </div>
       )}
     </>
   );
