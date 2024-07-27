@@ -14,55 +14,71 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
 
   //Check if the length of the text has reached the line limit yet
   useEffect(() => {
-    setIsLengthReached(messages.filter(message => message.type === "dialogue").length === lengthLimit)
+    setIsLengthReached(messages.filter(msg => msg.text !== "" && msg.text !== null).length === lengthLimit)
   }, [messages])
   
+  function parsePoetryAndComment(input) {
+    // Initialize variables to store the parsed parts
+    let poetryLine = "";
+    let comment = "";
+
+    // Trim the input to remove leading/trailing whitespace
+    input = input.trim();
+
+    // Check if the input starts with a '[' character
+    if (input.startsWith('[')) {
+        // Find the closing ']' character
+        let endBracketIndex = input.indexOf(']');
+        
+        // If a closing ']' is found, extract the poetry line
+        if (endBracketIndex !== -1) {
+            poetryLine = input.substring(1, endBracketIndex).trim();
+            // Extract the comment part if there is any text after the closing ']'
+            if (endBracketIndex + 1 < input.length) {
+                comment = input.substring(endBracketIndex + 1).trim();
+            }
+        }
+    } else {
+        // If the input doesn't start with '[', consider the whole input as a comment
+        comment = input;
+    }
+
+    console.log("Parsed: ", poetryLine, ", ", comment)
+
+    return { poetryLine, comment };
+}
+
+function checkAndAddMessage(sender, text, comment, type) {
+  text = (typeof text === 'string' && text.trim()) ? text : null;
+  comment = (typeof comment === 'string' && comment.trim()) ? comment : null;
+
+  if (text === null && comment === null) {
+    console.log("no message");
+  } else {
+    addMessage({ sender: sender, text: text, comment: comment, type: "dialogue"}); 
+  }
+}
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (newLine.trim()) {
-      addMessage({ sender: "user", text: newLine, comment: newComment, type: "dialogue"});
-      taskService
+    checkAndAddMessage("user", newLine, newComment,"dialogue");   
+
+    if (isLengthReached) {
+      newComment += " The poem is finished. Do NOT add a new poetry line.";
+    }
+
+    taskService
         .submitUserInput({inputData: { commentData: newComment}, text: newLine, ojective: theme})
         .then((returnedResponse) => {
-          if (returnedResponse.text.match(/\[(.*?)\]/)) {
-            addMessage({ 
-              sender: "ai",
-              text: returnedResponse.text,
-              type: "dialogue"
-            })
-          } else {
-            addMessage({ 
-              sender: "ai",
-              text: returnedResponse.text,
-              type: "conversation"
-            })
-          }
-        })  
-        .catch((error) => {
-          console.log(error)
-        });
-      setNewLine("");
-      setNewComment("");
-    } else if (newComment.trim()) {
-      addMessage({ sender: "user", text: "", comment: newComment, type: "conversation"});
-      taskService
-        .submitUserInput({inputData: { commentData: newComment}, text: "", ojective: theme})
-        .then((returnedResponse) => {
-          addMessage({ 
-            sender: "ai",
-            text: returnedResponse.text,
-            type: "conversation"
-          })
+          let parsed = parsePoetryAndComment(returnedResponse.text)
+          checkAndAddMessage("ai", parsed.poetryLine, parsed.comment,"dialogue")
         })
         .catch((error) => {
           console.log(error)
         });
         setNewLine("");
         setNewComment("");
-    } else {
-      console.log("No data is being sent to the model");
-    }
   };
 
   const chooseTheme = (event) => {
@@ -81,11 +97,8 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
         objective: theme
       })
       .then((returnedResponse) => {
-        addMessage({ 
-          sender: "ai",
-          text: returnedResponse.text,
-          type: "dialogue"
-        })
+        let parsed = parsePoetryAndComment(returnedResponse.text)
+        checkAndAddMessage("ai", parsed.poetryLine, parsed.comment, "dialogue")
       })
       .catch((error) => {
         console.log(error)
@@ -125,7 +138,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
         </div>
         <div className="messages">
           {messages
-            .filter(msg => msg.comment !== "")
+            .filter(msg => msg.comment !== "" && msg.comment !== null)
             .map((msg, index) => (
               <ConversationItem key={index} message={msg} /> 
             ))
