@@ -1,6 +1,6 @@
 # Task template for use with the Collaborative AI Arena
 
-This module serves as a template task ( and as a suggestion on how to set up communication pathes)
+This module serves as a template task (and as a suggestion on how to set up communication pathes)
 The aim of this template is to allow concurrent processing of requests and implement the flow for the Task component as detailed in the following diagram:
 
 ![A diagram showing the flow of messages from the model perspective](docs/threecomp_layout.svg)
