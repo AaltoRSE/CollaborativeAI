@@ -1,6 +1,7 @@
 # IMPORTANT: For Hackathon participants
 In the hackathon, the 3 main things you need to edit to adjust to your own task are the prompt, the frontend, and the model selection. However, if you want, feel free to explore the other parts of the system as well. We appreciate any feedback and suggestions that you might have for the Collaborative AI arena!
 
+
 ## Prompt:
 The prompt for the task is located inside [poetry.py](task_template/app/task_examples/poetry.py) in the `get_system_prompt` function. Currently, the function receives a parameter called `objective`, which serves as the theme/topic for the poem, and returns the prompt. 
 
