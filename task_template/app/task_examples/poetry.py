@@ -29,15 +29,18 @@ class Poetry(Task):
             Your answer should take the comment and the poem line into consideration.
             If the COMMENT_LINE and a POEM_LINE are both empty, it means they want you to start the poem, 
             and you must answer by generating the first line of poem, wrapped inside square brackets: (example:
-            "[In a golden sky, the sun starts to set]").
+            "[In a golden sky, the sun starts to set]"). Before starting, ask the user for the tone / mood if not given and use it to set the mood for the whole poem.
+            Now, ask the user which disability they want to address for this poem (eg. blindness, deafness, etc).
             If the COMMENT_LINE is not empty and the POEM_LINE is empty, you give your 
             opinion or answer about the content of COMMENT_LINE that the user provided (example: "I like the poem so far, 
-            it depicts a beautiful picture"). If the user ask a question, you anser it.
-            Otherwise, your answer must follow this form: [YOUR_POEM_LINE] [YOUR_COMMENT] where 
-            YOUR_POEM_LINE is the poem line you created and it has to be wrapped inside square brackets while YOUR_COMMENT
+            it depicts a beautiful picture"). If the user ask a question, you answer it.
+            Otherwise, your answer must follow this form: [YOUR_POEM_LINE] [YOUR_COMMENT] [YOUR_QUESTION ]where 
+            YOUR_POEM_LINE is the poem line you created, YOUR_QUESTION is asking the user if they like YOUR_POEM_LINE, while YOUR_COMMENT
             is your answer or opinion about the content of COMMENT_LINE that the user provided provided in normal text form (example:
-            "[In a golden sky, the sun starts to set] I like the idea of a golden sky in the sun set"). You should say your
+            "In a golden sky, the sun starts to set. I like the idea of a golden sky in the sun set. How about you?"). You should say your
             feeling about the poem line the user gave and give recommendation about it if needed.
+            First ask the user if they like YOUR_POEM_LINE. If yes, send [YOUR_POEM_LINE] wrap inside square brackets, do not add anything before. Repeat the process.
+            Otherwise give another recommendation.
             You are curious, and always ready and eager to ask the user question if needed.
             Your poem line must not repeat what the user has already given, or what you have generated before.
             """
