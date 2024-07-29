@@ -22,7 +22,7 @@ services:
     networks:
       - mynetwork
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_KEY=sk-proj-SieQclm1K8npSRPujN2aT3BlbkFJvb0slxqMmA2LlFvOpab8
   model_handler_template:
     build: ./model_handler_template
     ports:
