@@ -15,7 +15,7 @@ const FeedbackForm = ({ }) => {
   return (
     <div className="feedback-container">
       <h2>Please rate your experience based on the below metric</h2>
-      <h3>"Me and the AI collaborated well in this task"</h3>
+      <h3>"The AI help me made my poem more inclusive."</h3>
       <div className="rating-container">
         {[0, 1, 2, 3, 4, 5, 6].map(rating => (
           <div
