@@ -29,23 +29,21 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
 
     // Check if the input starts with a '[' character
     if (input.startsWith('[')) {
-        let endBracketIndex = input.indexOf(']');
-        let endBracketIndex = input.indexOf(']');
-        
-        // If a closing ']' is found, extract the poetry line
+      // Find the closing ']' character
       let endBracketIndex = input.indexOf(']');
-        
-        // If a closing ']' is found, extract the poetry line
+      
+      // If a closing ']' is found, extract the poetry line
       if (endBracketIndex !== -1) {
-        poetryLine = input.substring(1, endBracketIndex).trim();
-        if (endBracketIndex + 1 < input.length) {
-          comment = input.substring(endBracketIndex + 1).trim();
-        }
+          poetryLine = input.substring(1, endBracketIndex).trim();
+          // Extract the comment part if there is any text after the closing ']'
+          if (endBracketIndex + 1 < input.length) {
+              comment = input.substring(endBracketIndex + 1).trim();
+          }
       }
-    } else {
-        // If the input doesn't start with '[', consider the whole input as a comment
+  } else {
+      // If the input doesn't start with '[', consider the whole input as a comment
       comment = input;
-    }
+  }
 
     console.log("Parsed: ", poetryLine, ", ", comment);
 
