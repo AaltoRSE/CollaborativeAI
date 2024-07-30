@@ -13,6 +13,9 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
   const poemLines = messages
   .filter(msg => msg.text !== "" && msg.text !== null)
   .map(msg => msg.text);
+  const discussionLines = messages
+  .filter(msg => msg.comment !== "" && msg.comment !== null)
+  .map(msg => msg.comment);
 
   // Check if the length of the text has reached the line limit yet
   useEffect(() => {
@@ -130,6 +133,16 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
     URL.revokeObjectURL(url);
   }
 
+  const exportDiscussion = () => {
+    const blob = new Blob([discussionLines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'discussion.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="chat-space-wrapper">
       <h2>Discussion with AI</h2>
@@ -194,15 +207,6 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
             </div>
           </form>
           <div className="button-group">
-              <button type="submit" 
-                style={{
-                  backgroundColor: "#4caf50"
-                }}
-                disabled={isLengthReached}
-                className={isLengthReached ? "disabled" : ""}
-                onClick={handleSubmit}> 
-                Submit
-              </button>
               <button type="button" className="finish-button" 
                 style={{
                   backgroundColor: isFinishClicked ? "#f44336" : "#6eb4ff",
@@ -217,6 +221,13 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
                 }}
                 onClick={exportPoem}> 
                 Export Poem
+              </button>
+              <button type="button" 
+                style={{
+                  backgroundColor: "#ff9800"
+                }}
+                onClick={exportDiscussion}> 
+                Export Discussion
               </button>
             </div>
         </div>
