@@ -113,6 +113,13 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
     setIsFinishClicked(!isFinishClicked);
   }
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); 
+      handleSubmit(event); 
+    }
+  };  
+
   const exportPoem = () => {
     const blob = new Blob([poemLines.join('\n')], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -173,6 +180,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
                 disabled={isLengthReached}
                 className={isLengthReached ? "disabled" : ""}
                 onChange={(event) => setNewLine(event.target.value)}
+                onKeyDown={handleKeyPress}
                 placeholder="Add a line to the poem" 
               />
               <textarea 
@@ -180,6 +188,7 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
                 disabled={isLengthReached}
                 className={isLengthReached ? "disabled" : ""}
                 onChange={(event) => setNewComment(event.target.value)} 
+                onKeyDown={handleKeyPress}
                 placeholder="Send a message to the AI" 
               />
             </div>
