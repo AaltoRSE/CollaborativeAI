@@ -22,7 +22,7 @@ services:
     networks:
       - mynetwork
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_KEY=
   model_handler_template:
     build: ./model_handler_template
     ports:

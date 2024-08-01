@@ -1,60 +1,71 @@
 import { useState, useEffect } from 'react';
 import ConversationItem from "./ConversationItem";
-import taskService from '../services/task'
-import { lengthLimit } from '../../config';
+import taskService from '../services/task';
+import { lengthLimit } from '../utils/config';
 
-const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
-  const [newMessage, setNewMessage] = useState("");
+const ConversationDisplay = ({ toggleFinish, messages, addMessage, formData }) => {
+  const [newLine, setNewLine] = useState("");
+  const [newComment, setNewComment] = useState("");
   const [isFinishClicked, setIsFinishClicked] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [theme, setTheme] = useState("");
   const [isLengthReached, setIsLengthReached] = useState(false);
 
-  //Check if the length of the text has reached the line limit yet
+  function checkAndAddMessage(sender, text, comment, type){
+    text = (typeof text === 'string' && text.trim()) ? text : null;
+    comment = (typeof comment === 'string' && comment.trim()) ? comment : null;
+  
+    if (text === null && comment === null) {
+      console.log("no message");
+    } else {
+      addMessage({ sender: sender, text: text, comment: comment, type: "dialogue" });
+    }
+  }
+
   useEffect(() => {
-    setIsLengthReached(messages.length === lengthLimit)
-    console.log(messages)
-  }, [messages])
+    setIsLengthReached(messages.filter(msg => msg.text !== "" && msg.text !== null).length === lengthLimit);
+  }, [messages]);
+
+  function parsePoetryAndComment(input) {
+    let poetryLine = "";
+    let comment = "";
+
+    input = input.trim();
+
+    if (input.startsWith('[')) {
+      let endBracketIndex = input.indexOf(']');
+      if (endBracketIndex !== -1) {
+        poetryLine = input.substring(1, endBracketIndex).trim();
+        if (endBracketIndex + 1 < input.length) {
+          comment = input.substring(endBracketIndex + 1).trim();
+        }
+      }
+    } else {
+      comment = input;
+    }
+
+    console.log("Parsed: ", poetryLine, ", ", comment);
+
+    return { poetryLine, comment };
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    let newLine = ""
-    const poemLine = newMessage.match(/\[(.*?)\]/);
-    if (newMessage.trim() && poemLine) {
-      newLine = poemLine[1];
-      addMessage({ sender: "user", text: newLine, comment: newMessage, type: "dialogue"});
-      taskService
-        .submitUserInput({inputData: { commentData: newMessage}, text: newLine, ojective: theme})
-        .then((returnedResponse) => {
-          addMessage({ 
-            sender: "ai",
-            text: returnedResponse.text,
-            type: "dialogue"
-          })
-        })
-        .catch((error) => {
-          console.log(error)
-        });
-      setNewMessage("");
-    } else if (!poemLine) {
-      addMessage({ sender: "user", text: "", comment: newMessage, type: "conversation"});
-      taskService
-        .submitUserInput({inputData: { commentData: newMessage}, text: "", ojective: theme})
-        .then((returnedResponse) => {
-          addMessage({ 
-            sender: "ai",
-            text: returnedResponse.text,
-            type: "conversation"
-          })
-        })
-        .catch((error) => {
-          console.log(error)
-        });
-      setNewMessage("");
-    } else {
-      console.log("Error")
-    }
+    checkAndAddMessage("user", newLine, newComment, "dialogue");
+
+    taskService
+      .submitUserInput({ inputData: { commentData: newComment, reqType: "chat"}, text: newLine, objective: theme })
+      .then((returnedResponse) => {
+        let parsed = parsePoetryAndComment(returnedResponse.text);
+        checkAndAddMessage("ai", parsed.poetryLine, parsed.comment, "dialogue");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setNewLine("");
+    setNewComment("");
   };
 
   const handleThemeChange = (event) => setTheme(event.target.value)
@@ -66,109 +77,60 @@ const ConversationDisplay = ({ toggleFinish, messages, addMessage }) => {
     }
     event.preventDefault();
     setIsDisabled(true);
-    
-    //Generate the first AI poem line after setting the theme
+
     taskService
       .submitUserInput({
-        inputData: { commentData: ""},
+        inputData: { commentData: "" },
         text: "",
         objective: theme
       })
       .then((returnedResponse) => {
-        addMessage({ 
-          sender: "ai",
-          text: returnedResponse.text,
-          type: "dialogue"
-        })
+        let parsed = parsePoetryAndComment(returnedResponse.text);
+        checkAndAddMessage("ai", parsed.poetryLine, parsed.comment, "dialogue");
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
       });
   };
 
   const toggleFinishButton = () => {
     toggleFinish();
     setIsFinishClicked(!isFinishClicked);
-  }
+  };
 
   return (
     <div className="chat-space-wrapper">
-      <h2>Discussion with AI</h2>
+      <h2>Chat with the AI</h2>
       <div className="chat-space">
-        <div className="theme-input">
-          <form onSubmit={chooseTheme}>
-            <input 
-                  type="text" 
-                  disabled={isDisabled}
-                  placeholder="Set a theme for the poem"
-                  value={theme}
-                  className={isDisabled ? "disabled" : ""}
-                  onChange={handleThemeChange}
-            />
-            <button 
-                type="button"
-                disabled={isDisabled}
-                className={isDisabled ? "disabled" : ""}
-                style={{
-                  "background-color": "#4caf50"
-                }}>
-                Submit 
-            </button>
-          </form>
-        </div>
         <div className="messages">
-          {messages.map((msg, index) => (
-            <ConversationItem key={index} message={msg} /> 
-          ))}
+          {messages
+            .filter(msg => msg.comment !== "" && msg.comment !== null)
+            .map((msg, index) => (
+              <ConversationItem key={index} message={msg} />
+            ))
+          }
         </div>
-        {isLengthReached && 
-        <span 
-          style={{
-            "color" : "#FF0000"
-          }}>
-          Thank you. Here is our final poem. Please click Finish to rate it!
-        </span>
-        }
         <div className="form-wrapper">
-          <form onSubmit={handleSubmit}>
-            <div className="input-form">
-              {/* <input 
-                type="text" 
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', width: "100%" }}>
+            <div className="input-form" style={{ display: 'flex', alignItems: 'stretch' }}>
+              <textarea
                 value={newComment}
-                disabled={isLengthReached}
-                className={isLengthReached ? "disabled" : ""}
-                onChange={(e) => setNewComment(e.target.value)} 
-                placeholder="Send a message to the AI" 
-              /> */}
-              <input 
-                type="text" 
-                value={newMessage} 
-                disabled={isLengthReached}
-                className={isLengthReached ? "disabled" : ""}
-                onChange={(e) => setNewMessage(e.target.value)} 
-                placeholder="Send a message to the AI" 
+                onChange={(event) => setNewComment(event.target.value)}
+                placeholder="Send a message to the AI"
+                style={{ height: "100px", resize: "none", flexGrow: 1, width: "80%" }}
               />
-            </div>
-          </form>
-          <div className="button-group">
-              <button type="submit" 
+              <button type="submit"
                 style={{
-                  "background-color": "#4caf50"
-                }}
-                disabled={isLengthReached}
-                className={isLengthReached ? "disabled" : ""}
-                onClick={handleSubmit}> 
+                  backgroundColor: "#4caf50",
+                  height: "100px",
+                  width: "15%",
+                  maxWidth: "150px",
+                  borderTop: "10px"
+                }}>
                 Submit
               </button>
-              <button type="submit" className="finish-button" 
-                style={{
-                  "background-color": isFinishClicked ? "#f44336" : "#6eb4ff",
-                  "cursor": isFinishClicked ? "not-allowed" : "pointer"
-                }}
-                onClick={toggleFinishButton}> 
-                {isFinishClicked ? "Cancel" : "Finish"}
-              </button>
             </div>
+          </form>
         </div>
       </div>
     </div>

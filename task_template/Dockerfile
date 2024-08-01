@@ -27,7 +27,7 @@ COPY ./frontend ./frontend
 # COPY backend code
 COPY ./app .
 # Install frontend, clear dist folder
-RUN cd frontend && npm install && npm run build && ls && pwd && mv dist ../ && cd .. && rm -r frontend
+RUN cd frontend && npm install && npm install react-dom react-quill quill && npm run build && ls && pwd && mv dist ../ && cd .. && rm -r frontend
 
 COPY entrypoint.sh .
 RUN useradd appuser
