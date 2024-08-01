@@ -8,6 +8,11 @@
   cursor: not-allowed;
 }
 
+textarea {
+  width: 630px;
+  height: 50px;
+}
+
 body {
   font-family: "Inter", sans-serif;
 }
@@ -44,6 +49,11 @@ a:active {
   align-items: center; 
   height: 100px; 
   padding: 20px;
+  text-align: center;
+}
+
+.header-content {
+  text-align: center;
 }
 
 .navbar {
@@ -99,17 +109,18 @@ a:active {
   height: 50vh;
   margin: 5px;
   border-radius: 20px;
+  text-align: justify;
 }
 
-.dialogue {
+.dialogue-poem {
   text-align: center;
-  display: flex;
-  flex-direction: column;
-}
-
-.dialogue-message {
   padding: 10px;
   margin: 5px 0;
+  border-radius: 10px;
+}
+
+.dialogue-paragraph {
+  display: inline;
   border-radius: 10px;
 }
 
@@ -127,6 +138,23 @@ a:active {
 
 .ai-dialogue {
   background-color: #ffe0b2;
+}
+
+.edit-form {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.edit-form textarea {
+  width: 760px;
+  margin-right: 5px;
+  height: 70px;
+}
+
+.edit-form button {
+  color: #225424;
+  background-color: #93df95;
+  border-radius: 5px;
 }
 
 .chat-space {
@@ -186,25 +214,27 @@ a:active {
   flex-direction: column;
 }
 
+
 .form-wrapper {
   display: flex;
-  flex-direction: rows;
+  flex-direction: column; /* 默认方向为纵向 */
+  width: 100%; /* 使表单在小屏幕上占满宽度 */
 }
 
-.input-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-form input {
-  width: 614px;
+.input-form textarea {
+  flex-grow: 1;
   margin: 5px;
+  width: 100%; /* 使表单在小屏幕上占满宽度 */
+
 }
+
 
 .button-group {
   display: flex;
-  flex-direction: row;
   margin: 5px;
+  height: auto; /* 自动高度适应内容 */
+  width: 20%; /* 使按钮组在小屏幕上占满宽度 */
+  box-sizing: border-box; /* 包含内边距和边框在内的宽度计算 */
 }
 
 .button-group button {
@@ -286,6 +316,11 @@ a:active {
   width: 600px; 
 }
 
+.systemlogo-section img {
+  width: 600px; 
+}
+
+
 .feedback-placeholder {
   height: 184px;
 }
@@ -332,4 +367,93 @@ a:active {
   color: white;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.task-description {
+  text-align: center;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.content-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.systemlogo-section {
+  flex: 1;
+  text-align: left;
+}
+
+
+.user-guide-section {
+  flex: 1;
+  text-align: left;
+  margin-top: 20px;
+  margin-left: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 10px solid #ddd;
+  border-radius: 20px;
+}
+
+.user-guide-section h3 {
+  margin-top: 10px;
+}
+
+.user-guide-section ol {
+  padding-left: 20px;
+}
+
+.user-guide-section li {
+  margin-bottom: 10px;
+}
+
+.task-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.center-header {
+  width: 100%;
+  text-align: center;
+}
+
+.content-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.systemlogo-section {
+  flex: 1;
+  text-align: left;
+  margin-left: 30px;
+}
+
+.user-guide-section {
+  flex: 1;
+  text-align: left;
+  margin-left: 20px;
+  margin-right: 50px;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.header-content {
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }

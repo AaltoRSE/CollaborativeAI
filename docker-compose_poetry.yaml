@@ -9,9 +9,8 @@ services:
       - 8062:8062
     networks:
       - mynetwork
-    environment:
-      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
-      - SSL_KEY=${SSL_KEY}
+
+
     # volumes:
     #   - ./task_template:/usr/project/task_template
     #   - /usr/project/node_modules
