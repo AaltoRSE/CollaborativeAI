@@ -13,3 +13,6 @@ RUN pip install --no-cache-dir -r /opt/requirements.txt
 COPY ./*.json /docker-entrypoint.d/
 COPY ./frontend/dist /frontend
 COPY ./backend/app /app
+
+EXPOSE 8062
+EXPOSE 8061
