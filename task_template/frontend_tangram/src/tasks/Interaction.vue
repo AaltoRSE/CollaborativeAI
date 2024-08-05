@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-column ml-3 p-input-icon-right w-full flex-grow-1">
+  <div class="flex flex-column ml-3 p-input-icon-right w-full">
     <div class="flex flex-row w-full mb-2">
       <div class="flex flex-shrink-0 w-10 mr-3">
         <TextArea

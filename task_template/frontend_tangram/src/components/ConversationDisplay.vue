@@ -19,7 +19,7 @@ const { currentInteraction, lastInteraction } = storeToRefs(taskStore)
 
 const errored = computed(() => {
   if (props.conversation) {
-    const convExists = props.conversation.at(-1)
+    const convExists = props.conversation[props.conversation.length - 1]
     if (convExists) {
       return convExists.error
     } else {

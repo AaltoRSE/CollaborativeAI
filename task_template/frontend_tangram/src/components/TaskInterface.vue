@@ -1,32 +1,31 @@
 <template>
-  <div ref="displayArea" class="flex flex-grow-1 flex-column align-content-between h-full">
-    <div class="grid h-full">
-      <Workspace
-        ref="WorkspaceComponent"
-        class="col-6"
-        @submit="submitData"
-        :inputData="currentInteraction.interactionData"
-        :isLoading="currentInteraction.isLoading"
-      />
-
+  <div ref="displayArea" class="flex flex-column align-content-between">
+    <div class="grid h-full align-items-center">
+      <div class="flex col-6">
+        <Workspace
+          ref="WorkspaceComponent"
+          @submit="submitData"
+          :inputData="currentInteraction.interactionData"
+          :isLoading="currentInteraction.isLoading"
+        />
+      </div>
       <div class="flex flex-column col-6">
         <ScrollPanel ref="chatpanel" :style="{ height: scrollpaneMax + 'px' }">
           <ConversationDisplay :conversation="currentInteraction.history"> </ConversationDisplay>
-          <div class="grid">
-            <div class="col-10">
-              <Interaction
-                ref="InteractionComponent"
-                @submit="submitData"
-                :inputData="currentInteraction.interactionData"
-                :isLoading="currentInteraction.isLoading"
-              />
-            </div>
-            <div class="col-2">
-              <Button v-if="!showRatings" @click="() => (showRatings = true)" label="Finish" />
-            </div>
-          </div>
         </ScrollPanel>
-
+        <div class="grid">
+          <div class="col-12">
+            <Interaction
+              ref="InteractionComponent"
+              @submit="submitData"
+              :inputData="currentInteraction.interactionData"
+              :isLoading="currentInteraction.isLoading"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="flex col-12 ml-2 justify-content-center w-full">
+        <Button v-if="!showRatings" @click="() => (showRatings = true)" label="Finish" />
         <Ratings v-if="showRatings" @ratingsSubmitted="() => (showRatings = false)" />
       </div>
     </div>

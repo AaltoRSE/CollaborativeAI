@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-column align-content-between h-screen">
-    <div class="taskview-header">
+  <div class="flex flex-column h-screen">
+    <div>
       <h1>{{ task.title }}</h1>
       <p>{{ task.description }}</p>
       <div v-if="currentInteraction.objective">
