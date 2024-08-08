@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-column h-screen">
     <div>
+      <Header />
       <h1>{{ task.title }}</h1>
       <p>{{ task.description }}</p>
       <div v-if="currentInteraction.objective">
@@ -22,6 +23,7 @@
         :input-data="lastInteraction"
       ></TaskInterface>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -32,6 +34,8 @@ import ConversationDisplay from '@/components/ConversationDisplay.vue'
 import InputField from '@/components/InputField.vue'
 import TaskInterface from '@/components/TaskInterface.vue'
 import Ratings from '@/components/Ratings.vue'
+import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
 
 import { defineComponent } from 'vue'
 
@@ -49,7 +53,9 @@ export default defineComponent({
     InputField,
     TaskInterface,
     ProgressSpinner,
-    Ratings
+    Ratings,
+    Header,
+    Footer
   },
   data() {
     return {
