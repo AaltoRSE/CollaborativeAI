@@ -16,6 +16,7 @@ The messages along with their fields are:
       - `text` : The text of the answer of the model
       - `image`: a base64 encoded image.
     - `sessionID`: An ID of the session that this response is for
+    - `messageID`: An ID of the individual message sent, to be able to answer to this message
 - Outgoing Messages:
   - `taskRequest`
     - `request` : A string represnting a json object with the following fields:
@@ -23,6 +24,7 @@ The messages along with their fields are:
       - `image`: a base64 encoded image.
       - `system`: A String representing a system message to the model (i.e. the task description)
     - `sessionID`: An ID of the session that generated this resource
+    - `messageID`: An ID of the individual message sent, to be able to answer to this message
   - `taskMetrics`:
     - `metrics`: A String that is alredy formatted and just needs to be put into the models log, so that it can be interpreted by AIBuilder for the leaderboard
     - `sessionID`: The session for which these metrics were generated

@@ -1,6 +1,6 @@
 # Model handler documentation
 
-This module serves as a handler that manages the connection between multiple models and tasks components. This documentation is for your information only. 
+This module serves as a handler that manages the connection between multiple models and tasks components. This documentation is for your information only.
 
 ## Model Handler Messages
 
@@ -15,17 +15,20 @@ The messages along with their fields are:
   - `taskMetrics`:
     - `metrics`: A String that is alredy formatted and just needs to be put into the models log, so that it can be interpreted by AIBuilder for the leaderboard
     - `sessionID`: The session for which these metrics were generated
+    - `messageID`: An ID of the individual message sent, to be able to answer to this message
   - `modelAnswer`:
     - `answer` : A string represnting a json object with the following fields:
       - `text` : The text of the answer of the model
       - `image`: a base64 encoded image.
     - `sessionID`: An ID of the session that prompted this response
+    - `messageID`: An ID of the individual message sent, to be able to answer to this message
   - `taskRequest`:
     - `request` : A string represnting a json object with the following fields:
       - `text` : An array of messages with a syntax resembling OpenAI messages. Each message has a field `role` and a field `content` where role can be either `"assistant"` or `"user"`
       - `image`: a base64 encoded image.
       - `system`: A String representing a system message to the model (i.e. the task description)
     - `sessionID`: An ID of the session that generated this resource
+    - `messageID`: An ID of the individual message sent, to be able to answer to this message
   - `modelDefinition`:
     - `needs_text`: A Bool indicating whether the model needs text for processing
     - `needs_image`: A Bool indicating whether the model needs an image for processing
@@ -52,11 +55,13 @@ The messages along with their fields are:
 ## Model Handler Services
 
 There are five services detailed in the model_handler.proto file. Those contain:
+
 - `startTask`: A service which is called when a modelRequirements message is sent from a task component. The request gives the handler the information so that it can choose the suitable model for the task. The condition for choosing the suitable model is as follow:
+
   - If the modelRequirements message has "needs_text", choose models that have "can_text" and don't have "needs_image".
   - If the modelRequirements message has "needs_image", choose models that have "can_image" and don't have "needs_text".
   - If the modelRequirements message has both "needs_image" and "needs_text", choose models that have both "can_image" and "can_text"
-If there are multiple models that sastisfy the condition, choose a random model and then store the sessionID-modelID connection in a dictionary. The idea here is to assign a single session to a single model only. Finally, the service returns an Empty message.
+    If there are multiple models that sastisfy the condition, choose a random model and then store the sessionID-modelID connection in a dictionary. The idea here is to assign a single session to a single model only. Finally, the service returns an Empty message.
 
 - `finishTask`: a service which is called when a taskMetrics message is sent from a task component (whenever the task is demdemned completed by the user). After that, the model handler retrieves the modelID from the modelID-sessionID dictionary, and severes the connection between the sessionID and the modelID. Finally, the response of the service is a metricsJson message, which is then sent to the correct model component to store the metrics in the model logs.
 

@@ -18,6 +18,7 @@ The messages along with their fields are:
       - `system`: A String representing a system message to the model (i.e. the task description)
     - `modelID`: A string representing which model this request is for
     - `sessionID`: An ID of the session that generated this resource
+    - `messageID`: An ID of the individual message sent, to be able to answer to this message (if multiple messages are sent simutaneously)
   - `metricsJson`:
     - `metrics`: A String that is alredy formatted and just needs to be put into the models log, so that it can be interpreted by AIBuilder for the leaderboard
     - `modelID`: A string representing which model this request is for
@@ -33,6 +34,7 @@ The messages along with their fields are:
       - `text` : The text of the answer of the model
       - `image`: a base64 encoded image.
     - `sessionID`: An ID of the session that prompted this response
+    - `messageID`: An ID of the individual message sent, must be the same as the ID provided in the corresponding `modelRequest`
 
 ## Model Services
 

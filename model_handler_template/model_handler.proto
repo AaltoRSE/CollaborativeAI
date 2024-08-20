@@ -8,7 +8,8 @@ syntax = "proto3";
 // { "data" : { "text" : [ { "role" : "user|assistant", "content" : "Content" } ... ], "image" : "base64 encoded image", "system" : "The system prompt for the model" } }
 message taskRequest { 
     string request = 1;   
-    string sessionID = 2;    
+    string sessionID = 2;
+    string messageID = 3;    
 }
 // The answer (again a json)
 // the answer is a json object with the following structure
@@ -16,6 +17,7 @@ message taskRequest {
 message modelAnswer { 
     string answer = 1;
     string sessionID = 2;
+    string messageID = 3;
 }
 
 // How an ID response looks like
@@ -36,6 +38,7 @@ message modelRequest {
     string request = 1;  
     string modelID = 2; 
     string sessionID = 3;
+    string messageID = 4;
 }
 
 // define model Properties
@@ -65,9 +68,9 @@ message Empty {
 }
 
 service ModelHandler {
-    rpc startTask(modelRequirements) returns (Empty); // Register a started task, and assign a model to it.
-    rpc finishTask(taskMetrics) returns (metricsJson); // Finish a Task, no reply necessary
-    rpc sendToModel(taskRequest) returns (modelRequest); // Predict a task
-    rpc returnToTask(modelAnswer) returns (modelAnswer); // Return the answer to the task, this is essentially just a forward
-    rpc registerModel(modelDefinition) returns (Empty); // Register a model
+    rpc startTask(modelRequirements) returns (Empty); 
+    rpc finishTask(taskMetrics) returns (metricsJson); 
+    rpc sendToModel(taskRequest) returns (modelRequest); 
+    rpc returnToTask(modelAnswer) returns (modelAnswer); 
+    rpc registerModel(modelDefinition) returns (Empty);
 }

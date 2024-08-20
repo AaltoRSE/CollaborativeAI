@@ -8,7 +8,8 @@ syntax = "proto3";
 // { "data" : { "text" : [ { "role" : "user|assistant", "content" : "Content" } ... ], "image" : "base64 encoded image", "system" : "The system prompt for the model" } }
 message taskRequest { 
     string request = 1;   
-    string sessionID = 2;    
+    string sessionID = 2;
+    string messageID = 3;    
 }
 // The answer (again a json)
 // the answer is a json object with the following structure
@@ -16,6 +17,7 @@ message taskRequest {
 message modelAnswer { 
     string answer = 1;
     string sessionID = 2;
+    string messageID = 3;
 }
 
 // How an ID response looks like
@@ -36,6 +38,7 @@ message modelRequest {
     string request = 1;  
     string modelID = 2; 
     string sessionID = 3;
+    string messageID = 4;
 }
 
 // define model Properties

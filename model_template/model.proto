@@ -10,6 +10,7 @@ message modelRequest {
     string request = 1;  
     string modelID = 2; 
     string sessionID = 3;
+    string messageID = 4;
 }
 // The answer (again a json)
 // the answer is a json object with the following structure
@@ -17,6 +18,7 @@ message modelRequest {
 message modelAnswer { 
     string answer = 1;   
     string sessionID = 2; 
+    string messageID = 3;
 }
 
 // define model Properties

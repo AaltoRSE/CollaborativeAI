@@ -10,7 +10,8 @@ syntax = "proto3";
 //   "system" : "The system prompt for the model" } 
 message taskRequest { 
     string request = 1;   
-    string sessionID = 2;    
+    string sessionID = 2;
+    string messageID = 3;    
 }
 // The answer (again a json)
 // the answer is a json object with the following structure
@@ -19,6 +20,7 @@ message taskRequest {
 message modelAnswer { 
     string answer = 1;
     string sessionID = 2;
+    string messageID = 3;
 }
 
 // define model Properties

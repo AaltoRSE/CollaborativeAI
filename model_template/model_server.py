@@ -74,6 +74,7 @@ class ModelServicer(model_pb2_grpc.ModelServicer):
             modelAnswer = model_pb2.modelAnswer()
             modelAnswer.answer = result.model_dump_json()
             modelAnswer.sessionID = data.sessionID
+            modelAnswer.messageID = data.messageID
             logger.info("Putting response to result queue")
             self.result_queue.put(modelAnswer)
         except Exception as e:
