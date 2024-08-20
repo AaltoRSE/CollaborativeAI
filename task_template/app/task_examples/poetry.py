@@ -1,5 +1,4 @@
 import logging
-import tasks.tangram_models as tangram_models
 from typing import Any, List
 import json
 from tasks.task_interface import Task
@@ -24,14 +23,23 @@ class Poetry(Task):
 
         system_prompt = f"""You are working together with a user to iteratively create a poem. 
             The details of the poem are as follows : {objective}
-            Each of you should generate one line in each step.
-            You will get a message from the user in the form:
-            [POEM_LINE] : the user poem line
-            [COMMENT_LINE] : the user comment on the poem up till now
-            The comment line can be empty
-            Your answer should take the comment line and the poem line into consideration and consist and consist of the next line in the poem you want to create.
-            Your anser should only be the poem line you created. Do not include the text '[POEM_LINE]' or '[COMMENT_LINE]' into your answer.
-            Your answer should not repeat what the user give, or what you have generated before
+            Each of you should generate one line in each step. You will get a message from the user in the form 
+            POEM_LINE COMMENT_LINE: POEM_LINE is the new poem line provided by the user and it is 
+            wrapped inside square brackets while COMMENT_LINE are the comment made by the user.
+            Your answer should take the comment and the poem line into consideration.
+            If the COMMENT_LINE and a POEM_LINE are both empty, it means they want you to start the poem, 
+            and you must answer by generating the first line of poem, wrapped inside square brackets: (example:
+            "[In a golden sky, the sun starts to set]").
+            If the COMMENT_LINE is not empty and the POEM_LINE is empty, you give your 
+            opinion or answer about the content of COMMENT_LINE that the user provided (example: "I like the poem so far, 
+            it depicts a beautiful picture"). If the user ask a question, you anser it.
+            Otherwise, your answer must follow this form: [YOUR_POEM_LINE] [YOUR_COMMENT] where 
+            YOUR_POEM_LINE is the poem line you created and it has to be wrapped inside square brackets while YOUR_COMMENT
+            is your answer or opinion about the content of COMMENT_LINE that the user provided provided in normal text form (example:
+            "[In a golden sky, the sun starts to set] I like the idea of a golden sky in the sun set"). You should say your
+            feeling about the poem line the user gave and give recommendation about it if needed.
+            You are curious, and always ready and eager to ask the user question if needed.
+            Your poem line must not repeat what the user has already given, or what you have generated before.
             """
         return system_prompt
 
@@ -44,6 +52,7 @@ class Poetry(Task):
         process pieces' data and plug them into the prompt
         """
         # This could include an image, but for this task, we currently don't supply one
+        logger.info(request)
         return TaskRequest(
             text=f"[POEM_LINE] : {request.text} \n[COMMENT_LINE] : {request.inputData['commentData']}",
             system=self.get_system_prompt(request.objective),

@@ -12,6 +12,9 @@ services:
     environment:
       - SSL_CERTIFICATE=${SSL_CERTIFICATE}
       - SSL_KEY=${SSL_KEY}
+    # volumes:
+    #   - ./task_template:/usr/project/task_template
+    #   - /usr/project/node_modules
   model_template:
     build: ./model_template
     ports:
