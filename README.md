@@ -8,7 +8,7 @@ The prompt for the task is located inside [poetry.py](task_template/app/task_exa
 Although the current prompt serves as a starting point for your task, it's by no means optimized. Because of that, we highly recommend you to experiment and do some prompt engineering for it to fit whatever task you have in mind.
 
 ## Frontend:
-The frontend for the hackathon is based on our poetry task, rewritten in ReactJS. The main idea of the task is that the user submits the theme/objective for the poem and then they collaborate with the model to complete it. However, This task is not limited to poem writing only as you can freely switch between a line-by-line rendering (poem) or a continuous rendering (paragraph). For a more detailed explanation, please go [here](task_template/new-poetry-frontend/README.md)
+The frontend for the hackathon is based on our poetry task, rewritten in ReactJS. The main idea of the task is that the user submits the theme/objective for the poem and then they collaborate with the model to complete it. However, This task is not limited to poem writing only as you can freely switch between a line-by-line rendering (poem) or a continuous rendering (paragraph). For a more detailed explanation, please go [here](task_template/frontend_poetry/README.md)
 
 ## Model selection:
 At the moment, the system supports two models [gpt4-turbo](model_template/models/openAI_model.py) and [gpt4-o](model_template/models/openAI_image_model.py), which are located inside the folder [model_template/models](model_template/models). 

@@ -73,10 +73,10 @@ class ModelHandler(model_handler_pb2_grpc.ModelHandlerServicer):
         )
 
     def returnToTask(self, request, context):
-        modelAnwer = request
+        modelAnswer = request
 
         return model_handler_pb2.modelAnswer(
-            answer=modelAnwer.answer, sessionID=modelAnwer.sessionID, messageID=modelAnswer.messageID,
+            answer=modelAnswer.answer, sessionID=modelAnswer.sessionID, messageID=modelAnswer.messageID,
         )
 
     def registerModel(self, request, context):

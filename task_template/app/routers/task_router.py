@@ -93,6 +93,9 @@ async def process_task_data(
     # And wait for the response to arrive:
     while True:
         answer = queue_handler.get_answer(sessionID, messageID)
+        logger.info("debug")
+        logger.info(messageID)
+        logger.info(sessionID)
         if answer == None:
             queue_handler.process_queue(sessionID)
             await asyncio.sleep(1)
