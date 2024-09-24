@@ -28,7 +28,7 @@ class OpenAIModel(AIModel):
         logger.info(metrics_json)
 
     async def get_response(self, message: TaskInput) -> TaskOutput:
-        model = ChatOpenAI()
+        model = ChatOpenAI(model="gpt-4o")
 
         history_template = ChatPromptTemplate.from_messages(
             [
