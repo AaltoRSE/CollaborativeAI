@@ -4,13 +4,14 @@ from models import (
     TaskDataResponse,
     ModelResponse,
     TaskRequirements,
-    TaskMetrics,
+    TaskMetrics,   
+    TaskRequest         
 )
 from routers.router_models import (
-    ConversationItem,
-    TaskRequest,
+    ConversationItem,    
     SessionData,
-    OpenAIChatBaseModel,
+    OpenAIChatBaseModel
+    
 )
 from routers.session import get_session, clear_session
 from typing import Dict, List
@@ -41,12 +42,13 @@ class TaskRouter:
         currentElement = self.task.generate_model_request(request)
         grpc_taskRequest = grpc_models.taskRequest()
         # Extend the history by the current request.
-        logger.info(currentElement.text)
-        history.append(ConversationItem(role="user", content=currentElement.text))
+        logger.info(currentElement.text)        
+        current
         # Now, we convert this into the taskRequest
         currentRequestObject = TaskRequest(
             text=history, image=currentElement.image, system=currentElement.system
         )
+        history.append(ConversationItem(role="user", content=currentElement.text))
         grpc_taskRequest.request = currentRequestObject.model_dump_json()
         return grpc_taskRequest
 
@@ -73,7 +75,6 @@ async def chat_completion_endpoint(
     """Generate prompt endpoint:
     process pieces' data and plug them into the prompt
     """
-    history = session.history
     sessionID = session.id
     messageID = str(uuid4())
     task_props = task_handler.get_requirements()
@@ -103,8 +104,23 @@ async def chat_completion_endpoint(
     converted_task_data.objective = system_messages[0].content
     # get the last message
     last_message = task_data.messages[-1]
-    # extract image and text parts from the last message
-    # we can only handle one message.
+    #Convert the messages array into ConversationItems for our framework. 
+    #We will not supplement with history apart from whats supplied here
+    data = []
+    for message in task_data.messages[:-1]:
+        role = message.role
+        for element in message.content:
+            if message.content.type == "text":
+                data.append(
+                    ConversationItem(role=message.role, content=message.content.text)
+                )
+            elif message.content.type == "image":
+                data.append(
+                    ConversationItem(role=message.role, content=message.content.image_url)
+                )
+            # Currently, we cannot handle audio.
+
+
     text_messages = [
         ConversationItem(content=message, role=last_message.role)
         for message in last_message.content
@@ -117,7 +133,8 @@ async def chat_completion_endpoint(
     ]
     if len(image_messages) > 0:
         converted_task_data.image = image_messages[0].url
-
+    history = []
+     
     model_request = task_handler.build_model_request(converted_task_data, history)
     # Add the session ID to the model request
     model_request.sessionID = sessionID

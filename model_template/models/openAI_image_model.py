@@ -30,36 +30,8 @@ class OpenAIImageModel(AIModel):
             model="gpt-4o",
             max_tokens=4096,
         )
-        if not message.image == None:
-            final_request = HumanMessage(
-                content=[
-                    {"type": "text", "text": message.text[-1].content},
-                    {"type": "image_url", "image_url": {"url": message.image}},
-                ]
-            )
-        else:
-            final_request = HumanMessage(
-                content=[{"type": "text", "text": message.text[-1].content}]
-            )
-        history_template = ChatPromptTemplate.from_messages(
-            [
-                # replace single curly brackets by double, since otherwise they they are interpreted as variables, which they are not
-                ("system", message.system.replace("{", "{{").replace("}", "}}")),
-                MessagesPlaceholder(variable_name="chat_history"),
-                final_request,
-            ]
-        )
-
-        history = []
-        if len(message.text) > 1:
-            logger.info("Including history")
-            for i in range(len(message.text) - 1):
-                inputMessage = message.text[i]
-                if inputMessage.role == "user":
-                    history.append(HumanMessage(inputMessage.content))
-                else:
-                    history.append(AIMessage(inputMessage.content))
-        AIresponse = model.invoke(history_template.format_prompt(chat_history=history))
+        messages = TaskInput.content        
+        AIresponse = model.invoke(messages)
         print(f"AIresponse: {AIresponse.content}")
         taskResponse = TaskOutput()
         taskResponse.text = AIresponse.content

@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 from pydantic import BaseModel, Field, ConfigDict
 
 
@@ -7,15 +7,6 @@ class TaskDataRequest(BaseModel):
     inputData: Any
     image: Optional[str] = None
     objective: Optional[str] = None
-
-
-class TaskRequest(BaseModel):
-    # The text of the request
-    text: Optional[str] = Field(default="", nullable=True)
-    # the image of the request
-    image: Optional[str] = Field(default=None, nullable=True)
-    # The system message of the request
-    system: str
 
 
 class ModelResponse(BaseModel):
@@ -39,3 +30,29 @@ class TaskRequirements(BaseModel):
 
 class TaskMetrics(BaseModel):
     metrics: Any
+
+class OpenAIMessage(BaseModel):
+    type: str
+
+
+class ImageMessage(OpenAIMessage):
+    type: str = "image_url"
+    image_url: str
+    model_config = ConfigDict(extra="ignore")
+
+
+class TextMessage(OpenAIMessage):
+    type: str = "text"
+    text: str
+    model_config = ConfigDict(extra="ignore")
+
+
+class Message(BaseModel):
+    role: str
+    content: Union[str, List[Union[ImageMessage, TextMessage]]]
+    model_config = ConfigDict(extra="ignore")
+
+
+class TaskRequest(BaseModel):
+    # The text of the request
+    content : List[Message]    

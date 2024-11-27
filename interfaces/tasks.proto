@@ -7,19 +7,20 @@ syntax = "proto3";
 // A model Request. The request must follow the following (textual) json conversion
 // { "text" : [ { "role" : "user|assistant", "content" : "Content" } ... ], 
 //   "image" : "base64 encoded image", 
-//   "system" : "The system prompt for the model" 
-//   }
-
-messaRge taskRequest { 
+//   "system" : "The system prompt for the model" } 
+message taskRequest { 
     string request = 1;   
-    string sessionID = 2;    
+    string sessionID = 2;
+    string messageID = 3;    
 }
 // The answer (again a json)
 // the answer is a json object with the following structure
-// { "data" : { "text" : "Some text returned by the model", "image" : "base64 encoded image returned by the model, if any" } }
+// { "text" : "Some text returned by the model", 
+//   "image" : "base64 encoded image returned by the model, if any" } 
 message modelAnswer { 
     string answer = 1;
     string sessionID = 2;
+    string messageID = 3;
 }
 
 // define model Properties

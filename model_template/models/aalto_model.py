@@ -38,28 +38,8 @@ class AaltoModel(AIModel):
         model = ChatOpenAI(
             base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/gpt4-1106-preview/",
             default_headers=default_headers,
-        )
-
-        history_template = ChatPromptTemplate.from_messages(
-            [
-                # replace single curly brackets by double, since otherwise they they are interpreted as variables, which they are not
-                ("system", message.system.replace("{", "{{").replace("}", "}}")),
-                MessagesPlaceholder(variable_name="chat_history"),
-                ("human", "{input}"),
-            ]
-        )
-
-        history = []
-        if len(message.text) > 1:
-            for i in range(len(message.text) - 1):
-                inputMessage = message.text[i]
-                if inputMessage.role == "user":
-                    history.append(HumanMessage(inputMessage.content))
-                else:
-                    history.append(AIMessage(inputMessage.content))
-        AIresponse = model.invoke(
-            history_template.format_prompt(chat_history=history, input=message.text[-1])
-        )
+        )        
+        AIresponse = model.invoke(message.content)
         print(f"AIresponse: {AIresponse.content}")
         taskResponse = TaskOutput()
         taskResponse.text = AIresponse.content
