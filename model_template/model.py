@@ -12,5 +12,9 @@ elif model_to_use == "o1":
     ai_model = o1()
 elif model_to_use == "aalto":    
     ai_model = AaltoModel()
+elif model_to_use == "simpleTangram":    
+    ai_model = simpleAgent()
+elif model_to_use == "relationalTangram":    
+    ai_model = relationalAgent()
 else:    
     ai_model = OpenAIImageModel()
