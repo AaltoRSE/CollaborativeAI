@@ -1,33 +1,35 @@
+import json
 import logging
-
-from fastapi import HTTPException
-
+from http.client import HTTPException
 from tasks.task_interface import OpenAITask
 from routers.router_models import Message
 from models import (
     OpenAIBasedDataRequest,
-    OpenAIBasedRequest,    
+    OpenAIBasedRequest,
+    TaskRequest,
     TaskDataResponse,
     ModelResponse,
     TaskRequirements,
-
-)
+    TaskDataRequest
+    )
 
 logger = logging.getLogger(__name__)
 
-
-def get_chat_prompt(objective : str) -> str :
+def get_chat_prompt(objective: str) -> str:
     game_reference = {
-        "type": "text", "text":"""Reference Information about the game: 
+        "type": "text",
+        "text": """Reference Information about the game: 
         You and the human user are playing a tangram game, arranging the pieces to form an objective shape. 
         The pieces are named by their colors: Red, Purple, Yellow, Green, Blue, Cream, and Brown.
         Red and Cream are two large triangles, Yellow and green are two small triangles, Blue is a medium triangle, Purple is a small square, Brown is a tilted parallelogram.
         We consider 0 degrees of rotation the triangles with their hypotenuse facing down, and the square in the square position (so the diamond shape corresponds to 45 degrees of rotation)
         Example logical plays: Matching shapes can allow new larger shapes to appear, uniting two triangles of the same size by their Hypotenuse creates a square of in the location. The Purple Square or a square created of 2 triangles can serve to form many things like heads, bodies, bases of structures. 
         Two triangles can also form a larger triangle when combined.
-        """
+        """,
     }
-    chat_prompt = {"type": "text", "text": """You are an AI chatting with a Human Player thats arraging tangram tangram pieces with you and your co-assistents to reach a certain objective. 
+    chat_prompt = {
+        "type": "text",
+        "text": """You are an AI chatting with a Human Player thats arraging tangram tangram pieces with you and your co-assistents to reach a certain objective. 
         To answer them, you will have access to the message history, an image of the current board, an image of the current piece drawer where the unplaced pieces lie.
         Your task:
         1. Review what you know about the game state.
@@ -50,13 +52,16 @@ def get_chat_prompt(objective : str) -> str :
         - "I don't think the yellow piece would make a good roof due to it's size, maybe we could use cream for the same objective."
         - "Sounds great, let's begin then!"
         - "I think the game already looks like our objective."
-        """
+        """,
     }
-    objective = {"type": "text", "text": f"Your objetive this game is to form the shape of {objective}"}
-    return {"role" : "system", "content":  [game_reference, chat_prompt, objective]}
+    objective = {
+        "type": "text",
+        "text": f"Your objetive this game is to form the shape of {objective}",
+    }
+    return {"role": "system", "content": [game_reference, chat_prompt, objective]}
 
 
-def get_move_extraction_prompt(figures_names: str, possible_directions : str) -> str:
+def get_move_extraction_prompt(figures_names: str, possible_directions: str) -> str:
     move_extraction_system_prompt = f"""You are currently extracting the first move from a detailed play suggestion by the AI. 
         You must convert that move into one of the following grammars formats: 
         - [PieceToMove], [Direction], [PieceOnBoard], (Optional: [Direction], [PieceOnBoard], ...), [DegreesOfRotation], [FlipXAxis], [FlipYAxis]. 
@@ -81,66 +86,76 @@ def get_move_extraction_prompt(figures_names: str, possible_directions : str) ->
     """
     return move_extraction_system_prompt
 
+
 def get_reasoning_prompt() -> str:
     return "You are currently extracting ONLY the reasoning behind the first move from a list of suggested moves. No need for any text beside the reasoning in the response you'll provide."
 
-def get_move_piece_message(objective : str) -> Message:
+def get_move_piece_message(objective: str) -> list:
 
-    game_logic = {"type": "text", "text":"""Reference Information about the game: 
+    game_logic = {
+        "type": "text",
+        "text": """Reference Information about the game: 
         You and the human user are playing a tangram game, arranging the pieces to form an objective shape. 
         The pieces are named by their colors: Red, Purple, Yellow, Green, Blue, Cream, and Brown.
         Red and Cream are two large triangles, Yellow and green are two small triangles, Blue is a medium triangle, Purple is a small square, Brown is a tilted parallelogram.
         We consider 0 degrees of rotation the triangles with their hypotenuse facing down, and the square in the square position (so the diamond shape corresponds to 45 degrees of rotation)
         Example logical plays: Matching shapes can allow new larger shapes to appear, uniting two triangles of the same size by their Hypotenuse creates a square of that size in the location or a diamond (can be used as a circle) shape if the triangles are angled by 45 degrees. The Purple Square or a square created of 2 triangles can serve to form many things like heads, bodies, bases of structures. two triangles can also form a larger triangle when combined by their cathetus green and yellow can usually be used together or to fill similar objectives this could be used to make a another medium sized triangle like blue if used with yellow and green.
-        It often makes sense to use pieces of the same shape to furfil similar objectives, for example if theres 2 arms, it makes sense to use similar pieces for each.
-        """}
+        It often makes sense to use pieces of the same shape to furfil similar objectives, for example if theres 2 arms, it makes sense to use similar pieces for each. Maintain friendly, concise dialogue (1-3 sentences). Suggest ideas to progress us towards our objective, collaboratively, not demands. Follow all formatting rules from the prompt.""",
+    }
 
-    prompt_text = f"""You are an AI-Player helping the Human Player arrange Tangram Pieces in a board in order to create {objective}. 
-		A move involves moving one of the tangram pieces on the board or placing a piece on the board from the piece drawer. 
+    prompt_text = {"type":  "text", 
+                "text" :
+                """You and the human user are playing a tangram game, arranging pieces to form an objective shape.
+                You will be provided with previous messages to consider past discussions and decisions. as well as a game state and an image of the board. You should ananlyse these to make a logical play move, if you previously said you would do a certain move and its not yet been done, you should perform it.
+                Try to undestand what the parts already on the board are representing with the image and how they can be used to form the objective shape.
+                Your answer should ideally say what the piece is meant to represent and where you are trying to place it in.
+                You can move pieces both on and off the board as well as rotating them to provide better parts.
+                \n
+                The tangram pieces are:
+                - Red: Large Triangle
+                - Cream: Large Triangle
+                - Yellow: Small Triangle
+                - Green: Small Triangle
+                - Blue: Medium Triangle
+                - Purple: Square
+                - Brown: Tilted Parallelogram
 
-		NEVER use a piece in the drawer as a reference in any of the following
-		
-		You will receive the current game state in an image format, an image showing the state of the piece drawer, 
-		a dictionary specifying the current rotation value of each piece, the full chat history between you (you're the AI) and the player 
-		and an history of all played moves, by the player and the AI.  
+                **Rotation Rules:**
+                - 0°: Triangles' hypotenuse faces down, thus somewhat like an arrow pointing up; 
+                - Square is in a square position at 0°
+                - 45°: Square appears as a diamond
+                - Rotations must be multiples of 45°
 
-		After analysing the given image of the state you should suggest your moves in one of the following ways:
-		
-		You can describe a relative position, done in relation to pieces already placed on the board by indicating which side 
-		(right, left, top, bottom, top-right, top-left, bottom-right, bottom-left) of them the piece to be moved should be placed. 
-		A move can be done in relation to a reference piece or more.
-		You can rotate a piece rotate in a move, always try to describe move rotation in terms of explicit degrees to add, 
-		avoid using phrases which require deducting or interpreting the rotation values.
-		Example: Place Red to the left of Cream with a 90º rotation.
-		This is your main way to play, you should only use the next ones if they match exactly what you consider the best move.
-		
-		You can suggest to make a Square/diamond shape using a pair of triangles. By moving one of them to next to one already on the board.
-		The triangle pair must consist of Cream and Red OR Green and Yellow, since these match in size.
-		Whenever suggesting a square creation move, you need to say "Form a Square" and then the triangle that needs to be placed followed by the referenced triangle.
-		Example: Form a Square by putting Cream next to Red (note, here red the one that MUST be already on the board, we would be moving cream, you can make this more clear in your replies)
-		
-		You can suggest to make a larger Triangle by using a pair of smaller triangles. One of them must already be on the board for the move to be valid.
-		Since this move leads to two possible positions and may be applied on different orientations, you must indicate if the triangle is placed clockwise or anticlockwise from the reference triangle.
-		The triangle pair must also consist of Cream and Red OR Green and Yellow.
-		Whenever suggesting a triangle creation move, you need to say "Form a Triangle by placing" and then the triangle piece name to be placed, followed by clockwise or anticlockwise, and then the reference triangle piece name.
-		Example: Form a Triangle by placing Cream anticlockwise from Red
+                *Reason*
+                - You should reason what the best thing to do would be so explain your chain of thought like: 
+                "I can see that purple is already placed and looks like and head, also the user said that red was a good torso, moving red would make sense" followed by the response format.
+                - Consider what the pieces current visible in the board look like in our context, and what was previously discussed.
+                - Think about how the missing pieces can be used to form missing parts of the objective shape.
+                - Consider if you agreed with the player on doing something that wasn't yet been done.
 
-		You can simply rotate a piece without moving it, "Just rotate" and then the piece and the rotation you intend for it to have.
-		Example: Just rotate Blue 90
+                **Board Coordinates:**
+                - X and Y range from **5 to 95** (100,100 is the top-right corner)
+                **Required Output Format (One Move Per Line):**
+                Exact Format: 
+                PLAY {piece}, {rotation}, {x}, {y} | {message}
 
-		If and only if you believe the objective has already been achieved, that is if you think it looks close enough to the objective then say "Looks finished" followed by a small friendly message to the human player.
-		Example: Looks finished: I think this already resembles our objective well. Do you agree?
-		
-		KEEP IN MIND THE PLAY YOU SHOULD MAKE THE MOST IS THE RELATIVE MOVE
-		
-		You should always follow the commands and reasoning in the chat history behind the user and the AI. 
-		ALWAYS check and respect if you promised something in a recent previous message that wasnt been done yet.
-		User commands prevail above AI commands, in case they conflict, as well as newest messages above older ones. 
-		Following the chat instructions and considering the state of the game, 
-		list all moves that should be done in order to create {objective}, providing explanations for each one."""
-    
-    system_message = {"role" : "system", "content":  [game_logic, { "type": "text", "text" : prompt_text} ]}
-    return system_message
+                Where:
+                - {piece} = One of the piece names
+                - {rotation} = Rotation in degrees (0, 45, 90, ..., 315)
+                - {x}, {y} = Float coordinates from 5 to 95 positive only
+                - {message} = Short reasoning (1-3 lines)
+
+                In the ocasion you think the game is finished send the exact format:
+                "FINISH" {message}
+
+                **Example Output:**
+                PLAY Red, 0, 50, 50 | I'm going to place the red triangle at the center as it could work as a base.
+                PLAY Purple, 45, 30, 70 | Maybe the square as a diamond would form a head if placed on top of the body we have been building with the triangles.
+                PLAY Green, 45, 30, 70 | I like green as a hat, on top of purple.
+                """
+        }
+
+    return [game_logic, prompt_text]
         
 
 class Tangram(OpenAITask):
@@ -162,25 +177,28 @@ class Tangram(OpenAITask):
             """
         return system_prompt
 
-    def process_model_answer_openAI(self, answer: ModelResponse) -> TaskDataResponse:
+    def process_model_answer(self, answer: ModelResponse) -> TaskDataResponse:
         # Again, we ignore the potential image here...
         return TaskDataResponse(text=answer.text)
 
-    def generate_model_request_openAI(self, request: OpenAIBasedDataRequest) -> OpenAIBasedRequest:
+    def generate_model_request(
+        self, request: TaskDataRequest
+    ) -> TaskDataResponse:
         """Generate prompt endpoint:
         process pieces' data and plug them into the prompt
         """
+
         try:
-            if request.inputData and request.inputData["target"]:
-                target = request.inputData["target"]
-                if target == "ai_move":
+            if request.inputData and request.text:
+                target = request.text
+                print(target)
+                if target == "playFeedback" or target == "playRequest":
                     system_message = get_move_piece_message(request.objective)
-                elif target == "extract_move":
-                    system_message = { "role" : "system", "content" : get_move_extraction_prompt(request.inputData["figures_names"], request.inputData["possible_directions"]) }
-                elif target == "get_reasoning":
-                    system_message = { "role" : "system", "content" : get_reasoning_prompt() }
-                elif target == "chat":
+                    message = request.inputData
+
+                elif target == "chatRequest":
                     system_message = get_chat_prompt(request.objective)
+                    message = request.inputData
                 else:
                     logger.error(f"Invalid target {target}")
                     raise HTTPException(400, "Input target type!")
@@ -191,10 +209,14 @@ class Tangram(OpenAITask):
             logger.error(e)
             raise HTTPException(400, "Input data invalid!")
 
-        messages = [system_message]
-        messages.extend(request.userMessages)
-        return OpenAIBasedRequest(messages=messages)
-        
+        # This could include an image, but for this task, we currently don't supply one
+
+        return TaskRequest(
+            text=str(message),
+            system=str(system_message),
+            image=None,
+        )
+
 
     def get_requirements(self) -> TaskRequirements:
-        return TaskRequirements(needs_text=True, needs_image=True)
+        return TaskRequirements(needs_text=True, needs_image=False)
