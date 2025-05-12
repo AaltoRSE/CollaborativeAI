@@ -14,6 +14,9 @@ const Footer = () => {
         </p> <br></br>
         <p>
           <strong>AI Builder: </strong><a href="https://www.ai4europe.eu/ai-builder" target="_blank">https://www.ai4europe.eu/ai-builder</a>
+        </p> <br></br>
+        <p>
+          <strong>Contact: </strong><a href="https://forms.gle/sBRPdCPEBwtWB6bw7" target="_blank">https://forms.gle/sBRPdCPEBwtWB6bw7</a>
         </p>
       </div>
       <div className="logo-section">
