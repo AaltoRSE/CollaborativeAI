@@ -91,7 +91,7 @@ Main dependencies of the infrastructure:
 - Model Handler:
   | Name | License | Docs |
   | ------------ | -------------------- | ---------------------------------------------- |
-  | grpcio | Apache license 2.0 | [grpcio](https://pypi.org/project/grpcio/) |
+  | grpcio | Apache license 2.0 | [link](https://pypi.org/project/grpcio/) |
   | grpcio-tools | Apache license 2.0 | [link](https://pypi.org/project/grpcio-tools/) |
   | protobuf | 3-Clause BSD License | [link](https://pypi.org/project/protobuf/) |
   | pydantic | MIT | [link](https://pypi.org/project/pydantic/) |
@@ -102,7 +102,7 @@ Main dependencies of the infrastructure:
   | Name | License | Docs |
   | ---------------- | -------------------- | -------------------------------------------------- |
   | openai | Apache license 2.0 | [link](https://pypi.org/project/openai/) |
-  | grpcio | Apache license 2.0 | [grpcio](https://pypi.org/project/grpcio/) |
+  | grpcio | Apache license 2.0 | [link](https://pypi.org/project/grpcio/) |
   | grpcio-tools | Apache license 2.0 | [link](https://pypi.org/project/grpcio-tools/) |
   | protobuf | 3-Clause BSD License | [link](https://pypi.org/project/protobuf/) |
   | pydantic | MIT | [link](https://pypi.org/project/pydantic/) |
