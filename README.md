@@ -42,6 +42,7 @@ They indicate how to implement a model and a task and supply most infrastructure
 Details are provided in the respective README files.
 
 ## Local testing
+
 <a id="local-testing"></a>
 To test things locally and see if they work, we provide a docker compose file along with a simple orchestrator.
 
@@ -71,3 +72,37 @@ If you had to change the `NGINX_HTTPS_PORT`, the address where the frontend is r
 
 NOTE: When connecting, your system will likely complain, that the certificates provided are not valid. Since this is for local development we provide some self signed certificates in the repo. Most browsers allow continuing by clicking something like "accept the risk".
 DO NOT REUSE THESE CERTIFICATES/KEYS IF YOU DEPLOY THE SYSTEM OUTSIDE OF LOCAL DEVELOPMENT.
+
+# Dependencies
+
+Main dependencies of the infrastructure:
+
+- Model Template:
+  | Name | License | Docs |
+  | openai | Apache license 2.0 | (link)[https://pypi.org/project/openai/] |
+  | grpcio | Apache license 2.0 | (grpcio)[https://pypi.org/project/grpcio/] |
+  | grpcio-tools | Apache license 2.0 | (link)[https://pypi.org/project/grpcio-tools/] |
+  | protobuf | 3-Clause BSD License | (link)[https://pypi.org/project/protobuf/] |
+  | pydantic | MIT | (link)[https://pypi.org/project/pydantic/] |
+  | langchain | MIT | (link)[https://pypi.org/project/langchain/] |
+  | langchain-openai | MIT | (link)[https://pypi.org/project/langchain-openai/] |
+- Model Handler:
+  | Name | License | Docs |
+  | grpcio | Apache license 2.0 | (grpcio)[https://pypi.org/project/grpcio/] |
+  | grpcio-tools | Apache license 2.0 | (link)[https://pypi.org/project/grpcio-tools/] |
+  | protobuf | 3-Clause BSD License | (link)[https://pypi.org/project/protobuf/] |
+  | pydantic | MIT | (link)[https://pypi.org/project/pydantic/] |
+  | pymongo | Apache License | (link)[https://pypi.org/project/pymongo/]|
+  | pytz | MIT | (link)[https://pypi.org/project/pytz/]|
+- Task Template:
+  | Name | License | Docs |
+  | openai | Apache license 2.0 | (link)[https://pypi.org/project/openai/] |
+  | grpcio | Apache license 2.0 | (grpcio)[https://pypi.org/project/grpcio/] |
+  | grpcio-tools | Apache license 2.0 | (link)[https://pypi.org/project/grpcio-tools/] |
+  | protobuf | 3-Clause BSD License | (link)[https://pypi.org/project/protobuf/] |
+  | pydantic | MIT | (link)[https://pypi.org/project/pydantic/] |
+  | langchain | MIT | (link)[https://pypi.org/project/langchain/] |
+  | langchain-openai | MIT | (link)[https://pypi.org/project/langchain-openai/] |
+  | fastapi | MIT | (link)[https://pypi.org/project/fastapi/] |
+  | itsdangerous | BSD | (link)[https://pypi.org/project/itsdangerous/] |
+  | uvicorn | BSD | (link)[https://pypi.org/project/uvicorn/] |
