@@ -1,3 +1,4 @@
+import json
 import logging
 
 from fastapi import HTTPException
@@ -9,21 +10,17 @@ from models import (
     OpenAIBasedRequest,    
     TaskDataResponse,
     ModelResponse,
+    TaskRequest,
     TaskRequirements,
 
 )
 
 logger = logging.getLogger(__name__)
 
-<<<<<<< Updated upstream
-
-def get_chat_prompt(objective : str) -> str :
-=======
 count = 0
 hardMAX = 3
 
 def get_chat_prompt(objective: str) -> str:
->>>>>>> Stashed changes
     game_reference = {
         "type": "text", "text":"""Reference Information about the game: 
         You and the human user are playing a tangram game, arranging the pieces to form an objective shape. 
@@ -62,12 +59,8 @@ def get_chat_prompt(objective: str) -> str:
     objective = {"type": "text", "text": f"Your objetive this game is to form the shape of {objective}"}
     return {"role" : "system", "content":  [game_reference, chat_prompt, objective]}
 
-<<<<<<< Updated upstream
-
-def get_move_extraction_prompt(figures_names: str, possible_directions : str) -> str:
-=======
 def get_move_extraction_prompt(figures_names: str, possible_directions: str) -> str:
->>>>>>> Stashed changes
+
     move_extraction_system_prompt = f"""You are currently extracting the first move from a detailed play suggestion by the AI. 
         You must convert that move into one of the following grammars formats: 
         - [PieceToMove], [Direction], [PieceOnBoard], (Optional: [Direction], [PieceOnBoard], ...), [DegreesOfRotation], [FlipXAxis], [FlipYAxis]. 
@@ -331,18 +324,6 @@ class Tangram(OpenAITask):
         """Generate prompt endpoint:
         process pieces' data and plug them into the prompt
         """
-<<<<<<< Updated upstream
-        try:
-            if request.inputData and request.inputData["target"]:
-                target = request.inputData["target"]
-                if target == "ai_move":
-                    system_message = get_move_piece_message(request.objective)
-                elif target == "extract_move":
-                    system_message = { "role" : "system", "content" : get_move_extraction_prompt(request.inputData["figures_names"], request.inputData["possible_directions"]) }
-                elif target == "get_reasoning":
-                    system_message = { "role" : "system", "content" : get_reasoning_prompt() }
-                elif target == "chat":
-=======
         system_message =""
         message=""
 
@@ -374,7 +355,6 @@ class Tangram(OpenAITask):
                         message = request.inputData
 
                 elif target == "chatRequest":
->>>>>>> Stashed changes
                     system_message = get_chat_prompt(request.objective)
                 else:
                     logger.error(f"Invalid target {target}")
@@ -386,20 +366,12 @@ class Tangram(OpenAITask):
             logger.error(e)
             raise HTTPException(400, "Input data invalid!")
 
-<<<<<<< Updated upstream
-        messages = [system_message]
-        messages.extend(request.userMessages)
-        return OpenAIBasedRequest(messages=messages)
-        
-=======
         # This could include an image, but for this task, we currently don't supply one
         return TaskRequest(
             text=str(message),
             system=str(system_message),
             image=None,
         )
-
->>>>>>> Stashed changes
 
     def get_requirements(self) -> TaskRequirements:
         return TaskRequirements(needs_text=True, needs_image=True)
