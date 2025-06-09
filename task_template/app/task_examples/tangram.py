@@ -312,35 +312,36 @@ class Tangram(OpenAITask):
         """
         system_message =""
         message=""
-
+        
         try:
-            if request.inputData and request.inputData["target"]:
+            requests = json.loads(request.inputData)
+            if requests and requests["target"]:
 
-                target = request.inputData["target"]
+                target = requests["target"]
                 hasOverlaps = "No" 
 
                 if target == "playRequest":
                     system_message = get_move_piece_message(request.objective)
-                    message = request.inputData
+                    message = requests
 
                 elif target == "playFeedback":
                     global count
                     count+=1
 
-                    for shape in request.inputData["state"]["on_board"]:
-                        if len(request.inputData["state"]["on_board"][shape]["collisions"]) > 0:
+                    for shape in requests["state"]["on_board"]:
+                        if len(requests["state"]["on_board"][shape]["collisions"]) > 0:
                             hasOverlaps = "Yes"
                             break
 
                     if count > hardMAX + 1:
 
                         count=0
-                        system_message = get_feedback_message(request.objective,request.inputData, hasOverlaps)
+                        system_message = get_feedback_message(request.objective,requests, hasOverlaps)
                         message = "you have exceeded your attempts end your play now by replying FINISH"
                                     
                     else:
-                        system_message = get_feedback_message(request.objective,request.inputData, hasOverlaps)
-                        message = request.inputData
+                        system_message = get_feedback_message(request.objective,requests, hasOverlaps)
+                        message = requests
 
                 elif target == "chatRequest":
                     system_message = get_chat_prompt(request.objective)
