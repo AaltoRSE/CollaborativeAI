@@ -30,7 +30,7 @@ class AaltoImageModel(AIModel):
 
     async def get_response(self, message: TaskInput) -> TaskOutput:
         model = ChatOpenAI(
-            base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/gpt4-turbo/",
+            base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/gpt4o/",
             default_headers=default_headers,
             max_tokens=4096,
         )       
