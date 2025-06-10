@@ -24,7 +24,7 @@ RUN mkdir -p $NVM_DIR && ./get_nvm.sh  \
 ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 # COPY frontend code
-COPY ./tangram_openai ./frontend
+COPY ./frontend_tangram ./frontend
 # Install frontend, clear dist folder
 RUN cd frontend && npm install && npm run build && ls && pwd && mv dist ../ && cd .. && rm -r frontend
 # COPY backend code
@@ -40,6 +40,6 @@ USER appuser
 EXPOSE 8062
 EXPOSE 8061
 
-ENV OPENAI_API_KEY="PROVIDE_EXERNALLY"
+#ENV OPENAI_API_KEY="PROVIDE_EXERNALLY"
 # Need to change this into a script file, which also generates the secret keys... 
 CMD ["sh", "entrypoint.sh"]
