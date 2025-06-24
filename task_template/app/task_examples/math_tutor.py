@@ -46,7 +46,7 @@ class MathTutor(Task):
 
     def generate_model_request(self, request: TaskDataRequest) -> TaskRequest:
         logger.info(request)
-        linetag = "COMMENT" if request.inputData["comment"] else "NEWRECIPE"
+        linetag = "COMMENT" if request.inputData["comment"] else "MESSAGE"
         plan = f"Lesson : {json.dumps(request.inputData['messages'])}"
         newplan = f"{linetag} : {request.text}"
 

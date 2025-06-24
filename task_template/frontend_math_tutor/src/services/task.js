@@ -11,7 +11,7 @@ const finishTask = (rating) => {
   const ratingjson = {
     metrics: {
       rating: rating, 
-      task_name: "mealplan"
+      task_name: "math_tutor"
     }
   }
   const request = axios.post(`${baseUrl}/finish`, ratingjson)
