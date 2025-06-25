@@ -114,7 +114,7 @@ function checkAndAddMessage(sender, text, comment, type) {
               </button>
             </form>
           </div>
-          <div className='preview-box'>
+          <div className='preview-box-conversation'>
             <strong>Preview:</strong>
             <div style={{ marginTop: '5px' }}>
               <ReactMarkdown

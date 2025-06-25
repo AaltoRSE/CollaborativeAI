@@ -85,7 +85,7 @@ const TopicDescriptionForm = ({ topicDescription, setTopicDescription, messages,
             type="text"
             style={{"minWidth": "180px", "minHeight": "80px"}}
             disabled={isDisabled}
-            placeholder="What do you want to learn? Type math equation in LaTeX: \sqrt{a^2 + b^2}"
+            placeholder="What do you want to learn? Type math equation in Markdown: $\sqrt{a^2 + b^2}$"
             value={topicDescription}
             onChange={(event) => setTopicDescription(event.target.value)}
           />
