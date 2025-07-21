@@ -18,7 +18,7 @@ services:
     networks:
       - mynetwork
     environment:
-      - ATLAS_URI=mongodb://collabai-mongo/
+      - ATLAS_URI=${ATLAS_URI}
   orchestrator:
     depends_on:
       - task_template
@@ -27,15 +27,15 @@ services:
     build: ./orchestrator
     networks:
       - mynetwork
-  mongo:
-    container_name: collabai-mongo
-    image: mongo:7.0.4
-    volumes:
-      - ./mongodb:/data/db
-    ports:
-      - 127.0.0.1:27017:27017
-    networks:
-      - mynetwork
+  # mongo:
+  #   container_name: collabai-mongo
+  #   image: mongo:7.0.4
+  #   volumes:
+  #     - ./mongodb:/data/db
+  #   ports:
+  #     - 127.0.0.1:27017:27017
+  #   networks:
+  #     - mynetwork
   nginx:
     image: docker.io/library/nginx:alpine
     environment:

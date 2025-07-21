@@ -20,7 +20,7 @@ export const TILE_MAP = [
 ];
 
 export const INVENTORY = [
-  { id: 'chair1', type: 'chair', width: 2, height: 2, backgroundColor: 'rgb(11, 188, 11)'},
-  { id: 'table1', type: 'table', width: 4, height: 2, backgroundColor: 'rgb(205, 159, 43)' },
-  { id: 'bed1', type: 'bed', width: 4, height: 6, backgroundColor: 'rgb(230, 123, 104)' }
+  { id: 'chair1', type: 'chair', width: 2, height: 2, backgroundColor: '#008000'},
+  { id: 'table1', type: 'table', width: 4, height: 2, backgroundColor: '#8C6400'},
+  { id: 'bed1', type: 'bed', width: 4, height: 6, backgroundColor: '#B4503C'}
 ]

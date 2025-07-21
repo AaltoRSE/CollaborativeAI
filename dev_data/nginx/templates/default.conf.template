@@ -1,8 +1,6 @@
 server {
-        listen 443 ssl default_server;
+        listen 443 default_server;
         server_name ${HOSTNAME};
-        ssl_certificate /certificates/certificate.crt;
-        ssl_certificate_key /certificates/private.key;
 
         location / {                        
             proxy_pass       http://task_template:8062;

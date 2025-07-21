@@ -6,10 +6,10 @@ const Grid = ({ tileMap, items, onDropItem, onMoveItem, onDeleteItem }) => {
   const [hoveredTile, setHoveredTile] = useState(null);
   const [contextMenu, setContextMenu] = useState(null);
 
-    useEffect(() => {
-      window.addEventListener('click', () => setContextMenu(null));
-      return () => window.removeEventListener('click', close);
-    }, []);
+  useEffect(() => {
+    window.addEventListener('click', () => setContextMenu(null));
+    return () => window.removeEventListener('click', close);
+  }, []);
 
   const handleDrop = (e) => {
     const itemData = JSON.parse(e.dataTransfer.getData("item"));

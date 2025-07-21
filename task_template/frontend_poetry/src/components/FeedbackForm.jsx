@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import taskService from '../services/task'
+import axios from 'axios'
 
 const colors = ["#b71c1c", "#f44336", "#ff9800", "#ffeb3b", "#009688", "#81c784", "#4caf50"];
 
@@ -9,19 +10,58 @@ const FeedbackForm = ({ }) => {
   const [aiPerformanceRating, setAiPerformanceRating] = useState(null);
   const [coordinationRating, setCoordinationRating] = useState(null);
   const [efficiencyRating, setEfficiencyRating] = useState(null);
-  const [modelInfo, setModelInfo] = useState(null)
+  const [modelInfo, setModelInfo] = useState('')
+
+  useEffect(() => {
+    const handleReconnect = () => {
+      const offlineRating = localStorage.getItem('offline-rating');
+      console.log(offlineRating)
+      console.log(JSON.parse(offlineRating))
+      if (offlineRating) {
+        // alert('Offline rating submitted!');
+        // localStorage.removeItem('offline-rating');
+        const ratingjson = {
+          metrics: {
+            rating: JSON.parse(offlineRating), 
+            task_name: "poetry_task"
+          }
+        }
+        axios.post('/api/v1/task/finish', ratingjson)
+          .then(() => {
+            alert('Offline rating submitted!');
+            localStorage.removeItem('offline-rating');
+          })
+          .catch((e) => {
+            console.error('Failed to send offline rating', e);
+          });
+      }
+    };
+
+    // Run once in case user is already online with stored data
+    handleReconnect();
+
+    // Also run when they reconnect later
+    window.addEventListener('online', handleReconnect);
+    return () => {
+      window.removeEventListener('online', handleReconnect);
+    };
+  }, []);
 
   const handleMetricsSubmit = async () => {
-    setRatingSubmitted(true);
-    const modelName = await taskService.finishTask(      
-      {
-        "collaboration_metric": collaborationRating,
-        "ai_performance_metric": aiPerformanceRating,
-        "coordination_metric": coordinationRating,
-        "efficiency_metric": efficiencyRating
-      }
-    )
-    setModelInfo(modelName["modelInfo"])
+    const ratingJson = {
+      "collaboration_metric": collaborationRating,
+      "ai_performance_metric": aiPerformanceRating,
+      "coordination_metric": coordinationRating,
+      "efficiency_metric": efficiencyRating
+    }
+    if (navigator.onLine) {
+      setRatingSubmitted(true);
+      const modelName = await taskService.finishTask(ratingJson)
+      setModelInfo(modelName["modelInfo"])
+    } else {
+      localStorage.setItem('offline-rating', JSON.stringify(ratingJson));
+      alert('You are currently offline. The rating will be sent after you reconnect.');
+    }
   }
 
   return (

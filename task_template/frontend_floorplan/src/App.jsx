@@ -39,23 +39,26 @@ const App = () => {
   }
   
   return (
-    <>
+    <div className='page-container '>
       <Header />
       <TaskDescription />
       <SurveyButton />
       {/* <TutorialPopUp /> */}
       <FloorDescriptionForm floorDescription={floorDescription} setFloorDescription={setFloorDescription} messages={messages} isDisabled={isDisabled} setIsDisabled={setIsDisabled} setIsLoading={setIsLoading} addMessage={addMessage}/>
-      <div className="main-interaction">
-        {(isRatingSubmitted || isFinishClicked) && (
-          <div className="main-interaction-overlay"> </div>
-        )}
-        <Dialogue isLoading={isLoading} setIsLoading={setIsLoading} setFloorDescription={setFloorDescription} messages={messages} addMessage={addMessage} setIsDisabled={setIsDisabled}/>
-        <ConversationDisplay isLoading={isLoading} setIsLoading={setIsLoading} setFloorDescription={setFloorDescription} isDisabled={isDisabled} messages={messages} addMessage={addMessage} />
+      <div className="main-content">
+        <div className="main-interaction">
+          {(isRatingSubmitted || isFinishClicked) && (
+            <div className="main-interaction-overlay"> </div>
+          )}
+          <Dialogue isLoading={isLoading} setIsLoading={setIsLoading} setFloorDescription={setFloorDescription} messages={messages} addMessage={addMessage} setIsDisabled={setIsDisabled}/>
+          <ConversationDisplay isLoading={isLoading} setIsLoading={setIsLoading} setFloorDescription={setFloorDescription} isDisabled={isDisabled} messages={messages} addMessage={addMessage} />
+        </div>
+        <FinishButton isFinishClicked={isFinishClicked} isRatingSubmitted={isRatingSubmitted} toggleFinish={toggleFinish} />
+        {isFinished && <FeedbackForm viewPointRef={viewPointRef} isRatingSubmitted={isRatingSubmitted} setIsRatingSubmitted={setIsRatingSubmitted}/>}
       </div>
-      <FinishButton isFinishClicked={isFinishClicked} isRatingSubmitted={isRatingSubmitted} toggleFinish={toggleFinish} />
-      {isFinished && <FeedbackForm viewPointRef={viewPointRef} isRatingSubmitted={isRatingSubmitted} setIsRatingSubmitted={setIsRatingSubmitted}/>}
+      
       <Footer />
-    </>
+    </div>
   );
 };
 

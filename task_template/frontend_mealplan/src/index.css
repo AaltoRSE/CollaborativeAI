@@ -4,7 +4,19 @@
 }
 
 body,html {
+  height: 100%;
   overflow-x: hidden;
+;}
+
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
 }
 
 textarea {
@@ -46,18 +58,85 @@ a:active {
   display: flex;
   justify-content: space-between; 
   align-items: center; 
-  height: 79px; 
+  height: 100%; 
   padding: 20px;
 }
 
+.logo-container {
+  flex-grow: 1;
+  min-width: 0;
+  overflow: hidden;
+  margin: 10px;
+  width: 70%;
+}
+
 .navbar {
-  color: white;
   display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 10px;
+  transition: transform 0.5s ease;
 }
 
 .navbar a {
   padding: 5px;
+  color: white;
+  text-decoration: none;
 }
+
+.navbar-dropdown {
+  display: none;
+  font-size: 25px;
+  cursor: pointer;
+  transition: transform 0.5s ease;
+}
+
+.navbar a:hover {
+  background-color: rgb(110, 104, 201);
+  border-radius: 10px;
+}
+
+.navbar-dropdown.open {
+  transform: rotate(90deg);
+}
+
+/* @media (max-width: 768px) {
+  .main-interaction {
+    flex-direction: column;
+  }
+
+  .dialogue-wrapper, .chat-space-wrapper {
+  }
+
+  .header-container {
+    height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .navbar {
+    display: none;
+    position: absolute;
+    top: 190px;    
+    right: 0;
+    background-color: rgb(56, 50, 138);
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .navbar.open {
+    display: flex;
+  }
+
+  .navbar-dropdown {
+    display: block;
+  }
+} */
 
 .main-interaction {
   display: flex;
@@ -177,16 +256,20 @@ a:active {
   justify-content: center;
 }
 
-.meal-description-input input {
+#form-descripton {
+  max-width: 200px;
+}
+
+.meal-description-input textarea {
   font-size: 15px;
-  width: 20%;
+  width: 50%;
   border-radius: 10px;
-  margin: 5px;
+  margin-right: 10px;
   padding: 10px;
   overflow-y: auto;
 }
 
-.meal-description-input input:disabled {
+.meal-description-input textarea:disabled {
   cursor: not-allowed;
 }
 
@@ -197,7 +280,7 @@ a:active {
   cursor: pointer;
   color: white;
   padding: 10px;
-  background-color: #4caf50;
+  background-color: #2e7d32;
 }
 
 .meal-description-submit-btn:hover {
@@ -217,7 +300,6 @@ a:active {
 }
 
 .finish-btn {
-  margin-top: 10px;
   font-size: larger;
   padding: 5px;
   height: 75px;
@@ -226,6 +308,10 @@ a:active {
 }
 
 .footer-container {
+  left: 0;
+  bottom: 0;
+  position: relative;
+  width: 100%;
   background-color: rgb(76, 70, 163);
   color: white;
   padding: 50px;
@@ -243,8 +329,11 @@ a:active {
 }
 
 .footer-container img {
+  margin-top: 60px;
+  margin-right: 100px;
   max-width: 100%;
-  height: auto;
+  height: 122px;
+  width: 600px;
 }
 
 .acknowledge-section {
@@ -328,17 +417,6 @@ a:active {
   color: white;
   border-radius: 10px;
   cursor: pointer;
-}
-
-@media (max-width: 600px) {
-  .main-interaction {
-    flex-direction: column;
-  }
-
-  .dialogue-wrapper, .chat-space-wrapper {
-    min-height: 500px;
-    max-height: 500px;
-  }
 }
 
 .dialogue-wrapper, .chat-space-wrapper {
@@ -521,4 +599,284 @@ a:active {
 .survey-button:hover {
   background-color: rgb(5, 5, 142);
   transform: translateY(-50%) rotate(-90deg) scale(1.08);
+}
+
+@media (max-width: 1538px) {
+  body,html {
+    font-size: 14px;
+  }
+
+  .header-container {
+    position: relative;
+    height: auto;
+    min-height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .navbar {
+    display: none;
+    position: absolute;
+    top: 100%;    
+    right: 0;
+    background-color: rgb(56, 50, 138);
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .navbar.open {
+    display: flex;
+  }
+
+  .navbar-dropdown {
+    display: block;
+  }
+
+  .meal-description-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .game {
+    flex-direction: row;
+  }
+
+  .inventory-items {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .inventory-item {
+    width: calc(var(--grid-size)*1);
+    height: calc(var(--grid-size)*1);
+  }
+
+  #form-descripton {
+    max-width: 300px;
+  }
+
+  .meal-description-input textarea {
+    width: 100%;
+    margin: 10px;
+  }
+
+  .main-interaction {
+    flex-direction: column;
+  }
+
+  .chat-space-wrapper {
+    max-height: 500px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .logo-section {
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer-container img {
+    width: 50%;
+    height: 50%;
+    margin: 10px;
+  }
+}
+
+@media (max-width: 1024px) {
+  body,html {
+    font-size: 12px;
+  }
+
+  .header-container {
+    min-height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .navbar {
+    display: none;
+    position: absolute;
+    top: 100%;    
+    right: 0;
+    background-color: rgb(56, 50, 138);
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .navbar.open {
+    display: flex;
+  }
+
+  .navbar-dropdown {
+    display: block;
+  }
+
+  .meal-description-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .game {
+    flex-direction: column;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .inventory-items {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .inventory-item {
+    width: calc(var(--grid-size)*1);
+    height: calc(var(--grid-size)*1);
+  }
+
+  #form-descripton {
+    max-width: 300px;
+  }
+
+  .meal-description-input textarea {
+    width: 100%;
+    margin: 10px;
+  }
+
+  .main-interaction {
+    flex-direction: column;
+  }
+
+  .chat-space-wrapper {
+    max-height: 500px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .logo-section {
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer-container img {
+    width: 60%;
+    height: 60%;
+    margin: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  body,html {
+    font-size: 10px;
+  }
+
+  .header-container {
+    min-height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .navbar {
+    display: none;
+    position: absolute;
+    top: 100%;    
+    right: 0;
+    background-color: rgb(56, 50, 138);
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .navbar.open {
+    display: flex;
+  }
+
+  .navbar-dropdown {
+    display: block;
+  }
+
+  .meal-description-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .game {
+    flex-direction: column;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .inventory-items {
+    flex-direction: row;
+    width: 100% !important;
+  }
+
+  .inventory-item {
+    width: calc(var(--grid-size)*1);
+    height: calc(var(--grid-size)*1);
+  }
+
+  #form-descripton {
+    max-width: 300px;
+  }
+
+  .meal-description-input textarea {
+    width: 100%;
+    margin: 10px;
+  }
+
+  .main-interaction {
+    flex-direction: column;
+  }
+
+  .chat-space-wrapper {
+    max-height: 500px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .logo-section {
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer-container img {
+    width: 85%;
+    height: 85%;
+    margin: 10px;
+    margin-right: 50px;
+  }
 }

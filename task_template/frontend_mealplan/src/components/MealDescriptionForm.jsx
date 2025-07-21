@@ -75,7 +75,7 @@ const MealDescriptionForm = ({ mealDescription, setMealDescription, messages, is
     <>
       <div className='meal-description-wrapper'>
         <form onSubmit={chooseMealDescription} className="meal-description-input">
-          <h3 style={{"maxWidth": "200px"}}>Tell me your meal plan description </h3>
+          <h3 id='form-descripton'>Tell me your meal plan description </h3>
           <textarea 
             type="text"
             style={{"minWidth": "180px", "minHeight": "80px"}}
