@@ -68,7 +68,7 @@ const FeedbackForm = ({ viewPointRef, isRatingSubmitted, setIsRatingSubmitted })
         </div>
         <br></br>
         <div className="coordination-metric">
-          <h3>"We succesfully coordinated our strategy to write a good poem."</h3>
+          <h3>"We successfully coordinated our strategy to solve the task."</h3>
           <div className="rating-selector">
             {[0, 1, 2, 3, 4, 5, 6].map(rating => (
               <div
