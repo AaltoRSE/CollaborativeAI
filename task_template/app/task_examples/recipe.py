@@ -11,7 +11,6 @@ from models import (
 
 logger = logging.getLogger(__name__)
 
-
 class Recipe(Task):
 
     def get_system_prompt(self, objective: str) -> str:
@@ -26,7 +25,10 @@ class Recipe(Task):
             Your answer must take the user's comment into consideration.
             Your recipe must be wrapped inside square brackets, along with some comments about the recipe that 
             you gave: (example: "[<the recipe>] <the comment>").
-            The recipe must be a JSON. It must follows exactly like the following example:\n
+            The recipe MUST be valid raw JSON that can be parsed using JavaScript's JSON.parse. Do not write the recipe as a 
+            JSON string. DO NOT escape quotes or wrap the entire JSON in quotes. The recipe must be a valid JSON object, not a stringified version.
+            The field of the JSON must have the following, word-by-word: name, ingredients, instruction, servings, prep_time, cook_time, total_time
+            The JSON must follows this example, each fields have to be followed word by word:
             {{
               "name": "Spaghetti Bolognese",
               "ingredients:
@@ -70,11 +72,10 @@ class Recipe(Task):
             }}
             Remember the recipe must be a valid JSON, all the key names and structure must follow the example, 
             wrapped inside squared brackets, follows by the comment.
-            Do not add redundant string such as "```json", "```", or equivalent. Only add the comment after the recipe
+            Do not add redundant string such as "```json", "```", or equivalent. Do not include markdown, or code blocks. 
             If the user ask or request something, you answer it as a comment.
             You are curious, and always ready and eager to ask the user question if needed."""
         return system_prompt
-    # I hope this recipe is what you were looking for! Are there any particular preferences or dietary restrictions you may have?
 
     def process_model_answer(self, answer: ModelResponse) -> TaskDataResponse:
         # Again, we ignore the potential image here...
