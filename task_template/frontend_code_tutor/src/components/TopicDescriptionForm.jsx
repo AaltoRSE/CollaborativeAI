@@ -7,7 +7,7 @@ import 'katex/dist/katex.min.css';
 const TopicDescriptionForm = ({ topicDescription, setTopicDescription, messages, isDisabled, setIsDisabled, setIsLoading, addMessage }) => {
   const chooseTopicDescription = (event) => {
     if (!topicDescription.trim()) {
-      alert("Please enter the description of your math topic");
+      alert("Please enter the description of your coding topic");
       return;
     }
     event.preventDefault();
@@ -20,11 +20,10 @@ const TopicDescriptionForm = ({ topicDescription, setTopicDescription, messages,
           comment: true,
           messages: []
         },
-        text: "Start explaining this math topic/problem",
+        text: "Start explaining this coding topic/problem",
         objective: topicDescription
       })
       .then((returnedResponse) => {
-        console.log(returnedResponse.text)
         let parsed = JSON.parse(returnedResponse.text)
         addMessage({ sender: "ai", message: parsed.message})
         setIsLoading(false)
@@ -43,7 +42,7 @@ const TopicDescriptionForm = ({ topicDescription, setTopicDescription, messages,
             type="text"
             style={{"minWidth": "180px", "minHeight": "80px"}}
             disabled={isDisabled}
-            placeholder="What do you want to learn? Type math equation in Markdown: $\sqrt{a^2 + b^2}$"
+            placeholder="What do you want to learn? Wrap your code inside ``` ```"
             value={topicDescription}
             onChange={(event) => setTopicDescription(event.target.value)}
           />
@@ -55,7 +54,7 @@ const TopicDescriptionForm = ({ topicDescription, setTopicDescription, messages,
             Submit 
           </button>
         </form>
-        <div className='preview-box'>
+        {/* <div className='preview-box'>
           <strong>Preview:</strong>
           <div style={{ marginTop: '5px'}}>
             <ReactMarkdown
@@ -64,7 +63,7 @@ const TopicDescriptionForm = ({ topicDescription, setTopicDescription, messages,
               rehypePlugins={[rehypeKatex]}
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

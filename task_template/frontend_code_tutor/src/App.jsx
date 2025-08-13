@@ -6,7 +6,7 @@ import FeedbackForm from "./components/FeedbackForm";
 import Dialogue from "./components/Dialogue";
 import ConversationDisplay from "./components/ConversationDisplay"
 import TaskDescription from './components/TaskDescription';
-import MathDescriptionForm from './components/MathDescriptionForm';
+import TopicDescriptionForm from './components/TopicDescriptionForm';
 import TutorialPopUp from './components/TutorialPopUp';
 import SurveyButton from './components/SurveyButton'
 import "./index.css";
@@ -44,7 +44,7 @@ const App = () => {
       <TaskDescription />
       <SurveyButton />
       {/* <TutorialPopUp /> */}
-      <MathDescriptionForm topicDescription={topicDescription} setTopicDescription={setTopicDescription} messages={messages} isDisabled={isDisabled} setIsDisabled={setIsDisabled} setIsLoading={setIsLoading} addMessage={addMessage}/>
+      <TopicDescriptionForm topicDescription={topicDescription} setTopicDescription={setTopicDescription} messages={messages} isDisabled={isDisabled} setIsDisabled={setIsDisabled} setIsLoading={setIsLoading} addMessage={addMessage}/>
       <div className="main-interaction">
         {(isRatingSubmitted || isFinishClicked) && (
           <div className="main-interaction-overlay"> </div>
@@ -52,7 +52,7 @@ const App = () => {
         {/* <Dialogue isLoading={isLoading} setIsLoading={setIsLoading} topicDescription={topicDescription} messages={messages} addMessage={addMessage} /> */}
         <ConversationDisplay isLoading={isLoading} setIsLoading={setIsLoading} topicDescription={topicDescription} isDisabled={isDisabled} messages={messages} addMessage={addMessage} />
       </div>
-      <FinishButton isFinishClicked={isFinishClicked} isRatingSubmitted={isRatingSubmitted} toggleFinish={toggleFinish} />
+      <FinishButton messages={messages} isFinishClicked={isFinishClicked} isRatingSubmitted={isRatingSubmitted} toggleFinish={toggleFinish} />
       {isFinished && <FeedbackForm viewPointRef={viewPointRef} isRatingSubmitted={isRatingSubmitted} setIsRatingSubmitted={setIsRatingSubmitted}/>}
       <Footer />
     </>

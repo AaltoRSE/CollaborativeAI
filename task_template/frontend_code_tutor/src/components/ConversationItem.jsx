@@ -7,7 +7,6 @@ const ConversationalItem = ({ message }) => {
   const messageClass = message.sender === "user" ? "user-message" : "ai-message";
   const avatarClass = message.sender === "user" ? "avatar-user" : "avatar-ai";
   const avatarText = message.sender === "user" ? "You" : "AI";
-  console.log(message)
   return (
     <>
       <div className={`dialogue-poem ${messageClass}`}>

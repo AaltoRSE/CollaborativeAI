@@ -12,7 +12,7 @@ from models import (
 logger = logging.getLogger(__name__)
 
 
-class MathTutor(Task):
+class CodeTutor(Task):
 
     def get_system_prompt(self, objective: str) -> str:
         """Generate response endpoint:
@@ -20,7 +20,7 @@ class MathTutor(Task):
         in the history of the session (based on the session_id cookie)
         """
 
-        system_prompt = fr"""Imagine yourself as a math tutor who is teaching a math concept/problem to a student.
+        system_prompt = f"""Imagine yourself as a coding tutor who is teaching a coding concept/problem to a student.
             The user provides the concept/problem they want to learn as follows: {objective}.
             You must make the lesson interactive by asking questions, giving hints, and guide the student in the
             correct path. Avoid giving the answer straight away.
@@ -32,10 +32,8 @@ class MathTutor(Task):
             JSON object, not a stringified version. The JSON has exactly 1 field:
             1. message: this field contains the actual tutoring and guiding. 
             
-            If your response contains math you must present it in valid markdown form. Remember that the any mathematic 
-            expressions must be presented as markdown. For example, the math in your response must be wrapped inside a pair of either 
-            $ or $$ so that it is a viable markdown math equation. If your Markdown contains LaTeX math expressions, escape all backslashes 
-            as double backslashes so the JSON is valid. You must not add additional characters/words immediately before or after the equation (such as new line).
+            If your response contains codes, you must present it in valid markdown form. You must not add additional
+            characters/words immediately before or after the equation (such as new line).
 
             Remember the response must be a valid JSON, all the key names and structure must follow the example.
             Do not add redundant string such as "```json", "```", or equivalent. 

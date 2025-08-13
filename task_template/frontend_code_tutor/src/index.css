@@ -61,12 +61,10 @@ a:active {
 
 .main-interaction {
   display: flex;
+  justify-self: center;
+  width: 90%;
   height: calc(100vh - 234px);
   padding: 20px;
-  margin-left: 100px;
-  margin-right: 100px;
-  margin-top: 20px;
-  margin-bottom: 20px;
   position: relative;
 }
 
@@ -82,7 +80,6 @@ a:active {
   padding: 20px;
   padding-top: 50px;
   padding-bottom: 30px;
-  
 }
 
 .task-description ol {

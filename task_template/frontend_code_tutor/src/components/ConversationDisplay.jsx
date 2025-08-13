@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
+import Editor from '@monaco-editor/react';
 
 const ConversationDisplay = ({ isLoading, setIsLoading, topicDescription, isDisabled, messages, addMessage }) => {
   const [newComment, setNewComment] = useState("");
@@ -15,6 +16,8 @@ const ConversationDisplay = ({ isLoading, setIsLoading, topicDescription, isDisa
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     }    
   }, [messages])
+
+  const textareaRef = useRef(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -37,9 +40,6 @@ const ConversationDisplay = ({ isLoading, setIsLoading, topicDescription, isDisa
       .then((returnedResponse) => {
         let parsed = JSON.parse(returnedResponse.text)
         addMessage({ sender: "ai", message: parsed.message})
-        // let parsed = parsePoetryAndComment(returnedResponse.text)
-        // console.log(parsed)
-        // checkAndAddMessage("ai", parsed.message, parsed.comment,"dialogue")
         setIsLoading(false)
       })
       .catch((error) => {
@@ -68,11 +68,12 @@ const ConversationDisplay = ({ isLoading, setIsLoading, topicDescription, isDisa
         {isLoading && <div>Waiting for response...</div>} 
           <div className="form-wrapper">
             <form onSubmit={handleSubmit} className="input-form">
-              <input 
+              <textarea 
                 value={newComment}
+                ref={textareaRef}
                 disabled={!isDisabled || isLoading}
                 onChange={(event) => setNewComment(event.target.value)} 
-                placeholder="Send a message to the AI" 
+                placeholder="Send a message to the AI. Wrap your code inside ``` ```" 
               />
               <button type="submit" 
                 disabled={!isDisabled || isLoading}
@@ -81,7 +82,7 @@ const ConversationDisplay = ({ isLoading, setIsLoading, topicDescription, isDisa
               </button>
             </form>
           </div>
-          <div className='preview-box-conversation'>
+          {/* <div className='preview-box-conversation'>
             <strong>Preview:</strong>
             <div style={{ marginTop: '5px' }}>
               <ReactMarkdown
@@ -90,7 +91,7 @@ const ConversationDisplay = ({ isLoading, setIsLoading, topicDescription, isDisa
                 rehypePlugins={[rehypeKatex]}
               />
             </div>
-          </div>
+          </div> */}
       </div>
     </div>
   );
