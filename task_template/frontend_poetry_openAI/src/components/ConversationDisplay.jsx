@@ -110,7 +110,7 @@ function checkAndAddMessage(sender, text, comment, type) {
           style={{
             "color" : "#FF0000"
           }}>
-          The poem reached the length limit. Please click "Rate task" to rate it
+          The poem reached the length limit. Please click "Finish" to rate it
         </span>
         }
         <div className="form-wrapper">

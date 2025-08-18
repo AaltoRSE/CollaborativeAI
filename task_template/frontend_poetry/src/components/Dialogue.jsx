@@ -127,7 +127,7 @@ const Dialogue = ({ isLoading, setIsLoading, theme, isDisabled, messages, setMes
           style={{
             "color" : "#FF0000"
           }}>
-          Thank you. Here is our final poem. Please click "Rate task" to rate it!
+          Thank you. Here is our final poem. Please click "Finish" to rate it!
         </span>
         }
         <div className="form-wrapper">
