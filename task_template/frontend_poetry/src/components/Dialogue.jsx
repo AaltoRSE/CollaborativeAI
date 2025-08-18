@@ -97,7 +97,12 @@ const Dialogue = ({ isLoading, setIsLoading, theme, isDisabled, messages, setMes
             setIsLoading(false)
           })
           .catch((error) => {
-            console.log(error)
+            if (error.response && error.response.status === 429) {
+              alert(error.response.data.error);
+            } else {
+              console.log(error);
+            }
+            setIsLoading(false)
           });
       setNewLine("");
     }
