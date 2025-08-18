@@ -25,9 +25,16 @@ class Mealplan(Task):
             goals, and other preferences and you must follow it. The description is as follows: {objective}
             You will get a message from the user in the form COMMENT_LINE: COMMENT_LINE is the comment made by the user.
             Your answer must take the user's comment into consideration.
-            Your meal plan must be wrapped inside square brackets, along with some comments about the meal plan that 
-            you gave: (example: "[<the recommended meal plan>] <the comment>").
-            The meal plan must be a JSON. Follows the form of this example:\n
+
+            Your response must be a valid raw JSON that can be parsed using JavaScript's JSON.parse. Do not write the 
+            response as a JSON string. DO NOT escape quotes or wrap the entire JSON in quotes. The response must be a valid 
+            JSON object, not a stringified version. The JSON has exactly 2 fields:
+            1. mealplan: this field contains the meal plan as a raw JSON.
+            2. comment: this field contains your additional comment.
+
+            The mealplan field MUST be valid raw JSON that can be parsed using JavaScript's JSON.parse. Do not write the mealplan as a 
+            JSON string. DO NOT escape quotes or wrap the entire JSON in quotes. The mealplan must be a valid JSON object, not a stringified version.
+            The mealplan field JSON must follows this example:
             {{
                 "Day 1":
                     {{
@@ -42,9 +49,8 @@ class Mealplan(Task):
                         "Dinner": "Rinderroulade - rolled beef steak, with potato salad."
                     }}
             }}
-            Remember the recipe must be a valid JSON, all the key names and structure must follow the example. 
-            The comment must be outside of the squared brackets. Only the plan can be inside the squared brackets.
-            Do not add redundant string such as "```json", "```", or equivalent. Only add the comment after the recipe
+            Remember the mealplan must be a valid JSON, all the key names and structure must follow the example.
+            Do not add redundant string such as "```json", "```", or equivalent. Do not include markdown, or code blocks. 
             If the user ask or request something, you answer it as a comment.
             If the user ask a question, you answer it as a comment.
             You are curious, and always ready and eager to ask the user question if needed."""

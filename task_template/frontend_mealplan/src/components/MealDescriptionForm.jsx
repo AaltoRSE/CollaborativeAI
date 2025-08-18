@@ -1,48 +1,6 @@
 import taskService from '../services/task'
 
 const MealDescriptionForm = ({ mealDescription, setMealDescription, messages, isDisabled, setIsDisabled, setIsLoading, addMessage }) => {
-  function parsePoetryAndComment(input) {
-    // Initialize variables to store the parsed parts
-    let mealPlan = "";
-    let comment = "";
-  
-    // Trim the input to remove leading/trailing whitespace
-    input = input.trim();
-  
-    // Check if the input starts with a '[' character
-    if (input.startsWith('[')) {
-        // Find the closing ']' character
-        let endBracketIndex = input.indexOf(']');
-        
-        // If a closing ']' is found, extract the poetry line
-        if (endBracketIndex !== -1) {
-            mealPlan = input.substring(1, endBracketIndex).trim();
-            // Extract the comment part if there is any text after the closing ']'
-            if (endBracketIndex + 1 < input.length) {
-                comment = input.substring(endBracketIndex + 1).trim();
-            }
-        }
-    } else {
-        // If the input doesn't start with '[', consider the whole input as a comment
-        comment = input;
-    }
-  
-    // console.log("Parsed: ", mealPlan, ", ", comment)
-  
-    return { mealPlan, comment };
-  }
-  
-  function checkAndAddMessage(sender, text, comment, type) {
-    text = (typeof text === 'string' && text.trim()) ? text : null;
-    comment = (typeof comment === 'string' && comment.trim()) ? comment : null;
-  
-    if (text === null && comment === null) {
-      console.log("no message");
-    } else {
-      addMessage({ sender: sender, text: text, comment: comment, type: "dialogue"}); 
-    }
-  }
-
   const chooseMealDescription = (event) => {
     if (!mealDescription.trim()) {
       alert("Please enter the description of your preferred meal plan");
@@ -62,8 +20,8 @@ const MealDescriptionForm = ({ mealDescription, setMealDescription, messages, is
         objective: mealDescription
       })
       .then((returnedResponse) => {
-        let parsed = parsePoetryAndComment(returnedResponse.text)
-        checkAndAddMessage("ai", parsed.mealPlan, parsed.comment, "dialogue")
+        let parsed = JSON.parse(returnedResponse.text)
+        addMessage({ sender: "ai", mealplan: parsed.mealplan, comment: parsed.comment})
         setIsLoading(false)
       })
       .catch((error) => {
