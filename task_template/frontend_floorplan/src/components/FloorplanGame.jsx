@@ -83,7 +83,7 @@ const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) =>
             console.log(error);
           }
           setIsLoading(false)
-          setIsDisabled(true)
+          setIsDisabled(false)
         });
     } catch (err) {
       console.error('Failed to send user move or get AI response:', err);

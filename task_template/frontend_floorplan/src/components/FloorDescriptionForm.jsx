@@ -74,7 +74,7 @@ const FloorDescriptionForm = ({ floorDescription, setFloorDescription, messages,
           console.log(error);
         }
         setIsLoading(false)
-        setIsDisabled(true)
+        setIsDisabled(false)
       });
   };
 
