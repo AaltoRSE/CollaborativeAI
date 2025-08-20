@@ -9,6 +9,11 @@ from starlette.middleware.sessions import SessionMiddleware
 import secrets
 import concurrent.futures
 
+#slowapi limiter
+from slowapi_limiter import limiter
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+
 # This will need to be adapted by the individual task!
 from tasks.task import task 
 
@@ -20,6 +25,8 @@ logger = logging.getLogger("app")
 logger.info(f"Starting {task} task")
 # Router handling.
 app = FastAPI()
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(SessionMiddleware, secret_key=secrets.token_hex(32), max_age=None)
 logger.info("Session middleware added")
