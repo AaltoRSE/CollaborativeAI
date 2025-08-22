@@ -56,7 +56,7 @@ const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) =>
     setIsLoading(true);
     setIsDisabled(true);
 
-    const floorPlanElement = document.getElementsByClassName("game")[0];
+    const floorPlanElement = document.getElementsByClassName("game-grid")[0];
     const snapShot = await html2canvas(floorPlanElement);
     const floorPlanImage = snapShot.toDataURL()
     
@@ -158,13 +158,15 @@ const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) =>
   return (
     <div className="game">
       <Inventory inventory={inventory} />
-      <Grid
-        tileMap={TILE_MAP}
-        items={furniture}
-        onDropItem={handleDropItem}
-        onMoveItem={handleMoveItem}
-        onDeleteItem={handleDeleteItem}
-      /> 
+      <div className="game-grid">
+        <Grid
+          tileMap={TILE_MAP}
+          items={furniture}
+          onDropItem={handleDropItem}
+          onMoveItem={handleMoveItem}
+          onDeleteItem={handleDeleteItem}
+        /> 
+      </div>
     </div>
   );
 };
