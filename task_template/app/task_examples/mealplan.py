@@ -49,6 +49,26 @@ class Mealplan(Task):
                         "Dinner": "Rinderroulade - rolled beef steak, with potato salad."
                     }}
             }}
+
+            An example response is as follows:
+            {{
+                "mealplan": {{
+                    "Day 1":
+                        {{
+                            "Breakfast": "A traditional German breakfast with fresh bread rolls (Brötchen), cold cuts, cheese, and a hard-boiled egg.",
+                            "Lunch": "Currywurst with a side of fries - a popular fast food option in Berlin.",
+                            "Dinner": "Sauerbraten with red cabbage and dumplings - to try authentic German cuisine."
+                        }},
+                    "Day 2":
+                        {{
+                            "Breakfast": "A light breakfast with muesli and yogurt, local fruit, and a cup of German coffee.",
+                            "Lunch": "A doner kebab - a popular and convenient Berlin street food.",
+                            "Dinner": "Rinderroulade - rolled beef steak, with potato salad."
+                        }}
+                }}, 
+                "comment": "Here's a traditional German meal plan for your 2-day stay in erlin! Does this align with what you were looking for, or would you like any substitutions or adjustments?"
+            }}
+
             Remember the mealplan must be a valid JSON, all the key names and structure must follow the example.
             Do not add redundant string such as "```json", "```", or equivalent. Do not include markdown, or code blocks. 
             If the user ask or request something, you answer it as a comment.

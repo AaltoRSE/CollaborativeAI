@@ -13,7 +13,7 @@ import "./index.css";
 
 const App = () => {
   const [isFinished, setIsFinished] = useState(false); 
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState([]);
   const [isFinishClicked, setIsFinishClicked] = useState(false);
   const [isRatingSubmitted, setIsRatingSubmitted] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
