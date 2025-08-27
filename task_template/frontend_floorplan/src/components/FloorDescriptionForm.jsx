@@ -62,7 +62,6 @@ const FloorDescriptionForm = ({ floorDescription, setFloorDescription, messages,
         objective: floorDescription
       })
       .then((returnedResponse) => {
-        console.log(returnedResponse)
         let parsed = parsePoetryAndComment(returnedResponse.text)
         checkAndAddMessage("ai", parsed.floor, parsed.comment, "dialogue")
         setIsLoading(false)
