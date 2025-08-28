@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import Grid from './Grid';
 import Inventory from './Inventory';
-import taskService from '../services/task'
-import html2canvas from 'html2canvas';
 import { TILE_MAP, INVENTORY } from '../utils/constants'
+import html2canvas from 'html2canvas';
+import taskService from '../services/task'
 
 const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) => {
   const [inventory, setInventory] = useState(INVENTORY);
-
   const [furniture, setFurniture] = useState([]);
 
   function parsePoetryAndComment(input) {
@@ -40,7 +39,7 @@ const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) =>
   
     return { floor, comment };
   }
-  
+    
   function checkAndAddMessage(sender, text, comment, type) {
     text = (typeof text === 'string' && text.trim()) ? text : null;
     comment = (typeof comment === 'string' && comment.trim()) ? comment : null;
@@ -51,14 +50,10 @@ const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) =>
       addMessage({ sender: sender, text: text, comment: comment, type: "dialogue"}); 
     }
   }
-
-  const sendMove = async () => {
+  
+  const sendMove = async (floorPlanImage) => {
     setIsLoading(true);
     setIsDisabled(true);
-
-    const floorPlanElement = document.getElementsByClassName("game")[0];
-    const snapShot = await html2canvas(floorPlanElement);
-    const floorPlanImage = snapShot.toDataURL()
     
     try {
       taskService
@@ -71,13 +66,18 @@ const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) =>
           objective: "bedroom"
         })
         .then((returnedResponse) => {
-          console.log(returnedResponse)
           let parsed = parsePoetryAndComment(returnedResponse.text)
           checkAndAddMessage("ai", parsed.floor, parsed.comment, "dialogue")
           setIsLoading(false)
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response && error.response.status === 429) {
+            alert(error.response.data.error);
+          } else {
+            console.log(error);
+          }
+          setIsLoading(false)
+          setIsDisabled(false)
         });
     } catch (err) {
       console.error('Failed to send user move or get AI response:', err);
@@ -91,7 +91,13 @@ const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) =>
 
     setFurniture([...furniture, { ...item, x, y, rotation }]);
     setInventory(prev => prev.filter(i => i.id !== item.id));
-    sendMove();
+    
+    setTimeout(async () => {
+      const floorPlanElement = document.getElementsByClassName("grid")[0];
+      const snapShot = await html2canvas(floorPlanElement);
+      const floorPlanImage = snapShot.toDataURL();
+      sendMove(floorPlanImage);
+    }, 0);
   };
 
   const handleMoveItem = (id, x, y, rotate = false) => {
@@ -115,8 +121,13 @@ const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) =>
           y: newY,
           rotation: newRotation
         };
-  
-        sendMove();
+
+        setTimeout(async () => {
+          const floorPlanElement = document.getElementsByClassName("grid")[0];
+          const snapShot = await html2canvas(floorPlanElement);
+          const floorPlanImage = snapShot.toDataURL();
+          sendMove(floorPlanImage);
+        }, 0);
 
         return movedItem;
       })

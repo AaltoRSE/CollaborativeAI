@@ -17,11 +17,11 @@ model_definition = model_pb2.modelDefinition()
 model_definition.needs_text = True
 model_definition.needs_image = False
 model_definition.can_text = True
-model_definition.can_image = True
-model_definition.modelID = "GPT4_vision"
+model_definition.can_image = False
+model_definition.modelID = "o1-mini"
 
 
-class AaltoImageModel(AIModel):
+class o1miniAalto(AIModel):
     def get_model_definition(self) -> model_pb2.modelDefinition:
         return model_definition
 
@@ -30,10 +30,17 @@ class AaltoImageModel(AIModel):
 
     async def get_response(self, message: TaskInput) -> TaskOutput:
         model = ChatOpenAI(
-            base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/deployments/gpt-4o-2024-11-20/",
+            base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/deployments/o1-mini-2024-09-12/",
             default_headers=default_headers,
-            max_tokens=4096,
         )       
+        # ai_messages = message.model_dump()["messages"]
+        # for ai_message in ai_messages:
+        #     if ai_message["role"] == "system":
+        #         ai_message["role"] = "user"                
+        # AIresponse = model.invoke(ai_messages)
+        # taskResponse = TaskOutput()
+        # taskResponse.text = AIresponse.content
+        # return taskResponse
         AIresponse = model.invoke(message.model_dump()["messages"])
         taskResponse = TaskOutput()
         taskResponse.text = AIresponse.content

@@ -6,12 +6,12 @@ const Grid = ({ tileMap, items, onDropItem, onMoveItem, onDeleteItem }) => {
   const [hoveredTile, setHoveredTile] = useState(null);
   const [contextMenu, setContextMenu] = useState(null);
 
-    useEffect(() => {
-      window.addEventListener('click', () => setContextMenu(null));
-      return () => window.removeEventListener('click', close);
-    }, []);
+  useEffect(() => {
+    window.addEventListener('click', () => setContextMenu(null));
+    return () => window.removeEventListener('click', close);
+  }, []);
 
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     const itemData = JSON.parse(e.dataTransfer.getData("item"));
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Math.floor((e.clientX - rect.left) / GRID_SIZE);
@@ -82,8 +82,7 @@ const Grid = ({ tileMap, items, onDropItem, onMoveItem, onDeleteItem }) => {
             top: hoveredTile.y * GRID_SIZE,
             width: GRID_SIZE,
             height: GRID_SIZE,
-            backgroundColor: 'rgba(0, 255, 0, 0.3)',
-            border: '2px dashed green',
+            border: '2px dashed',
             position: 'absolute',
           }}
         />

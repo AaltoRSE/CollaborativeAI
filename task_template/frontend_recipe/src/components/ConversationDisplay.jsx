@@ -11,47 +11,6 @@ const ConversationDisplay = ({ isLoading, setIsLoading, recipeDescription, isDis
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     }    
   }, [messages])
-  
-  function parsePoetryAndComment(input) {
-    // Initialize variables to store the parsed parts
-    let recipe = "";
-    let comment = "";
-
-    // Trim the input to remove leading/trailing whitespace
-    input = input.trim();
-    // Check if the input starts with a '[' character
-    if (input.startsWith('[')) {
-        // Find the closing ']' character
-        let endBracketIndex = input.indexOf(']');
-        
-        // If a closing ']' is found, extract the poetry line
-        if (endBracketIndex !== -1) {
-            recipe = input.substring(1, endBracketIndex).trim();
-            // Extract the comment part if there is any text after the closing ']'
-            if (endBracketIndex + 1 < input.length) {
-                comment = input.substring(endBracketIndex + 1).trim();
-            }
-        }
-    } else {
-        // If the input doesn't start with '[', consider the whole input as a comment
-        comment = input;
-    }
-
-    // console.log("Parsed: ", recipe, ", ", comment)
-
-    return { recipe, comment };
-}
-
-function checkAndAddMessage(sender, text, comment, type) {
-  text = (typeof text === 'string' && text.trim()) ? text : null;
-  comment = (typeof comment === 'string' && comment.trim()) ? comment : null;
-
-  if (text === null && comment === null) {
-    console.log("no message");
-  } else {
-    addMessage({ sender: sender, text: text, comment: comment, type: "dialogue"}); 
-  }
-}
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -59,7 +18,7 @@ function checkAndAddMessage(sender, text, comment, type) {
       return;
     }
     setIsLoading(true);
-    checkAndAddMessage("user", null, newComment,"dialogue");   
+    addMessage({ sender: "user", recipe: "", comment: newComment}); 
 
     taskService
         .submitUserInput({
@@ -71,14 +30,17 @@ function checkAndAddMessage(sender, text, comment, type) {
           ojective: recipeDescription
         })
         .then((returnedResponse) => {
-          let parsed = parsePoetryAndComment(returnedResponse.text)
-          console.log(returnedResponse)
-          console.log(parsed)
-          checkAndAddMessage("ai", parsed.recipe, parsed.comment,"dialogue")
+          let parsed = JSON.parse(returnedResponse.text)
+          addMessage({ sender: "ai", recipe: parsed.recipe, comment: parsed.comment})
           setIsLoading(false)
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response && error.response.status === 429) {
+            alert(error.response.data.error);
+          } else {
+            console.log(error);
+          }
+          setIsLoading(false)
         });
     setNewComment("");
   };

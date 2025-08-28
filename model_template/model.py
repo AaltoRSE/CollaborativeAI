@@ -14,5 +14,11 @@ elif model_to_use == "aalto":
     ai_model = AaltoModel()
 elif model_to_use == "simpleTangram":    
     ai_model = simpleAgent()
+elif model_to_use == "aalto_o1mini":    
+    ai_model = o1miniAalto()
+elif model_to_use == "aalto_o1":    
+    ai_model = o1Aalto()
+elif model_to_use == "aalto_o3mini":    
+    ai_model = o3miniAalto()
 else:    
     ai_model = OpenAIImageModel()

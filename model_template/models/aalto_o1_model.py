@@ -18,10 +18,10 @@ model_definition.needs_text = True
 model_definition.needs_image = False
 model_definition.can_text = True
 model_definition.can_image = True
-model_definition.modelID = "GPT4_vision"
+model_definition.modelID = "o1"
 
 
-class AaltoImageModel(AIModel):
+class o1Aalto(AIModel):
     def get_model_definition(self) -> model_pb2.modelDefinition:
         return model_definition
 
@@ -30,7 +30,7 @@ class AaltoImageModel(AIModel):
 
     async def get_response(self, message: TaskInput) -> TaskOutput:
         model = ChatOpenAI(
-            base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/deployments/gpt-4o-2024-11-20/",
+            base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/deployments/o1-2024-12-17/",
             default_headers=default_headers,
             max_tokens=4096,
         )       

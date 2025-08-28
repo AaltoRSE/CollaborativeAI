@@ -97,7 +97,12 @@ const Dialogue = ({ isLoading, setIsLoading, theme, isDisabled, messages, setMes
             setIsLoading(false)
           })
           .catch((error) => {
-            console.log(error)
+            if (error.response && error.response.status === 429) {
+              alert(error.response.data.error);
+            } else {
+              console.log(error);
+            }
+            setIsLoading(false)
           });
       setNewLine("");
     }
@@ -127,7 +132,7 @@ const Dialogue = ({ isLoading, setIsLoading, theme, isDisabled, messages, setMes
           style={{
             "color" : "#FF0000"
           }}>
-          Thank you. Here is our final poem. Please click "Rate task" to rate it!
+          Thank you. Here is our final poem. Please click "Finish" to rate it!
         </span>
         }
         <div className="form-wrapper">

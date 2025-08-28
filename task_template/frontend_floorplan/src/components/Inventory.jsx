@@ -2,7 +2,6 @@ import { GRID_SIZE } from '../utils/constants'
 
 const Inventory = ({ inventory }) => {
   const handleDragStart = (e, item) => {
-    console.log(item)
     e.dataTransfer.setData("item", JSON.stringify(item));
   };
 

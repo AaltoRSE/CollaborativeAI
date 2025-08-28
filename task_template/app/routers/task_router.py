@@ -21,6 +21,7 @@ import logging
 from grpc_server.queue_handler import queue_handler
 import grpc_server.tasks_pb2 as grpc_models
 from datetime import datetime
+from slowapi_limiter import limiter
 
 logger = logging.getLogger(__name__)
 task_router = APIRouter(prefix="/api/v1/task")
@@ -78,8 +79,10 @@ async def chat_completion_endpoint(
 
 
 @task_router.post("/process")
-async def process_task_data(
+@limiter.limit("10/minute")
+async def process_task_data( #Request is required to use slowapi limiter
     task_data: TaskDataRequest,
+    request: Request,
     task_handler: Annotated[CompletionService, Depends(CompletionService)],
     session: SessionData = Depends(get_session),
 ) -> TaskDataResponse:

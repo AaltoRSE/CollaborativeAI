@@ -40,18 +40,18 @@ const ConversationDisplay = ({ isLoading, setIsLoading, floorDescription, isDisa
     // console.log("Parsed: ", floor, ", ", comment)
 
     return { floor, comment };
-}
-
-function checkAndAddMessage(sender, text, comment, type) {
-  text = (typeof text === 'string' && text.trim()) ? text : null;
-  comment = (typeof comment === 'string' && comment.trim()) ? comment : null;
-
-  if (text === null && comment === null) {
-    console.log("no message");
-  } else {
-    addMessage({ sender: sender, text: text, comment: comment, type: "dialogue"}); 
   }
-}
+
+  function checkAndAddMessage(sender, text, comment, type) {
+    text = (typeof text === 'string' && text.trim()) ? text : null;
+    comment = (typeof comment === 'string' && comment.trim()) ? comment : null;
+
+    if (text === null && comment === null) {
+      console.log("no message");
+    } else {
+      addMessage({ sender: sender, text: text, comment: comment, type: "dialogue"}); 
+    }
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -71,15 +71,17 @@ function checkAndAddMessage(sender, text, comment, type) {
           ojective: "bedroom"
         })
         .then((returnedResponse) => {
-          console.log(returnedResponse)
           let parsed = parsePoetryAndComment(returnedResponse.text)
-          console.log(returnedResponse)
-          console.log(parsed)
           checkAndAddMessage("ai", parsed.floor, parsed.comment,"dialogue")
           setIsLoading(false)
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response && error.response.status === 429) {
+            alert(error.response.data.error);
+          } else {
+            console.log(error);
+          }
+          setIsLoading(false)
         });
     setNewComment("");
   };

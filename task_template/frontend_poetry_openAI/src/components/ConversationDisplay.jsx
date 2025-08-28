@@ -87,7 +87,12 @@ function checkAndAddMessage(sender, text, comment, type) {
           setIsLoading(false)
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response && error.response.status === 429) {
+            alert(error.response.data.error);
+          } else {
+            console.log(error);
+          }
+          setIsLoading(false)
         });
     setNewComment("");
   };
@@ -110,7 +115,7 @@ function checkAndAddMessage(sender, text, comment, type) {
           style={{
             "color" : "#FF0000"
           }}>
-          The poem reached the length limit. Please click "Rate task" to rate it
+          The poem reached the length limit. Please click "Finish" to rate it
         </span>
         }
         <div className="form-wrapper">

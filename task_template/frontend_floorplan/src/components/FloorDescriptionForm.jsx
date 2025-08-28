@@ -62,13 +62,18 @@ const FloorDescriptionForm = ({ floorDescription, setFloorDescription, messages,
         objective: floorDescription
       })
       .then((returnedResponse) => {
-        console.log(returnedResponse)
         let parsed = parsePoetryAndComment(returnedResponse.text)
         checkAndAddMessage("ai", parsed.floor, parsed.comment, "dialogue")
         setIsLoading(false)
       })
       .catch((error) => {
-        console.log(error)
+        if (error.response && error.response.status === 429) {
+          alert(error.response.data.error);
+        } else {
+          console.log(error);
+        }
+        setIsLoading(false)
+        setIsDisabled(false)
       });
   };
 

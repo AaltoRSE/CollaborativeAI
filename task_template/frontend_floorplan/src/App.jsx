@@ -52,7 +52,7 @@ const App = () => {
         <Dialogue isLoading={isLoading} setIsLoading={setIsLoading} setFloorDescription={setFloorDescription} messages={messages} addMessage={addMessage} setIsDisabled={setIsDisabled}/>
         <ConversationDisplay isLoading={isLoading} setIsLoading={setIsLoading} setFloorDescription={setFloorDescription} isDisabled={isDisabled} messages={messages} addMessage={addMessage} />
       </div>
-      <FinishButton isFinishClicked={isFinishClicked} isRatingSubmitted={isRatingSubmitted} toggleFinish={toggleFinish} />
+      <FinishButton messages={messages} isFinishClicked={isFinishClicked} isRatingSubmitted={isRatingSubmitted} toggleFinish={toggleFinish} />
       {isFinished && <FeedbackForm viewPointRef={viewPointRef} isRatingSubmitted={isRatingSubmitted} setIsRatingSubmitted={setIsRatingSubmitted}/>}
       <Footer />
     </>
