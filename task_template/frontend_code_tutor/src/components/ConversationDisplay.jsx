@@ -39,7 +39,6 @@ const ConversationDisplay = ({ isLoading, setIsLoading, topicDescription, isDisa
       })
       .then((returnedResponse) => {
         let parsed = JSON.parse(returnedResponse.text)
-        console.log(parsed)
         addMessage({ sender: "ai", message: parsed.message})
         setIsLoading(false)
       })

@@ -25,7 +25,6 @@ const TopicDescriptionForm = ({ topicDescription, setTopicDescription, messages,
       })
       .then((returnedResponse) => {
         let parsed = JSON.parse(returnedResponse.text)
-        console.log(parsed)
         addMessage({ sender: "ai", message: parsed.message})
         setIsLoading(false)
       })
