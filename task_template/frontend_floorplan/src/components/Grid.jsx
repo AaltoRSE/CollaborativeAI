@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import FurnitureItem from './FurnitureItem';
 import { GRID_SIZE } from '../utils/constants'
-import html2canvas from 'html2canvas';
-import taskService from '../services/task'
 
-const Grid = ({ messages, addMessage, setIsLoading, setIsDisabled, tileMap, items, onDropItem, onMoveItem, onDeleteItem }) => {
+const Grid = ({ tileMap, items, onDropItem, onMoveItem, onDeleteItem }) => {
   const [hoveredTile, setHoveredTile] = useState(null);
   const [contextMenu, setContextMenu] = useState(null);
 
@@ -12,81 +10,6 @@ const Grid = ({ messages, addMessage, setIsLoading, setIsDisabled, tileMap, item
     window.addEventListener('click', () => setContextMenu(null));
     return () => window.removeEventListener('click', close);
   }, []);
-
-  function parsePoetryAndComment(input) {
-    // Initialize variables to store the parsed parts
-    let floor = "";
-    let comment = "";
-  
-    // Trim the input to remove leading/trailing whitespace
-    input = input.trim();
-  
-    // Check if the input starts with a '[' character
-    if (input.startsWith('[')) {
-        // Find the closing ']' character
-        let endBracketIndex = input.indexOf(']');
-        
-        // If a closing ']' is found, extract the poetry line
-        if (endBracketIndex !== -1) {
-            floor = input.substring(1, endBracketIndex).trim();
-            // Extract the comment part if there is any text after the closing ']'
-            if (endBracketIndex + 1 < input.length) {
-                comment = input.substring(endBracketIndex + 1).trim();
-            }
-        }
-    } else {
-        // If the input doesn't start with '[', consider the whole input as a comment
-        comment = input;
-    }
-  
-    // console.log("Parsed: ", floor, ", ", comment)
-  
-    return { floor, comment };
-  }
-  
-  function checkAndAddMessage(sender, text, comment, type) {
-    text = (typeof text === 'string' && text.trim()) ? text : null;
-    comment = (typeof comment === 'string' && comment.trim()) ? comment : null;
-  
-    if (text === null && comment === null) {
-      console.log("no message");
-    } else {
-      addMessage({ sender: sender, text: text, comment: comment, type: "dialogue"}); 
-    }
-  }
-
-  const sendMove = async (floorPlanImage) => {
-    setIsLoading(true);
-    setIsDisabled(true);
-    
-    try {
-      taskService
-        .submitUserInput({
-          inputData: {
-            floorplans: messages
-          }, 
-          text: "", 
-          image: floorPlanImage,
-          objective: "bedroom"
-        })
-        .then((returnedResponse) => {
-          let parsed = parsePoetryAndComment(returnedResponse.text)
-          checkAndAddMessage("ai", parsed.floor, parsed.comment, "dialogue")
-          setIsLoading(false)
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 429) {
-            alert(error.response.data.error);
-          } else {
-            console.log(error);
-          }
-          setIsLoading(false)
-          setIsDisabled(false)
-        });
-    } catch (err) {
-      console.error('Failed to send user move or get AI response:', err);
-    }
-  }
 
   const handleDrop = async (e) => {
     const itemData = JSON.parse(e.dataTransfer.getData("item"));
@@ -101,12 +24,6 @@ const Grid = ({ messages, addMessage, setIsLoading, setIsDisabled, tileMap, item
       onDropItem(itemData, x, y);
     }
     setHoveredTile(null);
-    setTimeout(async () => {
-      const floorPlanElement = document.getElementsByClassName("grid")[0];
-      const snapShot = await html2canvas(floorPlanElement);
-      const floorPlanImage = snapShot.toDataURL();
-      sendMove(floorPlanImage);
-    }, 0);
   };
 
   const handleDragOver = (e) => {

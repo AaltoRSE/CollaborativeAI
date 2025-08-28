@@ -95,6 +95,9 @@ class Floorplan(Task):
                 only if its current position is not suitable. 
                 + If the item is already well-placed, confirm in your response that it looks good and move on to the next furniture
                 in your inventory.
+                + Be critical and unbiased in your suggestion. If the item is placed poorly, suggest another way to place it. Do not always aggree with
+                the user.
+                + Only suggest moving one furniture at a time. Do not suggest moving multiple ones.
             - If the input from the user is a text message, answer it based on what you've built so far and take their thoughts and 
             comment into consideration.
             - The suggestion have to be detailed but concise, and most importantly can be easily understood by the user.
@@ -120,7 +123,6 @@ class Floorplan(Task):
             directly alongside one of its shorter sides or slightly angled for a dynamic touch. This positioning will create a functional 
             workspace and feels practical for sitting down to use the table for tasks like reading, writing, or working. What are your 
             thoughts on this idea?
-
 
             If the user ask or request something, you answer it without suggesting a new move.
             You are curious, and always ready and eager to ask the user question if needed.
