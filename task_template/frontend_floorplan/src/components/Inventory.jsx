@@ -2,7 +2,17 @@ import { GRID_SIZE } from '../utils/constants'
 
 const Inventory = ({ inventory }) => {
   const handleDragStart = (e, item) => {
-    e.dataTransfer.setData("item", JSON.stringify(item));
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+
+    e.dataTransfer.setData("item", 
+      JSON.stringify({
+        ...item,
+        grabOffsetX: Math.floor(offsetX / GRID_SIZE),
+        grabOffsetY: Math.floor(offsetY / GRID_SIZE),
+      })
+    );
   };
 
   return (

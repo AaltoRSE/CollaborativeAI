@@ -14,8 +14,8 @@ const Grid = ({ tileMap, items, onDropItem, onMoveItem, onDeleteItem }) => {
   const handleDrop = async (e) => {
     const itemData = JSON.parse(e.dataTransfer.getData("item"));
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / GRID_SIZE);
-    const y = Math.floor((e.clientY - rect.top) / GRID_SIZE);
+    const x = Math.floor((e.clientX - rect.left) / GRID_SIZE) - itemData.grabOffsetX;
+    const y = Math.floor((e.clientY - rect.top) / GRID_SIZE) - itemData.grabOffsetY;
     const isExisting = items.some(i => i.id === itemData.id);
 
     if (isExisting) {
