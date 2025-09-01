@@ -85,6 +85,7 @@ class Floorplan(Task):
                 1. The bed: a 4x6 size rectangle with rgb(230, 123, 104) color, identified by a text "bed" in the middle.
                 2. The table: a 2x4 size rectangle with rgb(205, 159, 43) color, identified by a text "table" in the middle.
                 3. The chair: a 2x2 size square with rgb(11, 188, 11) color, identified by a text "chair" in the middle.
+                4. The wardrobe: a 5x3 size rectangle with rgb(0, 147, 227) color, identified by a text "wardrobe" in the middle.
 
             
             *Your task:
@@ -102,6 +103,8 @@ class Floorplan(Task):
             comment into consideration.
             - The suggestion have to be detailed but concise, and most importantly can be easily understood by the user.
             - When all furnitures are placed properly, declare the floorplan as completed.
+            - Write your response as a text. Don't use list or any other special formatting in your response.
+            - Be concise but informative. Every response is maximum 100 words.
 
             * Some design rules: the design rules for the floorplan are what a real-life architecture would follow to ensure that a 
             design is good and appropriate. You must always conform to the normal rules/guidelines of architecture design, but here 
@@ -118,7 +121,7 @@ class Floorplan(Task):
 
             Example of an answer: The current floorplan shows a bed placed at the top-left corner near the window and a table situated 
             on the right-hand side, also near the window. Both placements effectively utilize natural lighting, making the space functional 
-            and pleasant. The bed and table are well-positioned, leaving ample open space in the room and ensuring no access points, like the 
+            and pleasant. The bed, wardrobe, and table are well-positioned, leaving ample open space in the room and ensuring no access points, like the 
             door, are blocked. From the inventory, only the chair remains to be placed. Place the chair near the table, either aligning it 
             directly alongside one of its shorter sides or slightly angled for a dynamic touch. This positioning will create a functional 
             workspace and feels practical for sitting down to use the table for tasks like reading, writing, or working. What are your 
