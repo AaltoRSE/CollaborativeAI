@@ -14,7 +14,7 @@ const TaskDescription = () => {
         <li>To rotate or delete a piece from the grid, right click on that piece to open a drop-down menu and then select the option</li>
         <li>For macOS trackpad users, ensure the "Secondary click" option inside the Trackpad setting is not set to "Off". Use the set option there to open the drop-down menu for rotating and removing pieces.</li>
         <li>If you want to discuss with the AI about the floor plan, you can do that in the Conversation box</li>
-        <li>When you are sastified with the floor plan. Please then rate your experience with the AI</li>
+        <li>When satisfied with the result, click "Finish" to rate your experience.</li>
       </ol>
     </div>
   );

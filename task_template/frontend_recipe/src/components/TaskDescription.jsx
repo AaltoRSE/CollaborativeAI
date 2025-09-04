@@ -7,7 +7,7 @@ const TaskDescription = () => {
         <li>Provide the name of the recipe.</li>
         <li>The AI then gives you a recommended recipe.</li>
         <li>If you want to discuss with the AI about the recipe, you can do that in the Conversation box.</li>
-        <li>When you are sastified with the recipe. Please then rate your experience with the AI.</li>
+        <li>When satisfied with the result, click "Finish" to rate your experience.</li>
       </ol>
     </div>
   );
