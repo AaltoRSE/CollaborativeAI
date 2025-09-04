@@ -1,41 +1,39 @@
 import taskService from '../services/task'
 
 const ThemeForm = ({ theme, setTheme, isDisabled, setIsDisabled, setIsLoading, addMessage }) => {
-  function parsePoetryAndComment(input) {
-    // Initialize variables to store the parsed parts
+  const parsePoetryAndComment = (input) => {
     let poetryLine = "";
     let comment = "";
-  
-    // Trim the input to remove leading/trailing whitespace
     input = input.trim();
-  
-    // Check if the input starts with a '[' character
-    if (input.startsWith('[')) {
-        // Find the closing ']' character
-        let endBracketIndex = input.indexOf(']');
-        
-        // If a closing ']' is found, extract the poetry line
-        if (endBracketIndex !== -1) {
-            poetryLine = input.substring(1, endBracketIndex).trim();
-            // Extract the comment part if there is any text after the closing ']'
-            if (endBracketIndex + 1 < input.length) {
-                comment = input.substring(endBracketIndex + 1).trim();
-            }
+
+    if (input.includes('[')) {
+      let startBracketIndex = input.indexOf('[');
+      let endBracketIndex = input.indexOf(']');
+      
+      if (startBracketIndex !== -1 && endBracketIndex !== -1) {
+        poetryLine = input.substring(startBracketIndex + 1, endBracketIndex).trim();
+        let commentBeforeBracket = input.substring(0, startBracketIndex).trim();
+        let commentAfterBracket = input.substring(endBracketIndex + 1).trim();
+
+        if (commentBeforeBracket && commentAfterBracket) {
+          comment = `${commentBeforeBracket} ${commentAfterBracket}`.trim();
+        } else {
+          comment = commentBeforeBracket || commentAfterBracket;
         }
+      } else {
+        comment = input
+      }
     } else {
-        // If the input doesn't start with '[', consider the whole input as a comment
-        comment = input;
+      comment = input
     }
-  
-    // console.log("Parsed: ", poetryLine, ", ", comment)
-  
+    
     return { poetryLine, comment };
   }
-  
-  function checkAndAddMessage(sender, text, comment, type) {
+
+  const checkAndAddMessage = (sender, text, comment, type) => {
     text = (typeof text === 'string' && text.trim()) ? text : null;
     comment = (typeof comment === 'string' && comment.trim()) ? comment : null;
-  
+
     if (text === null && comment === null) {
       console.log("no message");
     } else {

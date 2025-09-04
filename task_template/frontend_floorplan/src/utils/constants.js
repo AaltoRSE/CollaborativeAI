@@ -22,5 +22,6 @@ export const TILE_MAP = [
 export const INVENTORY = [
   { id: 'chair1', type: 'chair', width: 2, height: 2, backgroundColor: 'rgb(11, 188, 11)'},
   { id: 'table1', type: 'table', width: 4, height: 2, backgroundColor: 'rgb(205, 159, 43)' },
-  { id: 'bed1', type: 'bed', width: 4, height: 6, backgroundColor: 'rgb(230, 123, 104)' }
+  { id: 'bed1', type: 'bed', width: 4, height: 6, backgroundColor: 'rgb(230, 123, 104)' },
+  { id: 'wardrobe1', type: 'wardrobe', width: 3, height: 5, backgroundColor: 'rgb(0, 147, 227)'}
 ]

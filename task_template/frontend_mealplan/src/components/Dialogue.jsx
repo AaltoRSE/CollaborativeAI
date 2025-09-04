@@ -17,7 +17,7 @@ const Dialogue = ({ isLoading, messages }) => {
         <div className="dialogue-content" ref={messagesRef}>
           {messages
             .map((msg, idx) => ({ ...msg, originalIndex: idx })) // Preserve original index
-            .filter(msg => msg.mealplan !== "" && msg.mealplan !== null)
+            .filter(msg => msg.mealplan !== "" && msg.mealplan !== null && JSON.stringify(msg.mealplan) !== "{}")
             .map((msg) => (
               <DialogueItem
                 key={msg.originalIndex} // Use original index as key if needed

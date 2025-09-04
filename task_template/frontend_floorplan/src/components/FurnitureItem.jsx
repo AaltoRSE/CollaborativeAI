@@ -2,7 +2,17 @@ import { GRID_SIZE } from '../utils/constants'
 
 const FurnitureItem = ({ item, rotation = 0, onContextMenu }) => {
   const handleDragStart = (e) => {
-    e.dataTransfer.setData("item", JSON.stringify(item));
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+
+    e.dataTransfer.setData("item", 
+      JSON.stringify({
+        ...item,
+        grabOffsetX: Math.floor(offsetX / GRID_SIZE),
+        grabOffsetY: Math.floor(offsetY / GRID_SIZE),
+      })
+    );
   };
 
   const handleContextMenu = (e) => {
