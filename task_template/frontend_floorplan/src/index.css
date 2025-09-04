@@ -104,7 +104,7 @@ a:active {
   border: none;
   border-radius: 5px;
   font-size: 16px;
-  background-color: #4CAF50;
+  background-color: #2d8130;
   color: white;
   border-radius: 10px;
   cursor: pointer;
@@ -215,7 +215,7 @@ a:active {
   cursor: pointer;
   color: white;
   padding: 10px;
-  background-color: #4caf50;
+  background-color: #2d8130;
 }
 
 .floor-description-submit-btn:hover {
@@ -386,6 +386,7 @@ a:active {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: rgb(225, 225, 225);
 }
 
 .dialogue-poem {
@@ -452,7 +453,7 @@ a:active {
   border-radius: 5px;
   height: 50px;
   min-width: 50px;
-  background-color: #4caf50;
+  background-color: #2d8130;
 }
 
 .input-form button:hover {
