@@ -50,13 +50,27 @@ a:active {
   padding: 20px;
 }
 
+.logo-container {
+  flex-grow: 1;
+  min-width: 0;
+  overflow: hidden;
+  margin: 10px;
+  width: 70%;
+}
+
 .navbar {
-  color: white;
   display: flex;
 }
 
 .navbar a {
   padding: 5px;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  background-color: rgb(110, 104, 201);
+  border-radius: 10px;
 }
 
 .task-description {
@@ -71,28 +85,20 @@ a:active {
 
 .main-interaction {
   display: flex;
+  height: calc(100vh - 234px);
   padding: 20px;
-}
-
-@media (max-width: 600px) {
-  .main-interaction {
-    flex-direction: column;
-  }
-
-  .dialogue-wrapper, .chat-space-wrapper {
-    min-height: 500px;
-    max-height: 500px;
-  }
+  position: relative;
 }
 
 .dialogue-wrapper, .chat-space-wrapper {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
-  height: 70vh;
+  height: 100%;
   margin: 5px;
   display: flex;
   flex-direction: column;
+  position: relative;
   text-align: center;
 }
 
@@ -165,9 +171,9 @@ a:active {
 
 .theme-input input {
   font-size: 15px;
-  width: 20%;
+  width: 50%;
   border-radius: 10px;
-  margin: 5px;
+  margin: 10px;
   padding: 10px;
   overflow-y: auto;
 }
@@ -290,7 +296,6 @@ a:active {
 }
 
 .finish-btn {
-  margin-left: 5px;
   font-size: larger;
   padding: 5px;
   height: 75px;
@@ -358,6 +363,10 @@ a:active {
 }
 
 .footer-container {
+  left: 0;
+  bottom: 0;
+  position: relative;
+  width: 100%;
   background-color: rgb(76, 70, 163);
   color: white;
   padding: 50px;
@@ -375,8 +384,11 @@ a:active {
 }
 
 .footer-container img {
+  margin-top: 60px;
+  margin-right: 100px;
   max-width: 100%;
-  height: auto;
+  height: 122px;
+  width: 600px;
 }
 
 .acknowledge-section {
@@ -565,4 +577,149 @@ a:active {
 .survey-button:hover {
   background-color: rgb(5, 5, 142);
   transform: translateY(-50%) rotate(-90deg) scale(1.08);
+}
+
+
+@media (max-width: 1538px) {
+  body,html {
+    font-size: 12px;
+  }
+
+  .header-container {
+    height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .theme-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .theme-input input {
+    width: 100%;
+    margin: 10px;
+  }
+
+  .main-interaction {
+    flex-direction: column;
+    min-height: 1200px;
+  }
+
+  .chat-space-wrapper {
+    max-height: 600px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .footer-container img {
+    width: 85%;
+    height: 85%;
+    margin: 10px
+  }
+}
+
+@media (max-width: 1024px) {
+  body,html {
+    font-size: 12px;
+  }
+
+  .header-container {
+    height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .theme-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .theme-input input {
+    width: 100%;
+    margin: 10px;
+  }
+
+  .main-interaction {
+    flex-direction: column;
+    min-height: 1200px;
+  }
+
+  .chat-space-wrapper {
+    max-height: 600px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .footer-container img {
+    width: 85%;
+    height: 85%;
+    margin: 10px
+  }
+}
+
+@media (max-width: 768px) {
+  body,html {
+    font-size: 12px;
+  }
+
+  .header-container {
+    height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .theme-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .theme-input input {
+    width: 100%;
+    margin: 10px;
+  }
+
+  .main-interaction {
+    flex-direction: column;
+    min-height: 1200px;
+  }
+
+  .chat-space-wrapper {
+    max-height: 600px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .footer-container img {
+    width: 85%;
+    height: 85%;
+    margin: 10px
+  }
 }

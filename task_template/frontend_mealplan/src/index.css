@@ -46,17 +46,31 @@ a:active {
   display: flex;
   justify-content: space-between; 
   align-items: center; 
-  height: 79px; 
+  height: 100%; 
   padding: 20px;
 }
 
+.logo-container {
+  flex-grow: 1;
+  min-width: 0;
+  overflow: hidden;
+  margin: 10px;
+  width: 70%;
+}
+
 .navbar {
-  color: white;
   display: flex;
 }
 
 .navbar a {
   padding: 5px;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  background-color: rgb(110, 104, 201);
+  border-radius: 10px;
 }
 
 .main-interaction {
@@ -177,7 +191,7 @@ a:active {
   justify-content: center;
 }
 
-.meal-description-input input {
+.meal-description-input textarea {
   font-size: 15px;
   width: 20%;
   border-radius: 10px;
@@ -186,7 +200,7 @@ a:active {
   overflow-y: auto;
 }
 
-.meal-description-input input:disabled {
+.meal-description-input textarea:disabled {
   cursor: not-allowed;
 }
 
@@ -217,7 +231,6 @@ a:active {
 }
 
 .finish-btn {
-  margin-top: 10px;
   font-size: larger;
   padding: 5px;
   height: 75px;
@@ -226,6 +239,10 @@ a:active {
 }
 
 .footer-container {
+  left: 0;
+  bottom: 0;
+  position: relative;
+  width: 100%;
   background-color: rgb(76, 70, 163);
   color: white;
   padding: 50px;
@@ -243,8 +260,11 @@ a:active {
 }
 
 .footer-container img {
+  margin-top: 60px;
+  margin-right: 100px;
   max-width: 100%;
-  height: auto;
+  height: 122px;
+  width: 600px;
 }
 
 .acknowledge-section {
@@ -330,17 +350,6 @@ a:active {
   cursor: pointer;
 }
 
-@media (max-width: 600px) {
-  .main-interaction {
-    flex-direction: column;
-  }
-
-  .dialogue-wrapper, .chat-space-wrapper {
-    min-height: 500px;
-    max-height: 500px;
-  }
-}
-
 .dialogue-wrapper, .chat-space-wrapper {
   flex: 1;
   overflow-y: auto;
@@ -349,6 +358,7 @@ a:active {
   margin: 5px;
   display: flex;
   flex-direction: column;
+  position: relative;
   text-align: center;
 }
 
@@ -525,4 +535,148 @@ a:active {
 .survey-button:hover {
   background-color: rgb(5, 5, 142);
   transform: translateY(-50%) rotate(-90deg) scale(1.08);
+}
+
+@media (max-width: 1538px) {
+  body,html {
+    font-size: 12px;
+  }
+
+  .header-container {
+    height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .meal-description-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .meal-description-input textarea {
+    width: 100%;
+    margin: 10px;
+  }
+
+  .main-interaction {
+    flex-direction: column;
+    min-height: 1200px;
+  }
+
+  .chat-space-wrapper {
+    max-height: 600px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .footer-container img {
+    width: 85%;
+    height: 85%;
+    margin: 10px
+  }
+}
+
+@media (max-width: 1024px) {
+  body,html {
+    font-size: 12px;
+  }
+
+  .header-container {
+    height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .meal-description-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .meal-description-input textarea {
+    width: 100%;
+    margin: 10px;
+  }
+
+  .main-interaction {
+    flex-direction: column;
+    min-height: 1200px;
+  }
+
+  .chat-space-wrapper {
+    max-height: 600px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .footer-container img {
+    width: 85%;
+    height: 85%;
+    margin: 10px
+  }
+}
+
+@media (max-width: 768px) {
+  body,html {
+    font-size: 12px;
+  }
+
+  .header-container {
+    height: 150px;
+  }
+
+  .logo-container {
+    font-size: 12px;
+  }
+
+  .meal-description-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .meal-description-input textarea {
+    width: 100%;
+    margin: 10px;
+  }
+
+  .main-interaction {
+    flex-direction: column;
+    min-height: 1200px;
+  }
+
+  .chat-space-wrapper {
+    max-height: 600px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .footer-container img {
+    width: 85%;
+    height: 85%;
+    margin: 10px
+  }
 }
