@@ -25,8 +25,9 @@ const Dialogue = ({ isLoading, messages }) => {
                 message={msg}
               />
             ))}
+          {isLoading && messages.length == 0 && <div style={{margin: "auto"}}>Waiting for response...</div>} 
         </div>
-        {isLoading && <div>Waiting for response...</div>} 
+        {isLoading && messages.length != 0 && <div>Waiting for response...</div>} 
       </div>
     </div>
   );

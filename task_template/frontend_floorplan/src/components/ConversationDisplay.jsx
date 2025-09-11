@@ -97,8 +97,9 @@ const ConversationDisplay = ({ isLoading, setIsLoading, floorDescription, isDisa
               <ConversationItem key={index} message={msg} /> 
             ))
           }
+          {isLoading && messages.length == 0 && <div style={{margin: "auto"}}>Waiting for response...</div>} 
         </div>
-        {isLoading && <div>Waiting for response...</div>} 
+        {isLoading && messages.length != 0 && <div>Waiting for response...</div>} 
         <div className="form-wrapper">
           <form onSubmit={handleSubmit} className="input-form">
             <input 
