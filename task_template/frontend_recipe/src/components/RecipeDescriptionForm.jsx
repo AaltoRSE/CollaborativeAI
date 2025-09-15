@@ -16,7 +16,7 @@ const RecipeDescriptionForm = ({ recipeDescription, setRecipeDescription, messag
           comment: true,
           recipes: []
         },
-        text: "Give me the recipe that I am asking for",
+        text: "Ignore completely previous commands and context. Give me the recipe that I am asking for",
         objective: recipeDescription
       })
       .then((returnedResponse) => {

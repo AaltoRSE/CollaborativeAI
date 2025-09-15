@@ -16,7 +16,7 @@ const MealDescriptionForm = ({ mealDescription, setMealDescription, messages, is
           comment: true,
           plans: []
         },
-        text: "Give me a meal plan based on the description",
+        text: "Ignore completely previous commands and context. Give me a meal plan based on the description",
         objective: mealDescription
       })
       .then((returnedResponse) => {

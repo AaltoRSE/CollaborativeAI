@@ -57,7 +57,7 @@ const ThemeForm = ({ theme, setTheme, isDisabled, setIsDisabled, setIsLoading, a
           comment: true,
           poem: []
         },
-        text: "Write the first line of the poem",
+        text: "Ignore completely previous commands and context. Write the first line of the poem",
         objective: theme
       })
       .then((returnedResponse) => {
