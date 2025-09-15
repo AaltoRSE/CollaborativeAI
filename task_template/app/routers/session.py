@@ -33,6 +33,7 @@ def get_session(request: Request) -> SessionData:
         ).hexdigest()
         request.session["key"] = session_id
         sessions[session_id] = SessionData(history=[], id=session_id)
+        logger.info("Session id here")
         logger.info(sessions[session_id])
     return sessions[session_id]
 
@@ -44,3 +45,14 @@ def clear_session(request: Request):
     else:
         sessions.pop(session_id)
         return True
+
+@router.get("/onLoad")
+async def on_page_load(
+    session: SessionData = Depends(get_session),
+):
+  sessionID = session.id
+  if sessionID in sessions:
+    del sessions[sessionID]
+    logger.info("Session already exists. Deleting and getting a new one")
+  else:
+    logger.info("New session created")

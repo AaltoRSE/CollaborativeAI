@@ -28,7 +28,7 @@ app = FastAPI()
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-app.add_middleware(SessionMiddleware, secret_key=secrets.token_hex(32), max_age=None)
+app.add_middleware(SessionMiddleware, secret_key=secrets.token_hex(32), max_age=3600)
 logger.info("Session middleware added")
 app.include_router(task_router)
 app.include_router(session_router)
