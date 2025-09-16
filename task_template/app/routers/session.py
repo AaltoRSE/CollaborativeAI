@@ -1,5 +1,6 @@
 from fastapi import Depends, Request, APIRouter
 from routers.router_models import SessionData
+from grpc_server.queue_handler import queue_handler
 from typing import Dict
 import time
 import hashlib
@@ -53,6 +54,7 @@ async def on_page_load(
   sessionID = session.id
   if sessionID in sessions:
     del sessions[sessionID]
+    queue_handler.clear_session(sessionID)
     logger.info("Session already exists. Deleting and getting a new one")
   else:
     logger.info("New session created")
