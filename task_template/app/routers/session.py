@@ -49,12 +49,13 @@ def clear_session(request: Request):
 
 @router.get("/onLoad")
 async def on_page_load(
+    request: Request,
     session: SessionData = Depends(get_session),
 ):
   sessionID = session.id
   if sessionID in sessions:
-    del sessions[sessionID]
-    queue_handler.clear_session(sessionID)
+    queue_handler.remove_response_queue(sessionID)
+    clear_session(request)
     logger.info("Session already exists. Deleting and getting a new one")
   else:
     logger.info("New session created")
