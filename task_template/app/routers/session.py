@@ -54,7 +54,7 @@ async def on_page_load(
 ):
   sessionID = session.id
   if sessionID in sessions:
-    queue_handler.remove_response_queue(sessionID)
+    queue_handler.clear_session(sessionID)
     clear_session(request)
     logger.info("Session already exists. Deleting and getting a new one")
   else:
