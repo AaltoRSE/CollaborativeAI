@@ -21,7 +21,7 @@ model_definition.can_image = False
 model_definition.modelID = "GPT4.1"
 
 
-class o3miniAalto(AIModel):
+class aalto_gpt4_1(AIModel):
     def get_model_definition(self) -> model_pb2.modelDefinition:
         return model_definition
 
