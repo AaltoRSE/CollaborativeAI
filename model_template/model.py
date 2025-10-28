@@ -2,23 +2,31 @@ from models import *
 import os
 
 model_to_use = os.environ.get("MODEL_TO_USE")
-if model_to_use == "aalto_image":    
+if model_to_use == "aalto_image":
     ai_model = AaltoImageModel()
-elif model_to_use == "openai":    
+elif model_to_use == "openai":
     ai_model = OpenAIModel()
-elif model_to_use == "o1mini":    
+elif model_to_use == "o1mini":
     ai_model = o1mini()
-elif model_to_use == "o1":    
+elif model_to_use == "o1":
     ai_model = o1()
-elif model_to_use == "aalto":    
+elif model_to_use == "aalto":
     ai_model = AaltoModel()
-elif model_to_use == "simpleTangram":    
+elif model_to_use == "simpleTangram":
     ai_model = simpleAgent()
-elif model_to_use == "aalto_o1mini":    
+elif model_to_use == "aalto_o1mini":
     ai_model = o1miniAalto()
-elif model_to_use == "aalto_o1":    
+elif model_to_use == "aalto_o1":
     ai_model = o1Aalto()
-elif model_to_use == "aalto_o3mini":    
+elif model_to_use == "aalto_o3mini":
     ai_model = o3miniAalto()
-else:    
+elif model_to_use == "aalto_gpt4o":
+    ai_model = AaltoImageModel()
+elif model_to_use == "aalto_gpt4_turbo":
+    ai_model = OpenAIModel()
+elif model_to_use == "aalto_gpt4_1":
+    ai_model = aalto_gpt4_1()
+elif model_to_use == "aalto_gpt4o_mini":
+    ai_model = aalto_gpt4o_mini()
+else:
     ai_model = OpenAIImageModel()
