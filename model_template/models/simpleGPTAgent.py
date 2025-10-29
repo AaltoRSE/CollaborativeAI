@@ -1,6 +1,7 @@
 import ast
 import json
 import logging
+import os
 
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
@@ -12,14 +13,20 @@ from models.basemodel import AIModel
 
 logger = logging.getLogger("app")
 
+default_headers = {"Ocp-Apim-Subscription-Key": os.environ["OPENAI_API_KEY"]}
+base_url = (
+    "https://aalto-openai-apigw.azure-api.net/v1/openai/deployments/o3-mini-2025-01-31/",
+)
+
 model_definition = model_pb2.modelDefinition()
 model_definition.needs_text = True
 model_definition.needs_image = False
 model_definition.can_text = True
 model_definition.can_image = True
-model_definition.modelID = "o3-mini-2025-01-31"
+model_definition.modelID = "TangramAgent-o3-mini"
 
-class ChatAgent():
+
+class ChatAgent:
     def __init__(self, model):
         super().__init__()
         self.chatLog = []
@@ -27,23 +34,27 @@ class ChatAgent():
         self.temperature = 0.7
         self.max_tokens = 1024
         self.historyLimit = 20
-        self.client = ChatOpenAI(model = self.model)
+        self.client = ChatOpenAI(base_url=base_url, default_headers=default_headers)
         # Initial system message for chat
-        self.chatLog.append({
-            "role": "system",
-            "content": """You and the human user are playing a tangram game, arranging the pieces to form an objective shape. 
+        self.chatLog.append(
+            {
+                "role": "system",
+                "content": """You and the human user are playing a tangram game, arranging the pieces to form an objective shape. 
             The pieces are named by their colors: Red, Purple, Yellow, Green, Blue, Cream, and Brown.
             Red and Cream are two large triangles, Yellow and green are two small triangles, Blue is a medium triangle, Purple is a small square, Brown is a tilted parallelogram.
             We consider 0 degrees of rotation the triangles with their hypotenuse facing down, and the square in the square position (so the diamond shape corresponds to 45 degrees of rotation)
             Example logical plays: Matching shapes can allow new larger shapes to appear, uniting two triangles of the same size by their Hypotenuse creates a square of that size in the location or a diamond (can be used as a circle) shape if the triangles are angled by 45 degrees. The Purple Square or a square created of 2 triangles can serve to form many things like heads, bodies, bases of structures. two triangles can also form a larger triangle when combined by their cathetus green and yellow can usually be used together or to fill similar objectives this could be used to make a another medium sized triangle like blue if used with yellow and green.
-            It often makes sense to use pieces of the same shape to furfil similar objectives, for example if theres 2 arms, it makes sense to use similar pieces for each. Maintain friendly, concise dialogue (1-3 sentences). Suggest ideas to progress us towards our objective, collaboratively, not demands. Follow all formatting rules from the prompt."""
-        })
+            It often makes sense to use pieces of the same shape to furfil similar objectives, for example if theres 2 arms, it makes sense to use similar pieces for each. Maintain friendly, concise dialogue (1-3 sentences). Suggest ideas to progress us towards our objective, collaboratively, not demands. Follow all formatting rules from the prompt.""",
+            }
+        )
 
     async def handleChat(self, objective, game_state, user_msg, board_img, drawer_img):
-        messages = self.chatLog[-self.historyLimit:]
-        user_message = await self.makeChatMessage(objective, game_state, user_msg, board_img)
+        messages = self.chatLog[-self.historyLimit :]
+        user_message = await self.makeChatMessage(
+            objective, game_state, user_msg, board_img
+        )
         messages.append(user_message)
-         
+
         try:
             response = self.client.invoke(messages[-1]["content"][-1]["text"])
 
@@ -59,20 +70,27 @@ class ChatAgent():
         return {
             "role": "user",
             "content": [
-                    {"type": "text", "text": f"Objective: {objective}"},
-                    {"type": "text", "text": f"Game State: {game_state}"},
-                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{board_img}"}},
-                    {"type": "text", "text": f"The message you are replying to: {user_msg}"}
-                ]
+                {"type": "text", "text": f"Objective: {objective}"},
+                {"type": "text", "text": f"Game State: {game_state}"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/png;base64,{board_img}"},
+                },
+                {
+                    "type": "text",
+                    "text": f"The message you are replying to: {user_msg}",
+                },
+            ],
         }
 
-class PlayAgent():
+
+class PlayAgent:
     def __init__(self, chat_agent, model):
         super().__init__()
         self.model = model
         self.temperature = 0.7
         self.max_tokens = 1024
-        self.client = ChatOpenAI(model=self.model)
+        self.client = ChatOpenAI(base_url=base_url, default_headers=default_headers)
         self.chat_agent = chat_agent
         self.last_play_context = []
         # System message for play decisions
@@ -127,44 +145,54 @@ class PlayAgent():
                 PLAY Purple, 45, 30, 70 | Maybe the square as a diamond would form a head if placed on top of the body we have been building with the triangles.
                 PLAY Green, 45, 30, 70 | I like green as a hat, on top of purple.
                 """
-            )
+            ),
         }
 
     async def generatePlay(self, objective, game_state, board_img, drawer_img):
         context = [
             self.play_system_message,
-            {"role": "user", 
+            {
+                "role": "user",
                 "content": [
-                    {"type": "text", "text": f"Objective: {objective}.\nGame State: {game_state}"} ,
-                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{board_img}"}}
-                ]
+                    {
+                        "type": "text",
+                        "text": f"Objective: {objective}.\nGame State: {game_state}",
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/png;base64,{board_img}"},
+                    },
+                ],
             },
         ]
-        
-        try:       
-            mgs=TaskInput(
-                messages=self.chat_agent.chatLog + context
-            )
+
+        try:
+            mgs = TaskInput(messages=self.chat_agent.chatLog + context)
 
             response = self.client.invoke(mgs.model_dump()["messages"])
-           
+
         except Exception as e:
             print(f"OpenAI API error in generatePlay: {e}")
             return "Error generating play move."
-       
+
         assistant_content = response.content
         # Update last_play_context for feedback (retain context without altering feedback later)
-        self.last_play_context = [{"role": "assistant", "content": "The agent said: " + assistant_content}]
-        self.chat_agent.chatLog.append({"role": "assistant", "content": assistant_content.split("PLAY")[0].strip()})
+        self.last_play_context = [
+            {"role": "assistant", "content": "The agent said: " + assistant_content}
+        ]
+        self.chat_agent.chatLog.append(
+            {"role": "assistant", "content": assistant_content.split("PLAY")[0].strip()}
+        )
         return assistant_content
 
-class FeedbackAgent():
+
+class FeedbackAgent:
     def __init__(self, play_agent, model):
         super().__init__()
         self.model = model
         self.temperature = 0.7
         self.max_tokens = 256
-        self.client = ChatOpenAI(model=self.model)
+        self.client = ChatOpenAI(base_url=base_url, default_headers=default_headers)
         self.playAgent = play_agent
         self.memory = []
         self.count = 0
@@ -263,7 +291,7 @@ class FeedbackAgent():
                 to move left decrease the X coordinate so calculate the current X - amount, to move right increase the X coordinate so calculate the current X + amount
                 to move down decrease the Y coordinate so calculate the current Y - amount, to move Up increase the Y coordinate so calculate the current Y + amount
                 """
-            )
+            ),
         }
 
     async def adjustPlay(self, game_state, board_img, hasOverlaps="No"):
@@ -273,10 +301,10 @@ class FeedbackAgent():
             if len(game_state["on_board"][shape]["collisions"]) > 0:
                 hasOverlaps = "Yes"
                 break
-        
+
         if hasOverlaps == "No" and len(self.memory) > 0:
             self.latestValid = self.memory[-1]["content"]
-        if self.count > self.hardMAX+ 1:
+        if self.count > self.hardMAX + 1:
             print("forcing finish")
             return "FINISH"
         if self.count > self.hardMAX:
@@ -286,13 +314,20 @@ class FeedbackAgent():
         messages = [msg for msg in self.playAgent.last_play_context]
         messages += self.memory
         messages.append(self.system_message)
-        adjustData = {"role": "user", 
-                        "content": [
-                            {"type": "text", "text": f"Feedback game state: {game_state}"},
-                            {"type": "text", "text": f"Are there Overlaps?: {hasOverlaps}, This is the your atempt number {self.count}"},
-                            {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{board_img}"}}
-                        ]
-                    }
+        adjustData = {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": f"Feedback game state: {game_state}"},
+                {
+                    "type": "text",
+                    "text": f"Are there Overlaps?: {hasOverlaps}, This is the your atempt number {self.count}",
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/png;base64,{board_img}"},
+                },
+            ],
+        }
         messages.append(adjustData)
         try:
             response = self.client.invoke(messages)
@@ -305,16 +340,18 @@ class FeedbackAgent():
         self.memory.append(adjustData)
         self.memory.append({"role": "assistant", "content": assistant_content})
         messages.append({"role": "assistant", "content": assistant_content})
-        
+
         if "FINISH" in assistant_content:
             self.count = 0
             self.memory = []
         return assistant_content
 
+
 class CustomAgent(AIModel):
     def __init__(self):
         super().__init__()
         self.model = "gpt-4o"
+        self_endpoint
         self.chat_agent = ChatAgent(self.model)
         self.play_agent = PlayAgent(self.chat_agent, self.model)
         self.feedback_agent = FeedbackAgent(self.play_agent, self.model)
@@ -330,82 +367,94 @@ class CustomAgent(AIModel):
         msg = message.model_dump()["messages"]
         try:
             data = ast.literal_eval(msg[-1]["content"][-1]["text"])
-        
-            if(data["target"] == "chatRequest"):
+
+            if data["target"] == "chatRequest":
                 taskResponse = TaskOutput()
                 taskResponse.text = await self.chatRequest(data)
                 return taskResponse
-            
-            elif(data["target"] == "playRequest"):
+
+            elif data["target"] == "playRequest":
                 taskResponse = TaskOutput()
                 taskResponse.text = await self.playRequest(data)
                 return taskResponse
-            
-            elif(data["target"] == "playFeedback"):
+
+            elif data["target"] == "playFeedback":
                 taskResponse = TaskOutput()
                 taskResponse.text = await self.playFeedback(data)
                 return taskResponse
-        
+
         except:
             model = ChatOpenAI(
-                model="o3-mini-2025-01-31",
+                base_url=base_url,
+                default_headers=default_headers,
                 max_tokens=4096,
-            ) 
+            )
 
             ai_messages = message.model_dump()["messages"]
 
             for ai_message in ai_messages:
                 if ai_message["role"] == "system":
-                    ai_message["role"] = "user"                
+                    ai_message["role"] = "user"
             AIresponse = model.invoke(ai_messages)
             print(f"AIresponse: {AIresponse.content}")
             taskResponse = TaskOutput()
             taskResponse.text = AIresponse.content
             return taskResponse
-            
-    async def playRequest(self, data):  
+
+    async def playRequest(self, data):
         # Generate play with full game state and chat history
         play_response = await self.play_agent.generatePlay(
-            data["objective"],
-            data["state"],
-            data["board_img"],
-            data["drawer_img"]
+            data["objective"], data["state"], data["board_img"], data["drawer_img"]
         )
-        
-        #a = await self.parsePlayResponse(play_response, data)
+
+        # a = await self.parsePlayResponse(play_response, data)
         return json.dumps(play_response)
 
     async def playFeedback(self, data):
         # Get adjustments based on recent context (pass full feedback data)
-        adjusted_play = await self.feedback_agent.adjustPlay(data["state"], data["board_img"])
-        return json.dumps(adjusted_play)#await self.parsePlayResponse(adjusted_play, data))
+        adjusted_play = await self.feedback_agent.adjustPlay(
+            data["state"], data["board_img"]
+        )
+        return json.dumps(
+            adjusted_play
+        )  # await self.parsePlayResponse(adjusted_play, data))
 
     async def chatRequest(self, data):
         # Store the incoming message
         self.recent_messages.append(data["message"])
-        
+
         # Generate chat response with full history
         chat_response = await self.chat_agent.handleChat(
             data["objective"],
             data["state"],
             data["message"],
             data["board_img"],
-            data["drawer_img"]
+            data["drawer_img"],
         )
         return json.dumps(chat_response)
 
     async def parsePlayResponse(self, response, data=None):
         # Check if the response indicates no changes are needed
-        if "FINISH" in response:#response.strip().split()[0].upper() == "FINISH":
+        if "FINISH" in response:  # response.strip().split()[0].upper() == "FINISH":
             if len(response.strip().split()) > 1:
-                return [{"type": "chat", "message": response.split("FINISH")[1].strip()}, 
-                        {"type": "finish", "timestamp": data["timestamp"] if data and "timestamp" in data else ""}]
-            return {"type": "finish", "timestamp": data["timestamp"] if data and "timestamp" in data else ""}
-        
+                return [
+                    {"type": "chat", "message": response.split("FINISH")[1].strip()},
+                    {
+                        "type": "finish",
+                        "timestamp": (
+                            data["timestamp"] if data and "timestamp" in data else ""
+                        ),
+                    },
+                ]
+            return {
+                "type": "finish",
+                "timestamp": data["timestamp"] if data and "timestamp" in data else "",
+            }
+
         try:
             # Split into move and message parts
             response = response.split("PLAY")[1].strip()
-                    
+
             lines = response.split("|", 1)
             move_part = lines[0]
             message_part = lines[1] if len(lines) > 1 else False
@@ -414,18 +463,32 @@ class CustomAgent(AIModel):
                 raise ValueError("Incorrect number of elements in move part.")
             piece, rotation, x, y = parts
             self.randomShape = piece
-            res = [{
-                "type": "play",
-                "shape": piece,
-                "position": (float(x), float(y)),
-                "rotation": float(rotation),
-                "timestamp": data["timestamp"] if data and "timestamp" in data else ""
-            }]
+            res = [
+                {
+                    "type": "play",
+                    "shape": piece,
+                    "position": (float(x), float(y)),
+                    "rotation": float(rotation),
+                    "timestamp": (
+                        data["timestamp"] if data and "timestamp" in data else ""
+                    ),
+                }
+            ]
             if message_part:
                 res.append({"type": "chat", "message": message_part.strip()})
                 return res
             return res[0]
         except Exception as e:
             print(f"Error parsing play response: {e}, response received: {response}")
-            return [{"type": "chat", "message": "Sorry had some trouble playing this turn."}, 
-                    {"type": "finish", "timestamp": data["timestamp"] if data and "timestamp" in data else ""}]
+            return [
+                {
+                    "type": "chat",
+                    "message": "Sorry had some trouble playing this turn.",
+                },
+                {
+                    "type": "finish",
+                    "timestamp": (
+                        data["timestamp"] if data and "timestamp" in data else ""
+                    ),
+                },
+            ]
