@@ -6,7 +6,7 @@ from .openAI_model import OpenAIModel
 from .testModel import TestModel
 from .o1mini_model import OpenAIImageModel as o1mini
 from .o1_model import OpenAIImageModel as o1
-from .simpleGPTAgent import CustomAgent as simpleAgent
+from .aalto_simpleGPTAgent import CustomAgent as simpleAgent
 from .aalto_o1mini_model import o1miniAalto
 from .aalto_o1_model import o1Aalto
 from .aalto_o3mini_model import o3miniAalto

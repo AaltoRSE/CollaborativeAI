@@ -9,6 +9,11 @@ import model_pb2
 from data_models import TaskInput, TaskOutput
 from models.basemodel import AIModel
 
+default_headers = {"Ocp-Apim-Subscription-Key": os.environ["OPENAI_API_KEY"]}
+base_url = (
+    "https://aalto-openai-apigw.azure-api.net/v1/openai/deployments/o3-mini-2025-01-31/",
+)
+
 
 logger = logging.getLogger("app")
 
@@ -17,7 +22,7 @@ model_definition.needs_text = True
 model_definition.needs_image = False
 model_definition.can_text = True
 model_definition.can_image = True
-model_definition.modelID = "o3-mini-2025-01-31"
+model_definition.modelID = "TangramAgent-o3-mini"
 
 
 class ChatAgent:
@@ -28,7 +33,10 @@ class ChatAgent:
         self.temperature = 0.7
         self.max_tokens = 1024
         self.historyLimit = 20
-        self.client = ChatOpenAI(model=self.model)
+        self.client = ChatOpenAI(
+            base_url=base_url,
+            default_headers=default_headers,
+        )
         # Initial system message for chat
         self.chatLog.append(
             {
@@ -84,7 +92,10 @@ class PlayAgent:
         self.model = model
         self.temperature = 0.7
         self.max_tokens = 1024
-        self.client = ChatOpenAI(model=self.model)
+        self.client = ChatOpenAI(
+            base_url=base_url,
+            default_headers=default_headers,
+        )
         self.chat_agent = chat_agent
         self.last_play_context = []
         # System message for play decisions
@@ -186,7 +197,10 @@ class FeedbackAgent:
         self.model = model
         self.temperature = 0.7
         self.max_tokens = 256
-        self.client = ChatOpenAI(model=self.model)
+        self.client = ChatOpenAI(
+            base_url=base_url,
+            default_headers=default_headers,
+        )
         self.playAgent = play_agent
         self.memory = []
         self.count = 0
@@ -378,7 +392,8 @@ class CustomAgent(AIModel):
 
         except:
             model = ChatOpenAI(
-                model="o3-mini-2025-01-31",
+                base_url=base_url,
+                default_headers=default_headers,
                 max_tokens=4096,
             )
 
