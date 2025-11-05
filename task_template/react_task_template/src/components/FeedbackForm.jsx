@@ -28,7 +28,7 @@ const FeedbackForm = ({ viewPointRef, isRatingSubmitted, setIsRatingSubmitted })
       <h2>Please rate your experience based on the below metric</h2> <br></br>
       <div className="rating-container" ref={viewPointRef}>
         <div className="collaboration-metric">
-          <h3>"We collaborated well with the AI."</h3>
+          <h3>"The AI collaborated well with me"</h3>
           <div className="rating-selector">
             {[0, 1, 2, 3, 4, 5, 6].map(rating => (
               <div
@@ -48,7 +48,7 @@ const FeedbackForm = ({ viewPointRef, isRatingSubmitted, setIsRatingSubmitted })
         </div>
         <br></br>
         <div className="ai-performance-metric">
-          <h3>"The AI performed well."</h3>
+          <h3>"Overall, the AI's performance was high"</h3>
           <div className="rating-selector">
             {[0, 1, 2, 3, 4, 5, 6].map(rating => (
               <div
@@ -68,7 +68,7 @@ const FeedbackForm = ({ viewPointRef, isRatingSubmitted, setIsRatingSubmitted })
         </div>
         <br></br>
         <div className="coordination-metric">
-          <h3>"We successfully coordinated our strategy to solve the task."</h3>
+          <h3>"It was easy to understand what the AI does and what I am supposed to do"</h3>
           <div className="rating-selector">
             {[0, 1, 2, 3, 4, 5, 6].map(rating => (
               <div
@@ -88,7 +88,7 @@ const FeedbackForm = ({ viewPointRef, isRatingSubmitted, setIsRatingSubmitted })
         </div>
         <br></br>
         <div className="with-or-without-metric">
-          <h3>"Working with the AI was more efficient than working alone."</h3>
+          <h3>"The AI helped me become more creative"</h3>
           <div className="rating-selector">
             {[0, 1, 2, 3, 4, 5, 6].map(rating => (
               <div
