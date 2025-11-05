@@ -23,7 +23,7 @@ elif model_to_use == "aalto_o3mini":
 elif model_to_use == "aalto_gpt4o":
     ai_model = AaltoImageModel()
 elif model_to_use == "aalto_gpt4_turbo":
-    ai_model = OpenAIModel()
+    ai_model = AaltoModel()
 elif model_to_use == "aalto_gpt4_1":
     ai_model = aalto_gpt4_1()
 elif model_to_use == "aalto_gpt4o_mini":
