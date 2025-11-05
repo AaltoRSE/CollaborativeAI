@@ -32,8 +32,13 @@ class o3miniAalto(AIModel):
         model = ChatOpenAI(
             base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/deployments/o3-mini-2025-01-31/",
             default_headers=default_headers,
-        )       
-        AIresponse = model.invoke(message.model_dump()["messages"])
+        )
+        ai_messages = message.model_dump()["messages"]
+        for ai_message in ai_messages:
+            if ai_message["role"] == "system":
+                # o1mini does not understand system messages
+                ai_message["role"] = "developer"
+        AIresponse = model.invoke(ai_messages)
         taskResponse = TaskOutput()
         taskResponse.text = AIresponse.content
         return taskResponse
