@@ -7,8 +7,8 @@ const FeedbackForm = ({ }) => {
   const [ratingSubmitted, setRatingSubmitted] = useState(false);
   const [collaborationRating, setCollaborationRating] = useState(null);
   const [aiPerformanceRating, setAiPerformanceRating] = useState(null);
-  const [coordinationRating, setCoordinationRating] = useState(null);
-  const [efficiencyRating, setEfficiencyRating] = useState(null);
+  const [clarityRating, setClarityRating] = useState(null);
+  const [creativityRating, setCreativityRating] = useState(null);
   const [modelInfo, setModelInfo] = useState(null)
 
   const handleMetricsSubmit = async () => {
@@ -17,8 +17,8 @@ const FeedbackForm = ({ }) => {
       {
         "collaboration_metric": collaborationRating,
         "ai_performance_metric": aiPerformanceRating,
-        "coordination_metric": coordinationRating,
-        "efficiency_metric": efficiencyRating
+        "clarity_metric": clarityRating,
+        "creativity_metric": creativityRating
       }
     )
     setModelInfo(modelName["modelInfo"])
@@ -74,12 +74,12 @@ const FeedbackForm = ({ }) => {
             {[0, 1, 2, 3, 4, 5, 6].map(rating => (
               <div
                 key={rating}
-                className={`rating-circle ${rating + 1 === coordinationRating ? "selected" : ""}`}
+                className={`rating-circle ${rating + 1 === clarityRating ? "selected" : ""}`}
                 style={{
                   "backgroundColor": colors[rating]
                 }}
                 onClick={() => {
-                  setCoordinationRating(rating+1)
+                  setClarityRating(rating+1)
                 }}
               >
                 {rating + 1}
@@ -94,12 +94,12 @@ const FeedbackForm = ({ }) => {
             {[0, 1, 2, 3, 4, 5, 6].map(rating => (
               <div
                 key={rating}
-                className={`rating-circle ${rating + 1 === efficiencyRating ? "selected" : ""}`}
+                className={`rating-circle ${rating + 1 === creativityRating ? "selected" : ""}`}
                 style={{
                   "backgroundColor": colors[rating]
                 }}
                 onClick={() => {
-                  setEfficiencyRating(rating+1)
+                  setCreativityRating(rating+1)
                 }}
               >
                 {rating + 1}

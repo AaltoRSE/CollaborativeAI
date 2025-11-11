@@ -98,8 +98,8 @@ class ModelHandler(model_handler_pb2_grpc.ModelHandlerServicer):
             "timeStamp": submitted_time,
             "collaboration_metric": rating["collaboration_metric"],
             "ai_performance_metric": rating["ai_performance_metric"],
-            "coordination_metric": rating["coordination_metric"],
-            "efficiency_metric": rating["efficiency_metric"],
+            "clarity_metric": rating["clarity_metric"],
+            "creativity_metric": rating["creativity_metric"],
             "version": "v_2"
         }
 
