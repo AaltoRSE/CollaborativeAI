@@ -15,6 +15,7 @@ const TaskDescription = () => {
         <li>For macOS trackpad users, ensure the "Secondary click" option inside the Trackpad setting is not set to "Off". Use the set option there to open the drop-down menu for rotating and removing pieces.</li>
         <li>If you want to discuss with the AI about the floor plan, you can do that in the Conversation box</li>
         <li>When satisfied with the result, click "Finish" to rate your experience.</li>
+        <li>Notice: your input to the AI will be stored in this study</li>
       </ol>
     </div>
   );

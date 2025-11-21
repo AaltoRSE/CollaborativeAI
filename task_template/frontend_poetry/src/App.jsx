@@ -53,7 +53,7 @@ const App = () => {
           {isFinishClicked ? "Cancel" : "Finish"}
         </button>
       </div>
-      {isFinished && <FeedbackForm />}
+      {isFinished && <FeedbackForm topic={theme} messages={messages}/>}
       <Footer />
     </>
   );

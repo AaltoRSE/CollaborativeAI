@@ -3,7 +3,7 @@ import taskService from '../services/task'
 
 const colors = ["#b71c1c", "#f44336", "#ff9800", "#ffeb3b", "#009688", "#81c784", "#4caf50"];
 
-const FeedbackForm = ({ viewPointRef, isRatingSubmitted, setIsRatingSubmitted }) => {
+const FeedbackForm = ({ messages, viewPointRef, isRatingSubmitted, setIsRatingSubmitted }) => {
   const [collaborationRating, setCollaborationRating] = useState(null);
   const [aiPerformanceRating, setAiPerformanceRating] = useState(null);
   const [clarityRating, setClarityRating] = useState(null);
@@ -17,7 +17,9 @@ const FeedbackForm = ({ viewPointRef, isRatingSubmitted, setIsRatingSubmitted })
         "collaboration_metric": collaborationRating,
         "ai_performance_metric": aiPerformanceRating,
         "clarity_metric": clarityRating,
-        "creativity_metric": creativityRating
+        "creativity_metric": creativityRating,
+        "topic": "bedroom",
+        "log": messages
       }
     )
     setModelInfo(modelName["modelInfo"])

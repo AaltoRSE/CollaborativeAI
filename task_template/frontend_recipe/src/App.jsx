@@ -53,7 +53,7 @@ const App = () => {
         <ConversationDisplay isLoading={isLoading} setIsLoading={setIsLoading} recipeDescription={recipeDescription} isDisabled={isDisabled} messages={messages} addMessage={addMessage} />
       </div>
       <FinishButton messages={messages} isFinishClicked={isFinishClicked} isRatingSubmitted={isRatingSubmitted} toggleFinish={toggleFinish} />
-      {isFinished && <FeedbackForm viewPointRef={viewPointRef} isRatingSubmitted={isRatingSubmitted} setIsRatingSubmitted={setIsRatingSubmitted}/>}
+      {isFinished && <FeedbackForm topic={recipeDescription} messages={messages} viewPointRef={viewPointRef} isRatingSubmitted={isRatingSubmitted} setIsRatingSubmitted={setIsRatingSubmitted}/>}
       <Footer />
     </>
   );

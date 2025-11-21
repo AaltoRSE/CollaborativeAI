@@ -10,6 +10,7 @@ const TaskDescription = () => {
         <li>If you want to discuss with the AI, you can do that in the Dialogue box.</li>
         <li>The game ends when the poem has 9 lines.</li>
         <li>When satisfied with the result, click "Finish" to rate your experience.</li>
+        <li>Notice: your input to the AI will be stored in this study</li>
       </ol>
     </div>
   );

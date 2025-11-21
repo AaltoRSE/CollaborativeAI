@@ -3,7 +3,7 @@ import taskService from '../services/task'
 
 const colors = ["#b71c1c", "#f44336", "#ff9800", "#ffeb3b", "#009688", "#81c784", "#4caf50"];
 
-const FeedbackForm = ({ }) => {
+const FeedbackForm = ({ topic, messages }) => {
   const [ratingSubmitted, setRatingSubmitted] = useState(false);
   const [collaborationRating, setCollaborationRating] = useState(null);
   const [aiPerformanceRating, setAiPerformanceRating] = useState(null);
@@ -18,7 +18,9 @@ const FeedbackForm = ({ }) => {
         "collaboration_metric": collaborationRating,
         "ai_performance_metric": aiPerformanceRating,
         "clarity_metric": clarityRating,
-        "creativity_metric": creativityRating
+        "creativity_metric": creativityRating,
+        "topic": topic,
+        "message_log": messages
       }
     )
     setModelInfo(modelName["modelInfo"])
