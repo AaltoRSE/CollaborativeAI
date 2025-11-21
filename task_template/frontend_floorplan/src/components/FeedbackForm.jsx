@@ -19,7 +19,7 @@ const FeedbackForm = ({ messages, viewPointRef, isRatingSubmitted, setIsRatingSu
         "clarity_metric": clarityRating,
         "creativity_metric": creativityRating,
         "topic": "bedroom",
-        "log": messages
+        "message_log": messages
       }
     )
     setModelInfo(modelName["modelInfo"])
