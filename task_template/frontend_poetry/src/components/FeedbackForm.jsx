@@ -20,7 +20,7 @@ const FeedbackForm = ({ topic, messages }) => {
         "clarity_metric": clarityRating,
         "creativity_metric": creativityRating,
         "topic": topic,
-        "message_log": messages
+        "message_log": ""
       }
     )
     setModelInfo(modelName["modelInfo"])
