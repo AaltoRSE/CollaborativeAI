@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import taskService from '../services/task'
 
 const colors = ["#b71c1c", "#f44336", "#ff9800", "#ffeb3b", "#009688", "#81c784", "#4caf50"];
@@ -9,8 +9,59 @@ const FeedbackForm = ({ topic, messages }) => {
   const [aiPerformanceRating, setAiPerformanceRating] = useState(null);
   const [clarityRating, setClarityRating] = useState(null);
   const [creativityRating, setCreativityRating] = useState(null);
-  const [modelInfo, setModelInfo] = useState(null)
+  const [modelInfo, setModelInfo] = useState(null);
+  const [questionList, setQuestionList] = useState([]);
 
+  const questions = [
+    {
+      id: "Collaboration metric",
+      content: "The AI collaborated well with me",
+      onSelected: setCollaborationRating,
+    },
+    {
+      id: "Performance metric",
+      content: "Overall, the AI's performance was high",
+      onSelected: setAiPerformanceRating,
+    },
+    {
+      id: "Clarity metric",
+      content: "It was easy to understand what the AI does and what I am supposed to do",
+      onSelected: setClarityRating,
+    },
+    {
+      id: "Creativity metric",
+      content: "The AI helped me become more creative",
+      onSelected: setCreativityRating,
+    },
+  ]
+
+  const getCorrespondingRating = (id) => {
+    if (id == "Collaboration metric") {
+      return collaborationRating;
+    } else if (id == "Performance metric") {
+      return aiPerformanceRating;
+    } else if (id == "Clarity metric") {
+      return clarityRating;
+    } else {
+      return creativityRating;
+    }
+  }
+
+  const shuffleQuestionList = (questions) => {
+    const temp = [...questions]
+    let idx = temp.length
+    while (idx != 0) {
+      let randomIdx = Math.floor(Math.random() * idx);
+      idx -= 1;
+      [temp[idx], temp[randomIdx]] = [temp[randomIdx], temp[idx]];
+    }
+    return temp;
+  }
+
+  useEffect(() => {
+    setQuestionList(shuffleQuestionList(questions));
+  }, []);
+  
   const handleMetricsSubmit = async () => {
     setRatingSubmitted(true);
     const modelName = await taskService.finishTask(      
@@ -30,85 +81,28 @@ const FeedbackForm = ({ topic, messages }) => {
     <div className="feedback-container">
       <h2>Please rate your experience based on the below metric</h2> <br></br>
       <div className="rating-container">
-        <div className="collaboration-metric">
-          <h3>"The AI collaborated well with me"</h3>
-          <div className="rating-selector">
-            {[0, 1, 2, 3, 4, 5, 6].map(rating => (
-              <div
-                key={rating}
-                className={`rating-circle ${rating + 1 === collaborationRating ? "selected" : ""}`}
-                style={{
-                  "backgroundColor": colors[rating]
-                }}
-                onClick={() => {
-                  setCollaborationRating(rating+1)
-                }}
-              >
-                {rating + 1}
-              </div>
-            ))}
+        {questionList.map(question => (
+          <div key={question.id} className="collaboration-metric">
+            <h3>"{question.content}"</h3>
+            <div className="rating-selector">
+              {[0, 1, 2, 3, 4, 5, 6].map(rating => (
+                <div
+                  key={rating}
+                  className={`rating-circle ${rating + 1 === getCorrespondingRating(question.id) ? "selected" : ""}`}
+                  style={{
+                    "backgroundColor": colors[rating]
+                  }}
+                  onClick={() => {
+                    question.onSelected(rating+1)
+                  }}
+                >
+                  {rating + 1}
+                </div>
+              ))}
+            </div>
+            <br></br>
           </div>
-        </div>
-        <br></br>
-        <div className="ai-performance-metric">
-          <h3>"Overall, the AI's performance was high"</h3>
-          <div className="rating-selector">
-            {[0, 1, 2, 3, 4, 5, 6].map(rating => (
-              <div
-                key={rating}
-                className={`rating-circle ${rating + 1 === aiPerformanceRating ? "selected" : ""}`}
-                style={{
-                  "backgroundColor": colors[rating]
-                }}
-                onClick={() => {
-                  setAiPerformanceRating(rating+1)
-                }}
-              >
-                {rating + 1}
-              </div>
-            ))}
-          </div>
-        </div>
-        <br></br>
-        <div className="coordination-metric">
-          <h3>"It was easy to understand what the AI does and what I am supposed to do"</h3>
-          <div className="rating-selector">
-            {[0, 1, 2, 3, 4, 5, 6].map(rating => (
-              <div
-                key={rating}
-                className={`rating-circle ${rating + 1 === clarityRating ? "selected" : ""}`}
-                style={{
-                  "backgroundColor": colors[rating]
-                }}
-                onClick={() => {
-                  setClarityRating(rating+1)
-                }}
-              >
-                {rating + 1}
-              </div>
-            ))}
-          </div>
-        </div>
-        <br></br>
-        <div className="with-or-without-metric">
-          <h3>"The AI helped me become more creative"</h3>
-          <div className="rating-selector">
-            {[0, 1, 2, 3, 4, 5, 6].map(rating => (
-              <div
-                key={rating}
-                className={`rating-circle ${rating + 1 === creativityRating ? "selected" : ""}`}
-                style={{
-                  "backgroundColor": colors[rating]
-                }}
-                onClick={() => {
-                  setCreativityRating(rating+1)
-                }}
-              >
-                {rating + 1}
-              </div>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
       {ratingSubmitted 
         ? <div className="after-rating-submitted">
