@@ -30,7 +30,7 @@ class aalto_gpt4o_mini(AIModel):
 
     async def get_response(self, message: TaskInput) -> TaskOutput:
         model = ChatOpenAI(
-            base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/deployments/gpt-4.1-mini-2025-04-14/",
+            base_url="https://aalto-openai-apigw.azure-api.net/v1/openai/deployments/gpt-4o-mini-2024-07-18/",
             default_headers=default_headers,
         )
         AIresponse = model.invoke(message.model_dump()["messages"])
