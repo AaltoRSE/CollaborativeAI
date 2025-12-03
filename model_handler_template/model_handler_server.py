@@ -100,7 +100,7 @@ class ModelHandler(model_handler_pb2_grpc.ModelHandlerServicer):
             "ai_performance_metric": rating["ai_performance_metric"],
             "clarity_metric": rating["clarity_metric"],
             "creativity_metric": rating["creativity_metric"],
-            "version": "v_3",
+            "version": "v_4",
             "topic": rating["topic"],
             "message_log": rating["message_log"]
         }
