@@ -17,7 +17,7 @@ model_definition = model_pb2.modelDefinition()
 model_definition.needs_text = True
 model_definition.needs_image = False
 model_definition.can_text = True
-model_definition.can_image = False
+model_definition.can_image = True
 model_definition.modelID = "GPT4.1"
 
 
