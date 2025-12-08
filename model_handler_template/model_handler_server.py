@@ -82,7 +82,7 @@ class ModelHandler(model_handler_pb2_grpc.ModelHandlerServicer):
 
         # Metrics
         metrics = taskMetrics.metrics
-        parsedMetrics = json.loads(metrics.replace("'", '"'))
+        parsedMetrics = json.loads(metrics)
 
         rating = parsedMetrics["rating"]
         task_name = parsedMetrics["task_name"]
