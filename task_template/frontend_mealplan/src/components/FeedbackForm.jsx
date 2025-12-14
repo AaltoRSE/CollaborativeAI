@@ -9,6 +9,7 @@ const FeedbackForm = ({ topic, messages, viewPointRef, isRatingSubmitted, setIsR
   const [clarityRating, setClarityRating] = useState(null);
   const [creativityRating, setCreativityRating] = useState(null);
   const [modelInfo, setModelInfo] = useState(null);
+  const [prolificID, setProlificID] = useState("");
   const [questionList, setQuestionList] = useState([]);
 
   const questions = [
@@ -70,15 +71,33 @@ const FeedbackForm = ({ topic, messages, viewPointRef, isRatingSubmitted, setIsR
         "clarity_metric": clarityRating,
         "creativity_metric": creativityRating,
         "topic": topic,
-        "message_log": messages
+        "message_log": messages,
+        "prolific_id": prolificID      
       }
     )
     setModelInfo(modelName["modelInfo"])
   }
 
+  const submitCheck = collaborationRating && clarityRating && aiPerformanceRating && creativityRating && prolificID
+
   return (
     <div className="feedback-container">
       <h2>Please rate your experience based on the below metric</h2> <br></br>
+      <label> <h3>Your prolific ID</h3></label>
+      <input
+        type="text" 
+        value={prolificID}
+        onChange={(event) => setProlificID(event.target.value)}
+        placeholder="Insert your prolific ID here"
+        style={{
+          "fontSize": "15px",
+          "width": "25%",
+          "borderRadius": "10px",
+          "margin": "10px",
+          "padding": "10px",
+          "overflowY": "auto",
+        }}
+      />
       <div className="rating-container" ref={viewPointRef}>
         {questionList.map(question => (
           <div key={question.id} className="collaboration-metric">
@@ -109,7 +128,16 @@ const FeedbackForm = ({ topic, messages, viewPointRef, isRatingSubmitted, setIsR
             <button type="submit" className="reset-button" onClick={() => window.location.reload()}> Restart </button>
           </div>
         : <div>
-            <button type="submit" className="submit-rating-button" onClick={() => handleMetricsSubmit()}> Submit </button>
+            <button type="submit" className="submit-rating-button" 
+              onClick={() => 
+                submitCheck 
+                  ? handleMetricsSubmit() 
+                  : undefined
+              }
+              disabled={!submitCheck}
+            > 
+              Submit 
+            </button>
           </div>
       }
     </div>

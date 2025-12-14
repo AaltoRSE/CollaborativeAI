@@ -8,7 +8,7 @@ const TaskDescription = () => {
         <li>The AI then gives you a recommended meal plan.</li>
         <li>If you want to discuss with the AI about the meal plan, you can do that in the Conversation box.</li>
         <li>When satisfied with the result, click "Finish" to rate your experience.</li>
-        <li>Notice: your input to the AI will be stored in this study</li>
+        <li><strong>Notice: </strong>your prolific ID and input to the AI will be stored in this study</li>
       </ol>
     </div>
   );

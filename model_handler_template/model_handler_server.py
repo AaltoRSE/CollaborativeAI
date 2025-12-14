@@ -100,9 +100,10 @@ class ModelHandler(model_handler_pb2_grpc.ModelHandlerServicer):
             "ai_performance_metric": rating["ai_performance_metric"],
             "clarity_metric": rating["clarity_metric"],
             "creativity_metric": rating["creativity_metric"],
-            "version": "v_4",
+            "version": "v_5",
             "topic": rating["topic"],
-            "message_log": rating["message_log"]
+            "message_log": rating["message_log"],
+            "prolific_id": rating["prolific_id"]
         }
 
         if not os.environ.get("ATLAS_URI", None) == None:
