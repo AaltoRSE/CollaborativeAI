@@ -58,7 +58,7 @@ const FeedbackForm = ({ messages, viewPointRef, isRatingSubmitted, setIsRatingSu
         "ai_performance_metric": aiPerformanceRating,
         "clarity_metric": clarityRating,
         "creativity_metric": creativityRating,
-        "topic": "bedroom",
+        "topic": "Design a bedroom",
         "message_log": messages,
         "prolific_id": prolificID
       }

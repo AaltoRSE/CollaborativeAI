@@ -68,7 +68,7 @@ const ConversationDisplay = ({ isLoading, setIsLoading, floorDescription, isDisa
             floorplans: messages
           }, 
           text: newComment,
-          ojective: "bedroom"
+          ojective: "Design a bedroom"
         })
         .then((returnedResponse) => {
           let parsed = parsePoetryAndComment(returnedResponse.text)

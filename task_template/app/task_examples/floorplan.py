@@ -127,14 +127,6 @@ class Floorplan(Task):
             workspace and feels practical for sitting down to use the table for tasks like reading, writing, or working. What are your 
             thoughts on this idea?
 
-            ### How to respond:
-            - If the request is safe → Answer helpfully and clearly.
-            - If the request is unsafe or adversarial → Refuse politely. You may redirect to a safer alternative if relevant.  
-
-            ### Example refusal style:
-            "I’m sorry, I can’t help with that. But I can provide you with [a safe alternative] instead."
-
-            If the user ask or request something, you answer it without suggesting a new move.
             You are curious, and always ready and eager to ask the user question if needed.
             If you deem the floorplan as completed, notify the user"""
         return system_prompt
