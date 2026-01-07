@@ -63,7 +63,7 @@ const FloorplanGame = ({ messages, addMessage, setIsLoading, setIsDisabled }) =>
           }, 
           text: "", 
           image: floorPlanImage,
-          objective: "bedroom"
+          objective: "Design a bedroom"
         })
         .then((returnedResponse) => {
           let parsed = parsePoetryAndComment(returnedResponse.text)
