@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ConversationDisplay from "./components/ConversationDisplay";
 import Dialogue from "./components/Dialogue";
 import TaskDescription from "./components/TaskDescription";
@@ -8,6 +8,7 @@ import FeedbackForm from "./components/FeedbackForm";
 import TutorialPopUp from './components/TutorialPopUp';
 import ThemeForm from './components/ThemeForm';
 import SurveyButton from './components/SurveyButton'
+import axios from 'axios'
 import "./index.css";
 
 const App = () => {
@@ -17,6 +18,18 @@ const App = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [theme, setTheme] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const onPageLoad = async() => {
+      try {
+        await axios.get('/api/v1/session/onLoad');
+        console.log("check session")
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    onPageLoad();
+  }, [])
 
   const addMessage = (message) => {
     setMessages(prevMessages => prevMessages.concat(message));
