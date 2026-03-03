@@ -3,9 +3,9 @@ import logging
 
 from fastapi import HTTPException
 
-from tasks.task_interface import OpenAITask
-from routers.router_models import Message
-from models import (
+from app.tasks.task_interface import OpenAITask
+from app.schemas.router_models import Message
+from app.schemas.models import (
     OpenAIBasedDataRequest,
     OpenAIBasedRequest,
     TaskDataRequest,    

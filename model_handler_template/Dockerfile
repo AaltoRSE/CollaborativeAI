@@ -1,22 +1,47 @@
 # Dockerfile
-FROM python:3.9
+FROM python:3.12
 
 WORKDIR /usr/project
 
+ARG UV_COMPILE_BYTECODE=1
+ARG EXPECTED_UV_SHA256=76c856787708ae47b7e776daf7ad61a83e43e50c895537aacffc24da90ab55a4
+ARG EXPECTED_UVX_SHA256=020a0266a73de991d2ddd6c009bd1178222affce05918d4eabe73e4ab2df741c
 
-RUN apt-get update -y && apt-get install -y python3-pip python3-dev ca-certificates
-RUN pip3 install --upgrade pip
-# Copy the requirements over to build the virtual environment
-COPY ./requirements.txt .
-RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
+# UV specific environment
+ENV UV_LINK_MODE="copy"
+# Enable bytecode compilation for production
+ENV UV_COMPILE_BYTECODE=${UV_COMPILE_BYTECODE}
+ENV UV_PROJECT_ENVIRONMENT=/usr/local/venv
 
-COPY . .
 
-RUN python3 -m grpc_tools.protoc --python_out=. --proto_path=. --grpc_python_out=. model_handler.proto
+ARG USERNAME=appuser
 
-RUN useradd appuser
-USER appuser
+# Install base dependencies
+RUN apt-get update && apt-get install -y libffi-dev
 
-EXPOSE 8061
+# Create user to run the server with
+RUN useradd -ms /bin/bash $USERNAME
 
-CMD ["python3", "-u", "model_handler_server.py"]
+# Install UV from their official image
+COPY --from=ghcr.io/astral-sh/uv:0.9.16 /uv /uvx /usr/local/bin/
+RUN echo "${EXPECTED_UV_SHA256}  /usr/local/bin/uv" | sha256sum -c - && \
+    echo "${EXPECTED_UVX_SHA256}  /usr/local/bin/uvx" | sha256sum -c -
+
+WORKDIR /app
+
+# Copy environment creation files
+COPY pyproject.toml ./pyproject.toml
+COPY uv.lock ./uv.lock
+
+# Install python dependencies
+RUN uv sync --frozen --no-dev  
+
+# Add venv bin to PATH
+ENV PATH="/usr/local/venv/bin:$PATH"
+
+COPY app ./app
+COPY run.sh ./run.sh
+# Change non-root user
+USER $USERNAME
+
+CMD ["./run.sh"]

@@ -1,8 +1,8 @@
 import logging
 from typing import Any, List
 import json
-from tasks.task_interface import Task, OpenAITask
-from models import (
+from app.tasks.task_interface import Task, OpenAITask
+from app.schemas.models import (
     TaskDataRequest,
     TaskRequest,
     TaskDataResponse,

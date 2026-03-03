@@ -1,24 +1,24 @@
-import grpc.aio as grpc
 from concurrent import futures
 import json
 import asyncio
 import random
-from pymongo import MongoClient
 import os
 from datetime import datetime
 from pytz import timezone
 import logging
 import logging.config
-
-logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
-
-logger = logging.getLogger("app")
+from pymongo import MongoClient
 
 # import the generated classes :
 import model_handler_pb2
 import model_handler_pb2_grpc
 
-port = 8061
+
+logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
+
+logger = logging.getLogger("app")
+
+
 
 DB_NAME = "task_rating"
 COLLECTION_NAME = "informal"
@@ -30,17 +30,7 @@ if not os.environ.get("ATLAS_URI", None) == None:
 
 print("Connected to Atlas instance! We are good to go!")
 
-
-class ModelHandler(model_handler_pb2_grpc.ModelHandlerServicer):
-    def __init__(self):
-        self.model_list = (
-            []
-        )  # a list of all the modelDefinition that got registered to the handler
-        self.assignment_list = (
-            {}
-        )  # a dictionary for storing the modelID-sessionID connection
-
-    def startTask(self, request, context):
+def startTask(self, request  ):
         suitable_models_list = []
 
         modelRequirements = {

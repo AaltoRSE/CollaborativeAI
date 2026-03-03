@@ -1,32 +1,56 @@
 version: "3"
 services:
-  task_template:
+  mealplan:
     build:
       context: ./task_template
-      dockerfile: ${TASK_DOCKERFILE}
+      dockerfile: Dockerfile_mealplan  
+    environment:
+      - REDIS_HISTORY_DB=3 
+      - REDISPASSWORD=${REDISPASSWORD} 
     networks:
       - mynetwork
-  model_template:
+    depends_on:
+      - model_handler
+  recipe:
+    build:
+      context: ./task_template
+      dockerfile: Dockerfile_recipe    
+    environment:
+      - REDIS_HISTORY_DB=4
+      - REDISPASSWORD=${REDISPASSWORD}
+    networks:
+      - mynetwork  
+    depends_on:
+      - model_handler
+  aalto_o1:
     build: ./model_template
     networks:
       - mynetwork
     environment:
-      - MODEL_TO_USE=${MODEL}
+      - MODEL_TO_USE=aalto_o1
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-  model_handler_template:
-    build: ./model_handler_template
+      - SERVICE_NAME=aalto_o1
+    depends_on:
+      - model_handler
+  aalto_gpt4o:
+    build: ./model_template    
     networks:
       - mynetwork
     environment:
-      - ATLAS_URI=mongodb://collabai-mongo/
-  orchestrator:
+      - MODEL_TO_USE=aalto_gpt4o
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERVICE_NAME=aalto_gpt4o
     depends_on:
-      - task_template
-      - model_template
-      - model_handler_template
-    build: ./orchestrator
+      - model_handler
+  model_handler:
+    build: 
+      context: ./model_handler_template  
+    container_name: model_handler
     networks:
       - mynetwork
+    environment:
+      - ATLAS_URI=mongodb://collabai-mongo/  
+      - REDISPASSWORD=${REDISPASSWORD}
   mongo:
     container_name: collabai-mongo
     image: mongo:7.0.4
@@ -48,8 +72,16 @@ services:
       - ./dev_data/certs/sp.crt:/certificates/certificate.crt
       - ./dev_data/certs/sp.key:/certificates/private.key
     depends_on:
-      - task_template
-    container_name: nginx-server
+      - recipe
+      - mealplan
+    networks:
+      - mynetwork
+  redis:
+    image: redis:7.2.3
+    container_name: redis    
+    command: ["redis-server", "--requirepass", "${REDISPASSWORD}"]
+    ports:
+      - 127.0.0.1:6379:6379
     networks:
       - mynetwork
 networks:

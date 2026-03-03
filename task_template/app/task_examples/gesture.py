@@ -1,7 +1,7 @@
 import logging
 import os
-from tasks.task_interface import Task
-from models import (
+from app.tasks.task_interface import Task
+from app.schemas.models import (
     TaskDataRequest,
     TaskRequest,
     TaskDataResponse,

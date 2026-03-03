@@ -1,4 +1,4 @@
-from models import (
+from app.schemas.models import (
     TaskDataRequest,
     TaskDataResponse,
     TaskRequest,

@@ -1,7 +1,7 @@
 import os
 
 # define the Task
-from task_examples import (
+from app.task_examples import (
     poetry,
     tangram,
     gesture,

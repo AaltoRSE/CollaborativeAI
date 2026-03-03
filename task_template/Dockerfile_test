@@ -1,0 +1,5 @@
+FROM node:22.13.0 AS frontend-builder
+
+WORKDIR /frontend
+COPY ./frontend_recipe ./
+

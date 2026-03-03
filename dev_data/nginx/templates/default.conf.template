@@ -1,11 +1,29 @@
 server {
-        listen 443 ssl default_server;
-        server_name ${HOSTNAME};
+        listen 443 ssl;
+        server_name mealplan.${HOSTNAME};
         ssl_certificate /certificates/certificate.crt;
         ssl_certificate_key /certificates/private.key;
 
         location / {                        
-            proxy_pass       http://task_template:8062;
+            proxy_pass       http://mealplan:8000;
+            proxy_set_header Host                    $host;
+            proxy_set_header X-Real-IP               $remote_addr;
+            proxy_set_header X-Auth-Request-Redirect $request_uri;
+            # or, if you are handling multiple domains:
+            # proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
+        }
+        
+            
+    }
+
+server {
+        listen 443 ssl;
+        server_name recipe.${HOSTNAME};
+        ssl_certificate /certificates/certificate.crt;
+        ssl_certificate_key /certificates/private.key;
+
+        location / {                        
+            proxy_pass       http://recipe:8000;
             proxy_set_header Host                    $host;
             proxy_set_header X-Real-IP               $remote_addr;
             proxy_set_header X-Auth-Request-Redirect $request_uri;
