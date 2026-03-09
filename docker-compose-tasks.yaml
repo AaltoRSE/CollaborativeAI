@@ -5,6 +5,7 @@ services:
       context: ./task_template
       dockerfile: Dockerfile_mealplan  
     environment:
+      - REDISHOST=${REDISHOST}   
       - REDIS_HISTORY_DB=3 
       - REDISPASSWORD=${REDISPASSWORD} 
     networks:
@@ -16,6 +17,7 @@ services:
       context: ./task_template
       dockerfile: Dockerfile_recipe    
     environment:
+      - REDISHOST=${REDISHOST}   
       - REDIS_HISTORY_DB=4
       - REDISPASSWORD=${REDISPASSWORD}
     networks:
@@ -27,6 +29,7 @@ services:
       context: ./task_template
       dockerfile: Dockerfile_math_tutor  
     environment:
+      - REDISHOST=${REDISHOST}
       - REDIS_HISTORY_DB=5 
       - REDISPASSWORD=${REDISPASSWORD} 
     networks:
@@ -38,6 +41,7 @@ services:
       context: ./task_template
       dockerfile: Dockerfile_code_tutor  
     environment:
+      - REDISHOST=${REDISHOST}
       - REDIS_HISTORY_DB=6
       - REDISPASSWORD=${REDISPASSWORD} 
     networks:
@@ -49,6 +53,7 @@ services:
       context: ./task_template
       dockerfile: Dockerfile_floorplan  
     environment:
+      - REDISHOST=${REDISHOST}
       - REDIS_HISTORY_DB=7 
       - REDISPASSWORD=${REDISPASSWORD} 
     networks:
@@ -60,6 +65,7 @@ services:
       context: ./task_template
       dockerfile: Dockerfile_poetry  
     environment:
+      - REDISHOST=${REDISHOST}
       - REDIS_HISTORY_DB=8 
       - REDISPASSWORD=${REDISPASSWORD} 
     networks:
