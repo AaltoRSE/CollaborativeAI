@@ -33,3 +33,71 @@ server {
         
             
     }
+
+server {
+        listen 443 ssl;
+        server_name math_tutor.${HOSTNAME};
+        ssl_certificate /certificates/certificate.crt;
+        ssl_certificate_key /certificates/private.key;
+
+        location / {                        
+            proxy_pass       http://math_tutor:8000;
+            proxy_set_header Host                    $host;
+            proxy_set_header X-Real-IP               $remote_addr;
+            proxy_set_header X-Auth-Request-Redirect $request_uri;
+            # or, if you are handling multiple domains:
+            # proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
+        }
+                    
+    }
+
+server {
+        listen 443 ssl;
+        server_name code_tutor.${HOSTNAME};
+        ssl_certificate /certificates/certificate.crt;
+        ssl_certificate_key /certificates/private.key;
+
+        location / {                        
+            proxy_pass       http://code_tutor:8000;
+            proxy_set_header Host                    $host;
+            proxy_set_header X-Real-IP               $remote_addr;
+            proxy_set_header X-Auth-Request-Redirect $request_uri;
+            # or, if you are handling multiple domains:
+            # proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
+        }
+                    
+    }
+
+server {
+        listen 443 ssl;
+        server_name floorplan.${HOSTNAME};
+        ssl_certificate /certificates/certificate.crt;
+        ssl_certificate_key /certificates/private.key;
+
+        location / {                        
+            proxy_pass       http://floorplan:8000;
+            proxy_set_header Host                    $host;
+            proxy_set_header X-Real-IP               $remote_addr;
+            proxy_set_header X-Auth-Request-Redirect $request_uri;
+            # or, if you are handling multiple domains:
+            # proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
+        }
+                    
+    }
+
+server {
+        listen 443 ssl;
+        server_name poetry.${HOSTNAME};
+        ssl_certificate /certificates/certificate.crt;
+        ssl_certificate_key /certificates/private.key;
+
+        location / {                        
+            proxy_pass       http://poetry:8000;
+            proxy_set_header Host                    $host;
+            proxy_set_header X-Real-IP               $remote_addr;
+            proxy_set_header X-Auth-Request-Redirect $request_uri;
+            # or, if you are handling multiple domains:
+            # proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
+        }
+                    
+    }

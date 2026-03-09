@@ -78,8 +78,8 @@ async def finish(
     their task is done
     """
     session = await session_service.get_session(source_request)    
-    finishObj = APITaskMetrics(sessionID=session.id, metrics=request.metrics)
+    finishObj = APITaskMetrics(sessionID=session.id, metrics=json.dumps(request.metrics))
     response = await httpx_client.post("http://model_handler:8000/session/endTask", json=finishObj.model_dump())
-    model_info = ModelInfo.model_validate_json(response.json())
+    model_info = ModelInfo.model_validate(response.json())
     session_service.clear_session(session.id)
     return {"modelInfo": model_info.model_name}

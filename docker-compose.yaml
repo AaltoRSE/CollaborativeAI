@@ -1,47 +1,54 @@
 version: "3"
 services:
   mealplan:
-    build:
-      context: ./task_template
-      dockerfile: Dockerfile_mealplan  
-    environment:
-      - REDIS_HISTORY_DB=3 
-      - REDISPASSWORD=${REDISPASSWORD} 
-    networks:
-      - mynetwork
-    depends_on:
-      - model_handler
+    extends:
+      file: docker-compose-tasks.yaml
+      service: mealplan 
   recipe:
-    build:
-      context: ./task_template
-      dockerfile: Dockerfile_recipe    
-    environment:
-      - REDIS_HISTORY_DB=4
-      - REDISPASSWORD=${REDISPASSWORD}
-    networks:
-      - mynetwork  
-    depends_on:
-      - model_handler
+    extends:
+      file: docker-compose-tasks.yaml
+      service: recipe
+  math_tutor:
+    extends:
+      file: docker-compose-tasks.yaml
+      service: math_tutor
+  code_tutor:
+    extends:
+      file: docker-compose-tasks.yaml
+      service: code_tutor
+  floorplan:
+    extends:
+      file: docker-compose-tasks.yaml
+      service: floorplan
+  poetry:
+    extends:
+      file: docker-compose-tasks.yaml
+      service: poetry 
+
   aalto_o1:
-    build: ./model_template
-    networks:
-      - mynetwork
-    environment:
-      - MODEL_TO_USE=aalto_o1
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - SERVICE_NAME=aalto_o1
-    depends_on:
-      - model_handler
+    extends:
+      file: docker-compose-models.yaml
+      service: aalto_o1
   aalto_gpt4o:
-    build: ./model_template    
-    networks:
-      - mynetwork
-    environment:
-      - MODEL_TO_USE=aalto_gpt4o
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - SERVICE_NAME=aalto_gpt4o
-    depends_on:
-      - model_handler
+    extends:
+      file: docker-compose-models.yaml
+      service: aalto_gpt4o
+  aalto_o1mini:
+    extends:
+      file: docker-compose-models.yaml
+      service: aalto_o1mini
+  aalto_o3mini:
+    extends:
+      file: docker-compose-models.yaml
+      service: aalto_o3mini
+  aalto_gpt4_1:
+    extends:
+      file: docker-compose-models.yaml
+      service: aalto_gpt4_1
+  aalto_gpt4o_mini:
+    extends:
+      file: docker-compose-models.yaml
+      service: aalto_gpt4o_mini    
   model_handler:
     build: 
       context: ./model_handler_template  
@@ -49,11 +56,17 @@ services:
     networks:
       - mynetwork
     environment:
-      - ATLAS_URI=mongodb://collabai-mongo/  
+      - ATLAS_URI=mongodb://${MONGOUSER}:${MONGOPASSWORD}@collabai-mongo
       - REDISPASSWORD=${REDISPASSWORD}
+    depends_on:
+      - mongo
+      - redis
   mongo:
     container_name: collabai-mongo
     image: mongo:7.0.4
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGOUSER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGOPASSWORD}
     volumes:
       - ./mongodb:/data/db
     ports:
@@ -84,5 +97,19 @@ services:
       - 127.0.0.1:6379:6379
     networks:
       - mynetwork
+  mongo-express:
+    image: mongo-express:latest
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGOUSER}:${MONGOPASSWORD}@collabai-mongo:27017/
+      ME_CONFIG_BASICAUTH_ENABLED: true     
+      ME_CONFIG_BASICAUTH_USERNAME: express
+      ME_CONFIG_BASICAUTH_PASSWORD: mongoexpress
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    networks:
+      - mynetwork
+
 networks:
   mynetwork:

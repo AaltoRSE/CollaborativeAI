@@ -1,0 +1,72 @@
+version: "3"
+services:
+  aalto_o1:
+    build: ./model_template
+    networks:
+      - mynetwork
+    environment:
+      - MODEL_TO_USE=aalto_o1
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERVICE_NAME=aalto_o1
+    depends_on:
+      - model_handler
+  aalto_gpt4o:
+    build: ./model_template    
+    networks:
+      - mynetwork
+    environment:
+      - MODEL_TO_USE=aalto_gpt4o
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERVICE_NAME=aalto_gpt4o
+    depends_on:
+      - model_handler
+  aalto_o1mini:
+    build: ./model_template    
+    networks:
+      - mynetwork
+    environment:
+      - MODEL_TO_USE=aalto_o1mini
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERVICE_NAME=aalto_o1mini
+    depends_on:
+      - model_handler
+  aalto_gpt4o_mini:
+    build: ./model_template    
+    networks:
+      - mynetwork
+    environment:
+      - MODEL_TO_USE=aalto_gpt4o_mini
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERVICE_NAME=aalto_gpt4o_mini
+    depends_on:
+      - model_handler
+  aalto_gpt4_1:
+    build: ./model_template    
+    networks:
+      - mynetwork
+    environment:
+      - MODEL_TO_USE=aalto_gpt4_1
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERVICE_NAME=aalto_gpt4_1
+    depends_on:
+      - model_handler
+  aalto_o3mini:
+    build: ./model_template    
+    networks:
+      - mynetwork
+    environment:
+      - MODEL_TO_USE=aalto_o3mini
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERVICE_NAME=aalto_o3mini
+    depends_on:
+      - model_handler
+  aalto_gpt4_turbo:
+    build: ./model_template    
+    networks:
+      - mynetwork
+    environment:
+      - MODEL_TO_USE=aalto_gpt4_turbo
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERVICE_NAME=aalto_gpt4_turbo
+    depends_on:
+      - model_handler

@@ -1,0 +1,68 @@
+version: "3"
+services:
+  mealplan:
+    build:
+      context: ./task_template
+      dockerfile: Dockerfile_mealplan  
+    environment:
+      - REDIS_HISTORY_DB=3 
+      - REDISPASSWORD=${REDISPASSWORD} 
+    networks:
+      - mynetwork
+    depends_on:
+      - model_handler  
+  recipe:
+    build:
+      context: ./task_template
+      dockerfile: Dockerfile_recipe    
+    environment:
+      - REDIS_HISTORY_DB=4
+      - REDISPASSWORD=${REDISPASSWORD}
+    networks:
+      - mynetwork  
+    depends_on:
+      - model_handler
+  math_tutor:
+    build:
+      context: ./task_template
+      dockerfile: Dockerfile_math_tutor  
+    environment:
+      - REDIS_HISTORY_DB=5 
+      - REDISPASSWORD=${REDISPASSWORD} 
+    networks:
+      - mynetwork
+    depends_on:
+      - model_handler
+  code_tutor:
+    build:
+      context: ./task_template
+      dockerfile: Dockerfile_code_tutor  
+    environment:
+      - REDIS_HISTORY_DB=6
+      - REDISPASSWORD=${REDISPASSWORD} 
+    networks:
+      - mynetwork
+    depends_on:
+      - model_handler
+  floorplan:
+    build:
+      context: ./task_template
+      dockerfile: Dockerfile_floorplan  
+    environment:
+      - REDIS_HISTORY_DB=7 
+      - REDISPASSWORD=${REDISPASSWORD} 
+    networks:
+      - mynetwork
+    depends_on:
+      - model_handler
+  poetry:
+    build:
+      context: ./task_template
+      dockerfile: Dockerfile_poetry  
+    environment:
+      - REDIS_HISTORY_DB=8 
+      - REDISPASSWORD=${REDISPASSWORD} 
+    networks:
+      - mynetwork
+    depends_on:
+      - model_handler

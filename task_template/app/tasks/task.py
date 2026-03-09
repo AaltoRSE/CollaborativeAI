@@ -1,5 +1,5 @@
 import os
-
+from app.tasks.task_interface import ArenaTask
 # define the Task
 from app.task_examples import (
     poetry,
@@ -16,7 +16,7 @@ from app.task_examples import (
 currentTask = os.environ.get("TASK_NAME")
 
 if currentTask == "tangram":
-    task = tangram.Tangram()
+    task : ArenaTask = tangram.Tangram()
 elif currentTask == "openai":
     task = openai_task.OpenAITask()
 elif currentTask == "gesture":

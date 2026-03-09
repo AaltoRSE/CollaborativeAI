@@ -32,7 +32,7 @@ class CompletionService:
                  httpx_client: Annotated[httpx.AsyncClient, Depends(get_httpx_client)],):        
         self.task : Task | OpenAITask  = task
         self.httpx_client = httpx_client
-        logger.info(f"Task set to {self.task}")
+        logger.info("Task set to %s", self.task)
 
     def get_requirements(self) -> TaskRequirements:
         return self.task.get_requirements()
@@ -113,15 +113,14 @@ class CompletionService:
         return self.task.process_model_answer(data)
 
     async def send_task_request_to_model(self, request : APITaskRequest, history : List[ConversationItem]) -> TaskDataResponse:
-        print(self.httpx_client.timeout)
-        logger.warning(f"Timeout is set to {self.httpx_client.timeout}")
+        logger.debug("Timeout is set to %s", self.httpx_client.timeout)
         httpx_response = await self.httpx_client.post("http://model_handler:8000/model/send_request", json=request.model_dump())
         httpx_response.raise_for_status()
         return self.interpret_model_response(response=ModelAnswer.model_validate(httpx_response.json()), history=history)
     
     async def send_task_request_to_model_openai(self, request : APITaskRequest) -> TaskDataResponse:
-        print(self.httpx_client.timeout)
-        logger.warning(f"Timeout is set to {self.httpx_client.timeout}")
+        
+        logger.debug("Timeout is set to %s", self.httpx_client.timeout)
         httpx_response = await self.httpx_client.post("http://model_handler:8000/model/send_request", json=request.model_dump())
         httpx_response.raise_for_status()
         return self.interpret_model_response_openAI(ModelAnswer.model_validate(httpx_response.json()))

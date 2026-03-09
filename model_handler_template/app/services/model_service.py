@@ -29,18 +29,15 @@ class ModelService:
     def registerModel(self, request : ModelDefinition):
         exists = self.redis_client.exists(request.modelID)       
         if exists:
-            print(f"Overriding existing model: {self.redis_client.get(request.modelID)} with {request}")            
-        
+            logger.warning("Overriding existing model: %s with %s", self.redis_client.get(request.modelID), request)        
         self.redis_client.set(request.modelID, request.model_dump_json())
 
     async def find_fitting_model(self, requirements: ModelRequirements) -> ModelDefinition:
         models : List[ModelDefinition]= []
-        keys = self.redis_client.keys()
-        print(keys)
+        keys = self.redis_client.keys()        
         for key in keys:
             model_data = self.redis_client.get(key)
-            if model_data:
-                print(f"Found model in redis: {model_data}")
+            if model_data:                
                 model = ModelDefinition.model_validate_json(model_data)
                 models.append(model)
         suitable_models_list = []
@@ -56,9 +53,7 @@ class ModelService:
                 if model.can_image and not model.needs_text:
                     suitable_models_list.append(model)
         # choose a random model if there are multiple that sastisfy the requirements
-        chosen_model = random.choice(suitable_models_list)
-        print("The chosen model is")
-        print(chosen_model)
+        chosen_model = random.choice(suitable_models_list)        
         return ModelDefinition.model_validate(chosen_model)
         
     async def get_model(self, model_name: str) -> ModelDefinition:        
@@ -76,7 +71,5 @@ class ModelService:
             sessionID=model_request.sessionID
         )
         response = await self.httpx_client.post(f"http://{model.hostname}:8000/model/request", json=current_request.model_dump())
-        print(response)
-        print(response.json())
         response.raise_for_status()
         return ModelAnswer.model_validate(response.json())

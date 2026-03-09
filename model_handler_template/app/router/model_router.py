@@ -25,8 +25,7 @@ async def send_request(
     model_id = await session_service.get_model_for_session(request_data.sessionID)
     if not model_id:
         raise HTTPException(404, "Session not found or no model assigned")    
-    response = await model_service.forward_request(model_id, request_data)
-    print(response)
+    response = await model_service.forward_request(model_id, request_data)    
     return response
 
 @router.post("/register")
@@ -34,7 +33,7 @@ def register_model(
     model_register: ModelDefinition,
     model_service: Annotated[ModelService, Depends(ModelService)],    
 ):
-    print("Registering model")
+    logger.info("Registering model %s", model_register.modelID)
     model_service.registerModel(model_register)
     return {}
 

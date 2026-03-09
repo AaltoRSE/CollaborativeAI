@@ -1,9 +1,15 @@
 from contextlib import asynccontextmanager
+import logging
 from typing import Any, AsyncGenerator
-from app.model import ai_model
+import asyncio
+
 from fastapi import Request, FastAPI
 import httpx
 
+from app.model import ai_model
+
+
+logger = logging.getLogger("app")
 
 async def get_httpx_client(request : Request) -> httpx.AsyncClient:
     if not hasattr(request.app.state, "httpx_client"):
@@ -31,9 +37,20 @@ async def startup(
     # the possibility that a model needs to load first, which
     # takes substantial time.
     client = init_httpx_async_client(app_instance)
-    # register with the model_handler
-    print(f"Registering model {ai_model.get_model_definition()} with model handler")
-    await client.post(f"http://model_handler:8000/model/register", json=ai_model.get_model_definition().model_dump())    
+    # register with the model_handler    
+    registered = False
+    while not registered:
+        logger.info(f"Registering model {ai_model.get_model_definition()} with model handler")
+        try:
+            response = await client.post(f"http://model_handler:8000/model/register", json=ai_model.get_model_definition().model_dump())
+            response.raise_for_status()
+            if response.status_code == 200:
+                registered = True
+        except httpx.RequestError as e:
+            # Wait a bit before retrying
+            logger.error(f"Error registering model: {e}, retrying in 5 seconds")
+            await asyncio.sleep(5)
+    logger.info("Model registered successfully")
     yield
     await client.aclose()
     
