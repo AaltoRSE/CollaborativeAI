@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 from typing import Annotated
@@ -12,7 +13,7 @@ from app.services.session_service import SessionService
 
 
 router = APIRouter(prefix="/session", tags=["session"]) 
-
+logger = logging.getLogger("app")
 
 @router.post("/startTask", status_code=status.HTTP_200_OK)
 async def start_task(
@@ -39,8 +40,10 @@ async def end_task(
 	except KeyError:
 		raise HTTPException(status_code=404, detail="Session not found")
 	modelID = model.modelID
-	# Metrics	
-	parsedMetrics = json.loads(metrics.metrics.replace("'", '"'))
+	logger.info(metrics)
+	logger.info(metrics.metrics)
+	# Metrics		
+	parsedMetrics = json.loads(metrics.metrics)
 
 	rating = parsedMetrics["rating"]
 	task_name = parsedMetrics["task_name"]
@@ -54,10 +57,14 @@ async def end_task(
 		"task_name": task_name,
 		"model": modelID,
 		"timeStamp": submitted_time,
-		"collaboration_metric": rating["collaboration_metric"],
-		"ai_performance_metric": rating["ai_performance_metric"],
-		"coordination_metric": rating["coordination_metric"],
-		"efficiency_metric": rating["efficiency_metric"],
+        "collaboration_metric": rating["collaboration_metric"],
+        "ai_performance_metric": rating["ai_performance_metric"],
+    	"clarity_metric": rating["clarity_metric"],
+    	"creativity_metric": rating["creativity_metric"],
+        "version": "v_5",
+        "topic": rating["topic"],
+        "message_log": rating["message_log"],
+        "prolific_id": rating["prolific_id"]
 	}
 
 	if not os.environ.get("ATLAS_URI", None) == None:
